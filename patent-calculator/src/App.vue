@@ -11,9 +11,9 @@
     >
       <v-list>
         <v-list-tile
-          value="true"
-          v-for="(item, i) in items"
+          v-for="(item, i) in menu"
           :key="i"
+          @click="view=item.component"
         >
           <v-list-tile-action>
             <v-icon v-html="item.icon"></v-icon>
@@ -29,68 +29,59 @@
       :clipped-left="clipped"
     >
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-btn icon @click.stop="miniVariant = !miniVariant">
-        <v-icon v-html="miniVariant ? 'chevron_right' : 'chevron_left'"></v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="clipped = !clipped">
-        <v-icon>web</v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="fixed = !fixed">
-        <v-icon>remove</v-icon>
-      </v-btn>
       <v-toolbar-title v-text="title"></v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn icon @click.stop="rightDrawer = !rightDrawer">
-        <v-icon>menu</v-icon>
-      </v-btn>
     </v-toolbar>
     <v-content>
-      <HelloWorld/>
+      <!-- 만약 투명도 변화를 주고 싶다면 css에 opacity transition 속성 추가 -->
+      <transition name="component-fade" mode="out-in">
+        <component v-bind:is="view"></component>
+      </transition>
     </v-content>
-    <v-navigation-drawer
-      temporary
-      :right="right"
-      v-model="rightDrawer"
-      fixed
-      app
-    >
-      <v-list>
-        <v-list-tile @click="right = !right">
-          <v-list-tile-action>
-            <v-icon>compare_arrows</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title>Switch drawer (click me)</v-list-tile-title>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer :fixed="fixed" app>
-      <span>&copy; 2017</span>
+    <v-footer :fixed="fixed">
+      <v-layout column align-center>
+        <span>&copy; 2018 광일공방</span>
+      </v-layout>
     </v-footer>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
-
+import Search from "./components/Search";
+import Briefcase from "./components/Briefcase";
+import Quotation from "./components/Quotation";
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
+    Search,
+    Briefcase,
+    Quotation
   },
-  data () {
+  data() {
     return {
+      title: "상표 견적 도우미",
       clipped: false,
-      drawer: true,
+      drawer: false,
       fixed: false,
-      items: [{
-        icon: 'bubble_chart',
-        title: 'Inspire'
-      }],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js'
-    }
+      menu: [
+        {
+          icon: "search",
+          title: "검색하기",
+          component: "Search"
+        },
+        {
+          icon: "work",
+          title: "내 상표 가방",
+          component: "Briefcase"
+        },
+        {
+          icon: "insert_chart_outlined",
+          title: "견적내기",
+          component: "Quotation"
+        }
+      ],
+      view: "Search",
+      miniVariant: false
+    };
   }
-}
+};
 </script>
