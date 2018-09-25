@@ -82,6 +82,9 @@ export default {
       view: "Search",
       miniVariant: false
     };
+  },
+  created () {
+    this.$store.dispatch('fetchProducts')
   }
 };
 </script>

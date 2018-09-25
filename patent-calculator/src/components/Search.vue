@@ -10,7 +10,12 @@
 
 <script>
 export default {
-  name: 'Search'
+  name: 'Search',
+  computed: {
+    products () {
+      return this.$store.getters.products
+    }
+  }
 }
 </script>
 
