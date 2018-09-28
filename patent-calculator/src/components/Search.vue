@@ -111,10 +111,9 @@ export default {
   methods: {
     add_to_list(item) {
       alert("지정상품에 추가되었습니다.");
-      // TODO
-      // 1. alert창을 snackbar로 교체
-      // 2. 선택된 아이템을 vuex store에 저장합니다.
-    }
+      // TODO: alert창을 snackbar로 교체
+      this.$store.dispatch('addProduct', item)
+    },
   },
   computed: {
     categories() {
