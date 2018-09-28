@@ -60,17 +60,17 @@ export default {
           badge: false
         }
       ],
-      view: "Search",
+      view: "Search"
     };
   },
   computed: {
-    selectedCount () {
-      return this.$store.getters.selectedCount
+    selectedCount() {
+      return this.$store.getters.selectedCount;
     }
   },
-  created () {
-    this.$store.dispatch('fetchCategories')
-    this.$store.dispatch('fetchProducts')
+  created() {
+    this.$store.dispatch("fetchCategories");
+    this.$store.dispatch("fetchProducts");
   }
 };
 </script>

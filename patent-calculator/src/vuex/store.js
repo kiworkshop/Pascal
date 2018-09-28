@@ -14,16 +14,16 @@ export const store = new Vuex.Store({
         selected: {}
     },
     getters: {
-        products (state) {
+        products(state) {
             return state.products
         },
-        categories (state) {
+        categories(state) {
             return state.categories
         },
-        selected (state) {
+        selected(state) {
             return state.selected
         },
-        selectedCount (state) {
+        selectedCount(state) {
             let count = 0
             const categories = state.selected
             for (const category in categories) {
@@ -35,13 +35,13 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
-        [UPDATE_CATEGORIES] (state, categories) {
+        [UPDATE_CATEGORIES](state, categories) {
             state.categories = categories
         },
-        [UPDATE_PRODUCTS] (state, products) {
+        [UPDATE_PRODUCTS](state, products) {
             state.products = products
         },
-        [ADD_PRODUCT] (state, product) {
+        [ADD_PRODUCT](state, product) {
             if (!(product['NICE분류'] in state.selected)) {
                 state.selected[product['NICE분류']] = {}
             }
@@ -50,19 +50,19 @@ export const store = new Vuex.Store({
         }
     },
     actions: {
-        fetchCategories ({commit}) {
+        fetchCategories({ commit }) {
             const dataUrl = "https://s3.ap-northeast-2.amazonaws.com/pascal.kiworkshop/data/categories.json"
             axios.get(dataUrl)
-            .then(result => result.data)
-            .then(categories => commit(UPDATE_CATEGORIES, categories))
+                .then(result => result.data)
+                .then(categories => commit(UPDATE_CATEGORIES, categories))
         },
-        fetchProducts ({commit}) {
+        fetchProducts({ commit }) {
             const dataUrl = "https://s3.ap-northeast-2.amazonaws.com/pascal.kiworkshop/data/classification(minified).json"
             axios.get(dataUrl)
-            .then(result => result.data)
-            .then(products => commit(UPDATE_PRODUCTS, products))
+                .then(result => result.data)
+                .then(products => commit(UPDATE_PRODUCTS, products))
         },
-        addProduct ({commit}, product) {
+        addProduct({ commit }, product) {
             commit(ADD_PRODUCT, product)
         }
     }

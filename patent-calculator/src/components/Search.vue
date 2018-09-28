@@ -55,6 +55,7 @@
         </v-flex>
         <!-- TODO: 현재 담은 목록을 간단하게 보여줍니다. -->
         <v-flex xs4>
+          <briefcase-summary></briefcase-summary>
         </v-flex>
       </v-layout>
     </v-slide-y-transition>
@@ -62,8 +63,12 @@
 </template>
 
 <script>
+import BriefcaseSummary from "./BriefcaseSummary";
 export default {
   name: "Search",
+  components: {
+    BriefcaseSummary
+  },
   data() {
     return {
       rowsPerPageItems: [
@@ -112,8 +117,8 @@ export default {
     add_to_list(item) {
       alert("지정상품에 추가되었습니다.");
       // TODO: alert창을 snackbar로 교체
-      this.$store.dispatch('addProduct', item)
-    },
+      this.$store.dispatch("addProduct", item);
+    }
   },
   computed: {
     categories() {

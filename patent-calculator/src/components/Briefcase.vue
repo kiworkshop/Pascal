@@ -10,8 +10,8 @@
 
 <script>
 export default {
-  name: 'Briefcase'
-}
+  name: "Briefcase"
+};
 </script>
 
 <style scoped>

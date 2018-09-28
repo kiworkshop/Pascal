@@ -10,8 +10,8 @@
 
 <script>
 export default {
-  name: 'Quotation'
-}
+  name: "Quotation"
+};
 </script>
 
 <style scoped>
