@@ -6,6 +6,7 @@
       <v-list>
           <v-list-group
             v-for="(category, categoryNo) in selected"
+            v-if="Object.keys(category).length > 0"
             :key="categoryNo"
           >
             <v-list-tile slot="activator">
@@ -17,7 +18,7 @@
               <v-list-tile-action>
                 <v-avatar color="blue" size=22>
                   <span class="white--text body-1 font-weight-medium">
-                    {{Object.keys(category).length}}
+                    {{ Object.keys(category).length }}
                   </span>
                 </v-avatar>
               </v-list-tile-action>
@@ -26,14 +27,12 @@
             <v-list-tile
                 v-for="(item, itemNo) in category"
                 :key="itemNo"
-                @click=""
             >
               <v-list-tile-content>
                 <v-list-tile-title>{{ item['지정상품(국문)'] }}</v-list-tile-title>
               </v-list-tile-content>
-              <v-list-tile-action>
-                <v-icon>{{ itemNo }}</v-icon>
-              </v-list-tile-action>
+              <!-- <v-icon color="red" small class="mr-2" @click="editItem(item)">edit</v-icon> -->
+              <v-icon color="red" small @click="deleteItem(item)">delete</v-icon>
             </v-list-tile>
           </v-list-group>
         </v-list>
@@ -49,6 +48,11 @@ export default {
     },
     categories() {
       return this.$store.getters.categories;
+    }
+  },
+  methods: {
+    deleteItem(item) {
+      this.$store.dispatch("deleteProduct", item);
     }
   }
 };

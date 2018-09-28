@@ -5,6 +5,7 @@ import axios from 'axios';
 const UPDATE_CATEGORIES = 'UPDATE_CATEGORIES'
 const UPDATE_PRODUCTS = 'UPDATE_PRODUCTS'
 const ADD_PRODUCT = 'ADD_PRODUCT'
+const DELETE_PRODUCT = 'DELETE_PRODUCT'
 
 Vue.use(Vuex);
 export const store = new Vuex.Store({
@@ -47,6 +48,10 @@ export const store = new Vuex.Store({
             }
             state.selected[product['NICE분류']][product['id']] = product
             state.selected = Object.assign({}, state.selected)
+        },
+        [DELETE_PRODUCT](state, product) {
+            delete state.selected[product['NICE분류']][product['id']]
+            state.selected = Object.assign({}, state.selected)
         }
     },
     actions: {
@@ -64,6 +69,9 @@ export const store = new Vuex.Store({
         },
         addProduct({ commit }, product) {
             commit(ADD_PRODUCT, product)
+        },
+        deleteProduct({ commit }, product) {
+            commit(DELETE_PRODUCT, product)
         }
     }
 })
