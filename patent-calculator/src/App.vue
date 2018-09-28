@@ -5,7 +5,7 @@
       <v-spacer></v-spacer>
       <v-btn flat v-for="(item, i) in menu" :key="i" @click="view=item.component">
         <v-badge color="blue-grey lighten-3">
-          <span v-if="item.badge" slot="badge">{{selectedCount}}</span>
+          <span v-if="item.badge" slot="badge" class="caption font-weight-medium">{{selectedCount}}</span>
           <v-icon>{{item.icon}}</v-icon>
           {{item.title}}
       </v-badge>
