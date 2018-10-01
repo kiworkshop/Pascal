@@ -19,22 +19,22 @@
                     <v-flex text-xs-center>검색단계 대리인 수수료</v-flex>
                     <v-layout row wrap>
                       <v-flex text-xs-center>기본료</v-flex>
-                      <v-flex text-xs-center>{{numOfTrademarks}}상표 {{numOfClasses()}}개류</v-flex>
-                      <v-flex text-xs-right>{{agentFeeSearch().toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-center>{{numOfTrademarks}}상표 {{numOfClasses}}개류</v-flex>
+                      <v-flex text-xs-right>{{agentFeeSearch.toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-layout row wrap>
                       <v-flex text-xs-center>부가세</v-flex>
                       <v-flex text-xs-center>10%</v-flex>
-                      <v-flex text-xs-right>{{(agentFeeSearch() * 0.1).toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-right>{{(agentFeeSearch * 0.1).toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-layout row wrap>
                       <v-flex text-xs-center>소계</v-flex>
-                      <v-flex text-xs-right>{{(agentFeeSearch() * 1.1).toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-right>{{(agentFeeSearch * 1.1).toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-divider light></v-divider>
                     <v-layout row wrap>
                       <v-flex text-xs-center>검색단계 합계</v-flex>
-                      <v-flex text-xs-right>{{(agentFeeSearch() * 1.1).toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-right>{{searchFee.toLocaleString()}} 원</v-flex>
                     </v-layout>
                   </v-layout>
                 </v-container>
@@ -48,29 +48,29 @@
                     <v-flex text-xs-center>출원단계 대리인 수수료</v-flex>
                     <v-layout row wrap>
                       <v-flex text-xs-center>기본료</v-flex>
-                      <v-flex text-xs-center>{{numOfTrademarks}}상표 {{numOfClasses()}}개류</v-flex>
-                      <v-flex text-xs-right>{{(agentFeeApp()).toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-center>{{numOfTrademarks}}상표 {{numOfClasses}}개류</v-flex>
+                      <v-flex text-xs-right>{{agentFeeApp.toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-layout row wrap>
                       <v-flex text-xs-center>부가세</v-flex>
                       <v-flex text-xs-center>10%</v-flex>
-                      <v-flex text-xs-right>{{(agentFeeApp() * 0.1).toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-right>{{(agentFeeApp * 0.1).toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-layout row wrap>
                       <v-flex text-xs-center>소계</v-flex>
-                      <v-flex text-xs-right>{{(agentFeeApp() * 1.1).toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-right>{{(agentFeeApp * 1.1).toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-divider light></v-divider>
                     <v-flex text-xs-center>출원단계 특허청 관납료</v-flex>
                     <v-layout row wrap>
                       <v-flex text-xs-center>출원료</v-flex>
-                      <v-flex text-xs-center>{{numOfTrademarks}}상표 {{numOfClasses()}}개류</v-flex>
-                      <v-flex text-xs-right>{{(officialFeeApp()).toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-center>{{numOfTrademarks}}상표 {{numOfClasses}}개류</v-flex>
+                      <v-flex text-xs-right>{{officialFeeApp.toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-divider light></v-divider>
                     <v-layout row wrap>
                       <v-flex text-xs-center>출원단계 합계</v-flex>
-                      <v-flex text-xs-right>{{(agentFeeApp() * 1.1 + officialFeeApp()).toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-right>{{appFee.toLocaleString()}} 원</v-flex>
                     </v-layout>
                   </v-layout>
                 </v-container>
@@ -84,24 +84,24 @@
                     <v-flex text-xs-center>등록단계 대리인 수수료</v-flex>
                     <v-layout row wrap>
                       <v-flex text-xs-center>등록수수료</v-flex>
-                      <v-flex text-xs-center>{{numOfTrademarks}}상표 {{numOfClasses()}}개류</v-flex>
-                      <v-flex text-xs-right>{{agentFeeReg().toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-center>{{numOfTrademarks}}상표 {{numOfClasses}}개류</v-flex>
+                      <v-flex text-xs-right>{{agentFeeReg.toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-layout row wrap>
                       <v-flex text-xs-center>부가세</v-flex>
                       <v-flex text-xs-center>10%</v-flex>
-                      <v-flex text-xs-right>{{(agentFeeReg() * 0.1).toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-right>{{(agentFeeReg* 0.1).toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-layout row wrap>
                       <v-flex text-xs-center>소계</v-flex>
-                      <v-flex text-xs-right>{{(agentFeeReg() * 1.1).toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-right>{{(agentFeeReg * 1.1).toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-divider light></v-divider>
                     <v-flex text-xs-center>등록단계 특허청 관납료</v-flex>
                     <v-layout row wrap>
                       <v-flex text-xs-center>등록수수료</v-flex>
-                      <v-flex text-xs-center>{{numOfTrademarks}}상표 {{numOfClasses()}}개류</v-flex>
-                      <v-flex text-xs-right>{{officialFeeReg().toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-center>{{numOfTrademarks}}상표 {{numOfClasses}}개류</v-flex>
+                      <v-flex text-xs-right>{{officialFeeReg.toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-layout row wrap>
                       <v-flex text-xs-center>등록세</v-flex>
@@ -110,12 +110,12 @@
                     </v-layout>
                     <v-layout row wrap>
                       <v-flex text-xs-center>소계</v-flex>
-                      <v-flex text-xs-right>{{(officialFeeReg() + basicOfficialFeeTax).toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-right>{{(officialFeeReg + basicOfficialFeeTax).toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-divider light></v-divider>
                     <v-layout row wrap>
                       <v-flex text-xs-center>등록단계 합계</v-flex>
-                      <v-flex text-xs-right>{{(agentFeeReg() * 1.1 + basicOfficialFeeTax).toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-right>{{regFee.toLocaleString()}} 원</v-flex>
                     </v-layout>
                   </v-layout>
                 </v-container>
@@ -126,7 +126,7 @@
                 <v-toolbar color="elevation-0">
                   <v-toolbar-title>출원에서 등록까지</v-toolbar-title>
                 </v-toolbar>
-                <v-flex text-xs-center>{{(agentFeeSearch() * 1.1 + agentFeeApp() * 1.1 + officialFeeApp() + agentFeeReg() * 1.1 + basicOfficialFeeTax).toLocaleString()}} 원</v-flex>
+                <v-flex text-xs-center>{{totalFee.toLocaleString()}} 원</v-flex>
               </v-container>
             </v-flex>
           </v-card>
@@ -143,77 +143,42 @@ export default {
   components:{
     QuotationSummary
   },
-  data(){
-    return{
-      numOfTrademarks: 1,
-      basicAgentFeeSearch: 50000,
-      basicAgentFeeApp: 200000,
-      basicAgentFeeReg: 150000,
-      additionalFee: 2000,
-      basicOfficialFeeApp: 62000,
-      basicOfficialFeeReg: 211000,
-      basicOfficialFeeTax: 9120
-    }
-  },
-  methods: {
+  computed: {
+    numOfTrademarks() {
+      return this.$store.getters.trademarks;
+    },
     numOfClasses() {
-      let count = 0;
-      for (const _class in this.selected) {
-        if (this.selected.hasOwnProperty(_class)) {
-           count += 1;
-        }
-      }
-      return count
+      return this.$store.getters.selectedClassesCount;
     },
     agentFeeSearch() {
-      return this.numOfClasses() * this.basicAgentFeeSearch
+      return this.$store.getters.calculateFee.agentFeeSearch;
     },
     agentFeeApp() {
-      return this.numOfClasses() * this.basicAgentFeeApp
+      return this.$store.getters.calculateFee.agentFeeApp;
     },
     agentFeeReg() {
-      return this.numOfClasses() * this.basicAgentFeeReg
+      return this.$store.getters.calculateFee.agentFeeReg;
     },
     officialFeeApp() {
-      let fee = 0;
-      let goodsOver20 = 0;
-      for (const _class in this.selected) {
-        if (this.selected.hasOwnProperty(_class)) {
-          fee += this.basicOfficialFeeApp;
-          goodsOver20 = Object.keys(_class).length - 20;
-          if (goodsOver20 > 0) {
-            fee += goodsOver20 * this.additionalFee
-          }
-        }
-      }
-      return fee
+      return this.$store.getters.calculateFee.officialFeeApp;
     },
     officialFeeReg() {
-      let fee = 0;
-      let goodsOver20 = 0;
-      for (const _class in this.selected) {
-        if (this.selected.hasOwnProperty(_class)) {
-          fee += this.basicOfficialFeeReg;
-          goodsOver20 = Object.keys(_class).length - 20;
-          if (goodsOver20 > 0) {
-            fee += goodsOver20 * this.additionalFee
-          }
-        }
-      }
-      return fee
-    }
-  },
-  computed: {
-    classes() {
-      return this.$store.getters.classes;
+      return this.$store.getters.calculateFee.officialFeeReg;
     },
-    selected() {
-      let classes = this.$store.getters.selected;
-      let goods = [];
-      for (const classId in classes) {
-        goods = goods.concat(Object.values(classes[classId]))
-      }
-      return goods;
+    basicOfficialFeeTax() {
+      return this.$store.state.basicFee.basicOfficialFeeTax;
+    },
+    searchFee() {
+      return this.agentFeeSearch * 1.1;
+    },
+    appFee() {
+      return this.agentFeeApp * 1.1 + this.officialFeeApp;
+    },
+    regFee() {
+      return this.agentFeeReg * 1.1 + this.officialFeeReg + this.basicOfficialFeeTax;
+    },
+    totalFee() {
+      return this.searchFee + this.appFee + this.regFee;
     }
   }
 };

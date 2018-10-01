@@ -11,11 +11,28 @@ const EDIT_PRODUCT = 'EDIT_PRODUCT'
 Vue.use(Vuex);
 export const store = new Vuex.Store({
     state: {
+        trademarks: 1,
         classes: [],
         products: [],
-        selected: {}
+        selected: {},
+        basicFee: {
+            basicAgentFeeSearch: 50000,
+            basicAgentFeeApp: 200000,
+            basicAgentFeeReg: 150000,
+            additionalFee: 2000,
+            basicOfficialFeeApp: 62000,
+            basicOfficialFeeReg: 211000,
+            basicOfficialFeeTax: 9120      
+        },
+        fee: {}
     },
     getters: {
+        trademarks(state) {
+            return state.trademarks
+        },
+        basicFee(state) {
+            return state.basicFee
+        },
         products(state) {
             return state.products
         },
@@ -34,6 +51,39 @@ export const store = new Vuex.Store({
                 }
             }
             return count
+        },
+        selectedClassesCount(state) {
+            let count = 0;
+            const classes = state.selected
+            for (const _class in classes) {
+              if (classes.hasOwnProperty(_class)) {
+                 count += 1;
+              }
+            }
+            return count      
+        },
+        calculateFee(state, getters) {
+            let fee = { 
+                agentFeeSearch: 0, agentFeeApp: 0, agentFeeReg: 0, 
+                officialFeeApp: 0, officialFeeReg: 0
+            }
+            fee.agentFeeSearch = getters.selectedClassesCount * state.basicFee.basicAgentFeeSearch
+            fee.agentFeeApp = getters.selectedClassesCount * state.basicFee.basicAgentFeeApp
+            fee.agentFeeReg = getters.selectedClassesCount * state.basicFee.basicAgentFeeReg
+ 
+            let goodsOver20 = 0;
+            for (const _class in getters.selected) {
+              if (getters.selected.hasOwnProperty(_class)) {
+                fee.officialFeeApp += state.basicFee.basicOfficialFeeApp;
+                fee.officialFeeReg += state.basicFee.basicOfficialFeeReg;
+                goodsOver20 = Object.keys(_class).length - 20;
+                if (goodsOver20 > 0) {
+                  fee.officialFeeApp += goodsOver20 * state.basicFee.basicAdditionalFee
+                  fee.officialFeeReg += goodsOver20 * state.basicFee.basicAdditionalFee
+                }
+              }
+            }
+            return fee
         }
     },
     mutations: {
