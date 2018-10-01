@@ -16,6 +16,7 @@
       <transition name="component-fade" mode="out-in">
         <component v-bind:is="view"></component>
       </transition>
+      <snackbar></snackbar>
     </v-content>
     <v-footer :fixed="fixed">
       <v-layout column align-center>
@@ -29,12 +30,14 @@
 import Search from "./components/Search";
 import Briefcase from "./components/Briefcase";
 import Quotation from "./components/Quotation";
+import Snackbar from "./components/Snackbar";
 export default {
   name: "App",
   components: {
     Search,
     Briefcase,
-    Quotation
+    Quotation,
+    Snackbar
   },
   data() {
     return {
@@ -69,7 +72,7 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch("fetchCategories");
+    this.$store.dispatch("fetchClasses");
     this.$store.dispatch("fetchProducts");
   }
 };

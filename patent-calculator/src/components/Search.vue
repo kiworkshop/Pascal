@@ -3,17 +3,18 @@
     <v-slide-y-transition mode="out-in">
       <v-layout row wrap>
         <v-flex xs8>
-          <!-- <v-flex class="h_title">검색하기</v-flex>
-          <v-flex class="h_explanation">
-            <p>특허청 고시상품명칭 11판(2018)에서 상품 명칭을 검색합니다.</p>
-          </v-flex> -->
           <v-card>
+            <v-toolbar color="grey lighten-4">
+              <v-toolbar-title>검색하기</v-toolbar-title>
+              <v-spacer></v-spacer>
+              <p class="caption"><br><br>특허청 고시상품명칭 11판(2018)에서 상품 명칭을 검색합니다.</p>
+            </v-toolbar>
             <v-layout>  
               <v-spacer></v-spacer>
               <v-flex>
               <v-select
-                v-model="search.category"
-                :items="categories"
+                v-model="search._class"
+                :items="classes"
                 label="분류"
               ></v-select> <!--분류별 검색 기능 추가-->
               </v-flex>
@@ -42,20 +43,22 @@
                 <td class="text-xs-center">{{ props.item['유사군코드'] }}</td>
                 <td class="text-xs-center">
                   <!--추가하기-->
-                  <v-btn flat icon slot="activator" color="primary" dark @click.native="add_to_list(props.item)">
+                  <v-btn flat icon slot="activator" color="primary" dark @click.native="addProduct(props.item)">
                     <v-icon small>add</v-icon>
                   </v-btn>            
                 </td>
               </template>
               <v-alert slot="no-results" :value="true" color="error" icon="warning">
-                Your search for "{{ search.name }}" found no results.
+                "{{ search.name }}"을(를) 찾을 수 없습니다.
               </v-alert>
             </v-data-table>
           </v-card>
         </v-flex>
-        <!-- TODO: 현재 담은 목록을 간단하게 보여줍니다. -->
         <v-flex xs4>
-          <briefcase-summary></briefcase-summary>
+          <v-layout column>
+            <v-flex><briefcase-summary></briefcase-summary></v-flex>
+            <v-flex><quotation-summary></quotation-summary></v-flex>
+          </v-layout>
         </v-flex>
       </v-layout>
     </v-slide-y-transition>
@@ -64,10 +67,12 @@
 
 <script>
 import BriefcaseSummary from "./BriefcaseSummary";
+import QuotationSummary from "./QuotationSummary";
 export default {
   name: "Search",
   components: {
-    BriefcaseSummary
+    BriefcaseSummary,
+    QuotationSummary
   },
   data() {
     return {
@@ -77,7 +82,7 @@ export default {
         { text: "$vuetify.dataIterator.rowsPerPageAll", value: -1 }
       ],
       search: {
-        category: "",
+        _class: "",
         name: ""
       },
       headers: [
@@ -99,7 +104,7 @@ export default {
           value: "지정상품(영문)"
         },
         {
-          text: "유사군 코드",
+          text: "유사군코드",
           align: "center",
           sortable: false,
           value: "유사군코드"
@@ -114,15 +119,16 @@ export default {
     };
   },
   methods: {
-    add_to_list(item) {
-      alert("지정상품에 추가되었습니다.");
-      // TODO: alert창을 snackbar로 교체
+    addProduct(item) {
       this.$store.dispatch("addProduct", item);
+      const message = "[ " + item["NICE분류"] + "류 ] " +
+        item["지정상품(국문)"] + "이(가) 지정상품에 추가되었습니다.";
+      this.$noticeEventBus.$emit("raiseNotice", message);
     }
   },
   computed: {
-    categories() {
-      return this.$store.getters.categories;
+    classes() {
+      return this.$store.getters.classes;
     },
     products() {
       return this.$store.getters.products;

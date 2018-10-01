@@ -5,67 +5,54 @@
     </v-toolbar>
     <v-list>
       <v-list-group
-        v-for="(category, categoryNo) in selected"
-        v-if="Object.keys(category).length > 0"
-        :key="categoryNo"
+        v-for="(_class, classNo) in selected"
+        v-if="Object.keys(_class).length > 0"
+        :key="classNo"
       >
         <v-list-tile slot="activator">
           <v-list-tile-content>
             <v-list-tile-title>
-              {{ categories[categoryNo] }}
+              {{ classes[classNo] }}
             </v-list-tile-title>
           </v-list-tile-content>
           <v-list-tile-action>
-            <v-avatar color="blue" size=22>
+            <v-avatar color="primary" size=22>
               <span class="white--text body-1 font-weight-medium">
-                {{ Object.keys(category).length }}
+                {{ Object.keys(_class).length }}
               </span>
             </v-avatar>
           </v-list-tile-action>
         </v-list-tile>
-        <v-list-tile v-for="(item, itemNo) in category" :key="itemNo">
+        <v-list-tile v-for="(item, itemNo) in _class" :key="itemNo">
           <v-list-tile-content>
             <v-list-tile-title>{{ item['지정상품(국문)'] }}</v-list-tile-title>
           </v-list-tile-content>
-          <v-icon color="red" small @click="deleteItem(item)">delete</v-icon>
+          <v-icon color="red" small @click="deleteProduct(item)">delete</v-icon>
         </v-list-tile>
       </v-list-group>
-    </v-list>
-    <v-divider></v-divider>
-    <v-list two-line subheader>
-      <v-list-tile avatar>
-        <v-list-tile-avatar>
-          <v-icon>bar_chart</v-icon>
-        </v-list-tile-avatar>
-
-        <v-list-tile-content>
-          <v-list-tile-sub-title>합계</v-list-tile-sub-title>
-          <v-list-tile-title>1,000,000 원</v-list-tile-title>
-        </v-list-tile-content>
-
-        <v-list-tile-action>
-          <v-btn icon ripple>
-            <v-icon color="grey lighten-1">info</v-icon>
-          </v-btn>
-        </v-list-tile-action>
-      </v-list-tile>
     </v-list>
   </v-card>
 </template>
 
 <script>
+import ManualAdd from "./ManualAdd";
 export default {
   name: "BriefcaseSummary",
+  components:{
+    ManualAdd
+  },
   computed: {
     selected() {
       return this.$store.getters.selected;
     },
-    categories() {
-      return this.$store.getters.categories;
+    classes() {
+      return this.$store.getters.classes;
     }
   },
   methods: {
-    deleteItem(item) {
+    deleteProduct(item) {
+      const message = "[ " + item['NICE분류'] + "류 ] " + item['지정상품(국문)'] + "이(가) 지정상품에서 삭제되었습니다.";
+      this.$noticeEventBus.$emit('raiseNotice', message);
       this.$store.dispatch("deleteProduct", item);
     }
   }

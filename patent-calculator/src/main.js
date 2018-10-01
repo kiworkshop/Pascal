@@ -4,7 +4,8 @@ import './plugins/vuetify'
 import App from './App.vue'
 import { store } from './vuex/store'
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
+Vue.prototype.$noticeEventBus = new Vue();
 
 new Vue({
   store,
