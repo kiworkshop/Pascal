@@ -5,9 +5,9 @@
         <v-flex xs8>
           <v-card>
             <v-toolbar color="grey lighten-4">
-              <v-toolbar-title>내 상표 가방</v-toolbar-title>
+              <v-toolbar-title>상품 관리</v-toolbar-title>
               <v-spacer></v-spacer>
-              <p class="caption text-xs-left" ><br><br>선택된 지정상품을 표시합니다.</p>
+              <p class="caption text-xs-left" ><br><br>선택된 지정상품을 표시하고 관리합니다.</p>
             </v-toolbar>
             <v-layout>  
               <v-spacer></v-spacer>
@@ -30,9 +30,6 @@
               ></v-text-field>
               </v-flex>
               <v-spacer></v-spacer>
-              <v-flex>
-                <manual-add></manual-add>
-              </v-flex>
             </v-layout>
             <v-data-table
               :headers="headers"
@@ -100,12 +97,10 @@
 
 <script>
 import QuotationSummary from "./QuotationSummary";
-import ManualAdd from "./ManualAdd";
 export default {
   name: "Search",
   components: {
-    QuotationSummary,
-    ManualAdd
+    QuotationSummary
   },
   data() {
     return {

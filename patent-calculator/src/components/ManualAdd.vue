@@ -1,35 +1,34 @@
  <template>
-  <v-dialog v-model="dialog" width="500">
-    <v-btn
-        absolute
-        slot="activator"
-        color="primary" 
-        dark @click.native="initAddingProduct()"
-    >
+  <v-dialog v-model="dialog" width="900">
+    <v-btn 
+    flat 
+    slot="activator"
+    @click.native="initInput()">
+      <v-badge color="blue-grey lighten-3">
         <v-icon>add</v-icon>
+        추가
+      </v-badge>
     </v-btn>
     <v-card>
         <v-card-title>
-        <span class="headline">추가하기</span>
+        <span class="headline">지정상품 추가하기</span>
         </v-card-title>
         <v-card-text>
         <v-container grid-list-md>
-            <v-layout wrap>
-            <v-flex xs12>
+            <v-layout column wrap>
+            <v-flex>
                 <v-select
-                v-model="addingProduct['NICE분류']"
-                :items="classes"
-                label="분류"
+                  v-model="className"
+                  :items="classes"
+                  label="분류"
                 ></v-select>
             </v-flex>
-            <v-flex xs12>
-                <v-text-field v-model="addingProduct['지정상품(국문)']" label="명칭" required></v-text-field>
-            </v-flex>
-            <v-flex xs12>
-                <v-text-field v-model="addingProduct['지정상품(영문)']" label="영문 명칭"></v-text-field>
-            </v-flex>
-            <v-flex xs12>
-                <v-text-field v-model="addingProduct['유사군코드']" label="유사군코드"></v-text-field>
+            <v-flex>
+                <v-text-field
+                  v-model="text"
+                  label="명칭"
+                  required
+                ></v-text-field>
             </v-flex>
             </v-layout>
         </v-container>
@@ -45,35 +44,31 @@
 
 <script>
 export default {
-  name: "Snackbar",
+  name: "Manual Add",
   data () {
     return {
       dialog: false,
-      addingProduct: {
-        'id':0,
-        'NICE분류':'',
-        '지정상품(국문)':'',
-        '지정상품(영문)':'',
-        '유사군코드':''
-      },
-      manuallyAddedProducts: 0
+      className: '',
+      text: ''
     }
   },
   methods:{
-    initAddingProduct() {
-      this.addingProduct['NICE분류']='';
-      this.addingProduct['지정상품(국문)']='';
-      this.addingProduct['지정상품(영문)']='';
-      this.addingProduct['유사군코드']='';
+    initInput() {
+      this.className = '',
+      this.text = ''
     },
     commitAdding() {
-      this.manuallyAddedProducts += 1;
+      // 콤마 단위로 문자열 처리
+      // array
+      // 
+    
+/*      this.manuallyAddedProducts += 1;
       this.addingProduct['id'] = -this.manuallyAddedProducts;
       this.addingProduct['NICE분류'] = this.classes.indexOf(this.addingProduct['NICE분류']);
       this.$store.dispatch("addProduct", this.addingProduct);
       this.dialog = false;
       const message = "[ " + this.addingProduct["NICE분류"] + "류 ] " + this.addingProduct["지정상품(국문)"] + "이(가) 지정상품에 추가되었습니다.";
-      this.$noticeEventBus.$emit("raiseNotice", message);
+      this.$noticeEventBus.$emit("raiseNotice", message);*/
     }
   },
   created() {

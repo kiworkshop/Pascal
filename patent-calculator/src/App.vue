@@ -3,6 +3,7 @@
     <v-toolbar app>
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <v-spacer></v-spacer>
+      <manual-add></manual-add>
       <v-btn flat v-for="(item, i) in menu" :key="i" @click="view=item.component">
         <v-badge color="blue-grey lighten-3">
           <span v-if="item.badge" slot="badge" class="caption font-weight-medium">{{selectedCount}}</span>
@@ -31,13 +32,17 @@ import Search from "./components/Search";
 import Briefcase from "./components/Briefcase";
 import Quotation from "./components/Quotation";
 import Snackbar from "./components/Snackbar";
+import ManualAdd from "./components/ManualAdd";
+import Setting from "./components/Setting";
 export default {
   name: "App",
   components: {
     Search,
     Briefcase,
     Quotation,
-    Snackbar
+    Snackbar,
+    ManualAdd,
+    Setting
   },
   data() {
     return {
@@ -46,20 +51,26 @@ export default {
       menu: [
         {
           icon: "search",
-          title: "검색하기",
+          title: "검색",
           component: "Search",
           badge: false
         },
         {
           icon: "work",
-          title: "내 상표 가방",
+          title: "상품 관리",
           component: "Briefcase",
           badge: true
         },
         {
           icon: "insert_chart_outlined",
-          title: "견적내기",
+          title: "견적",
           component: "Quotation",
+          badge: false
+        },
+        {
+          icon: "settings",
+          title: "설정",
+          component: "Setting",
           badge: false
         }
       ],
