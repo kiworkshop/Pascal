@@ -35,7 +35,7 @@
         </v-card-text>
         <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="primary" flat @click.native="commitAdding()">추가</v-btn>
+        <v-btn color="primary" flat @click.native="add()">추가</v-btn>
         <v-btn color="primary" flat @click.native="dialog = false">취소</v-btn>
         </v-card-actions>
     </v-card>
@@ -44,12 +44,21 @@
 
 <script>
 export default {
-  name: "Manual Add",
+  name: "ManualAdd",
   data () {
     return {
       dialog: false,
       className: '',
-      text: ''
+      text: '',
+      addingProduct: {
+        'id':0,
+        'NICE분류':'',
+        '지정상품(국문)':'',
+        '지정상품(영문)':'',
+        '유사군코드':'',
+        '고시명칭':false
+      },
+      manuallyAddedProducts: 0
     }
   },
   methods:{
@@ -57,18 +66,27 @@ export default {
       this.className = '',
       this.text = ''
     },
-    commitAdding() {
-      // 콤마 단위로 문자열 처리
-      // array
-      // 
+    splitText() {
+      // 앞에 붙어 나오는 space 처리 -> 검색 방식에 따라 처리가 불필요할 수도
+      return this.text.split(',');
+    },
+    add() {
+      /* let stringList = this.splitText();
+        // 검색
+        // 명칭이 있을 경우 -> 고시명칭
+        // 명칭이 없을 경우 -> 비고시명칭
+        // 비고시명칭에 대한 처리 -> 분류 선택
+
+      */
     
-/*      this.manuallyAddedProducts += 1;
+      this.manuallyAddedProducts += 1;
       this.addingProduct['id'] = -this.manuallyAddedProducts;
-      this.addingProduct['NICE분류'] = this.classes.indexOf(this.addingProduct['NICE분류']);
+      this.addingProduct['NICE분류'] = this.classes.indexOf(this.className);
+      this.addingProduct['지정상품(국문)'] = this.text;
       this.$store.dispatch("addProduct", this.addingProduct);
       this.dialog = false;
       const message = "[ " + this.addingProduct["NICE분류"] + "류 ] " + this.addingProduct["지정상품(국문)"] + "이(가) 지정상품에 추가되었습니다.";
-      this.$noticeEventBus.$emit("raiseNotice", message);*/
+      this.$noticeEventBus.$emit("raiseNotice", message);
     }
   },
   created() {

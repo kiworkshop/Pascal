@@ -120,7 +120,9 @@ export default {
   },
   methods: {
     addProduct(item) {
-      this.$store.dispatch("addProduct", item);
+      let temp = Object.assign({}, item)
+      temp['고시명칭'] = true
+      this.$store.dispatch("addProduct", temp);
       const message = "[ " + item["NICE분류"] + "류 ] " +
         item["지정상품(국문)"] + "이(가) 지정상품에 추가되었습니다.";
       this.$noticeEventBus.$emit("raiseNotice", message);

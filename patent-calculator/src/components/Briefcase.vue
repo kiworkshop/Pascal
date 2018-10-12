@@ -43,6 +43,10 @@
                 <td> {{ props.item['지정상품(영문)'] }}</td>
                 <td class="text-xs-center">{{ props.item['유사군코드'] }}</td>
                 <td class="text-xs-center">
+                  <v-icon v-if="!props.item['고시명칭']" small color="red">check</v-icon>
+                  <v-icon v-if="props.item['고시명칭']" small color="blue">check</v-icon>
+                </td>
+                <td class="text-xs-center">
                   <v-dialog v-model="dialog" width="500">
                     <v-btn flat icon slot="activator" color="primary" dark @click.native="copyProductToEdit(props.item)">
                       <v-icon small>edit</v-icon>
@@ -65,6 +69,9 @@
                             </v-flex>
                             <v-flex xs12>
                               <v-text-field v-model="editingProduct['유사군코드']" label="유사군코드"></v-text-field>
+                            </v-flex>
+                            <v-flex xs12>
+                              <v-checkbox :label="`고시명칭`" v-model="editingProduct['고시명칭']"></v-checkbox>
                             </v-flex>
                           </v-layout>
                         </v-container>
@@ -137,6 +144,12 @@ export default {
           align: "center",
           sortable: false,
           value: "유사군코드"
+        },
+        {
+          text: "고시명칭",
+          align: "center",
+          sortable: false,
+          value: "고시명칭"
         },
         {
           text: "수정하기",
