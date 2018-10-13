@@ -85,6 +85,7 @@ export default {
   created() {
     this.$store.dispatch("fetchClasses");
     this.$store.dispatch("fetchProducts");
+    this.$store.dispatch("fetchFeeSettings");
   }
 };
 </script>

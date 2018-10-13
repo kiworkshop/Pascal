@@ -151,22 +151,22 @@ export default {
       return this.$store.getters.selectedClassesCount;
     },
     agentFeeSearch() {
-      return this.$store.getters.calculateFee.agentFeeSearch;
+      return this.$store.getters.calculateFee.agentSearch;
     },
     agentFeeApp() {
-      return this.$store.getters.calculateFee.agentFeeApp;
+      return this.$store.getters.calculateFee.agentApp;
     },
     agentFeeReg() {
-      return this.$store.getters.calculateFee.agentFeeReg;
+      return this.$store.getters.calculateFee.agentReg;
     },
     officialFeeApp() {
-      return this.$store.getters.calculateFee.officialFeeApp;
+      return this.$store.getters.calculateFee.officialApp;
     },
     officialFeeReg() {
-      return this.$store.getters.calculateFee.officialFeeReg;
+      return this.$store.getters.calculateFee.officialReg;
     },
     basicOfficialFeeTax() {
-      return this.$store.state.basicFee.basicOfficialFeeTax;
+      return this.$store.state.basicFee.officialTax;
     },
     searchFee() {
       return this.agentFeeSearch * 1.1;

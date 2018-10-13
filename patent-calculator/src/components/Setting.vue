@@ -1,65 +1,72 @@
- <template>
-  <v-dialog v-model="dialog" width="900">
-    <v-btn 
-    flat 
-    slot="activator"
-    @click.native="initSetting()">
-      <v-badge color="blue-grey lighten-3">
-        <v-icon>setting</v-icon>
-        설정
-      </v-badge>
-    </v-btn>
-    <v-card>
-        <v-card-title>
-        <span class="headline">설정</span>
-        </v-card-title>
-        <v-card-text>
-        <v-container grid-list-md>
+<template>
+  <v-container fluid grid-list-md>
+    <v-slide-y-transition mode="out-in">
+      <v-layout>
+        <v-flex>
+          <v-card>
+            <v-toolbar color="grey lighten-4">
+              <v-toolbar-title>설정</v-toolbar-title>
+              <v-spacer></v-spacer>
+              <p class="caption text-xs-left" ><br><br>프로그램의 설정을 변경합니다.</p>
+            </v-toolbar>
+            <v-layout row wrap>
+              <v-flex>
+                <v-container>
+                  <v-toolbar color="elevation-0">
+                    <v-toolbar-title>기본 대리인 수수료</v-toolbar-title>
+                  </v-toolbar>
 
-        </v-container>
-        </v-card-text>
-        <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="primary" flat @click.native="commitSetting()">확인</v-btn>
-        <v-btn color="primary" flat @click.native="dialog = false">취소</v-btn>
-        </v-card-actions>
-    </v-card>
-  </v-dialog>                
-</template>
+                  <v-layout column wrap>
+                    <v-layout row wrap>
+                      <v-flex text-xs-center>검색단계 수수료</v-flex>
+                      <v-flex text-xs-center>{{ basicFeeEdited.agentSearch.toLocaleString()}} 원</v-flex>
+                    </v-layout>
+                    <v-divider light></v-divider>
+                    <v-layout row wrap>
+                      <v-flex text-xs-center>출원단계 수수료</v-flex>
+                      <v-flex text-xs-center>{{ basicFeeEdited.agentApp.toLocaleString()}} 원</v-flex>
+                    </v-layout>
+                    <v-divider light></v-divider>
+                    <v-layout row wrap>
+                      <v-flex text-xs-center>등록단계 수수료</v-flex>
+                      <v-flex text-xs-center>{{ basicFeeEdited.agentReg.toLocaleString()}} 원</v-flex>
+                    </v-layout>
+                  </v-layout>
+                </v-container>
+              </v-flex>                
+            </v-layout>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-slide-y-transition>
+  </v-container>
+</template>            
 
 <script>
 export default {
-  name: "Manual Add",
+  name: "Settings",
   data () {
     return {
       dialog: false,
-      setting: {},
+      basicFeeEdited: {}
     }
   },
   methods:{
-    initInput() {
-    },
-    commitSetting() {
-    }
   },
   created() {
     this.$noticeEventBus.$on('raiseNotice', (message) => {
       this.message = message
       this.show = true
-      })
+      });
+    this.basicFeeEdited = this.basicFee;
   },
   computed: {
-    classes() {
-      return this.$store.getters.classes;
+    basicFee() {
+      return this.$store.getters.basicFee;
     },
-    selected() {
-      let classes = this.$store.getters.selected;
-      let goods = [];
-      for (const classId in classes) {
-        goods = goods.concat(Object.values(classes[classId]))
-      }
-      return goods;
-    }
+    feeSettingList() {
+      return this.$store.getters.feeSettingList;
+    },
   }
 }
 </script>

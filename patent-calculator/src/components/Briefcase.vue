@@ -43,8 +43,8 @@
                 <td> {{ props.item['지정상품(영문)'] }}</td>
                 <td class="text-xs-center">{{ props.item['유사군코드'] }}</td>
                 <td class="text-xs-center">
-                  <v-icon v-if="!props.item['고시명칭']" small color="red">check</v-icon>
-                  <v-icon v-if="props.item['고시명칭']" small color="blue">check</v-icon>
+                  <v-icon v-if="!props.item['고시명칭']" small color="red">X</v-icon>
+                  <v-icon v-if="props.item['고시명칭']" small color="blue">O</v-icon>
                 </td>
                 <td class="text-xs-center">
                   <v-dialog v-model="dialog" width="500">
@@ -95,7 +95,10 @@
           </v-card>
         </v-flex>
         <v-flex xs4>
-          <quotation-summary></quotation-summary>
+          <v-layout column>
+            <v-flex><briefcase-summary></briefcase-summary></v-flex>
+            <v-flex><quotation-summary></quotation-summary></v-flex>
+          </v-layout>
         </v-flex>
       </v-layout>
     </v-slide-y-transition>
@@ -103,10 +106,12 @@
 </template>
 
 <script>
+import BriefcaseSummary from "./BriefcaseSummary";
 import QuotationSummary from "./QuotationSummary";
 export default {
-  name: "Search",
+  name: "Briefcase",
   components: {
+    BriefcaseSummary,
     QuotationSummary
   },
   data() {

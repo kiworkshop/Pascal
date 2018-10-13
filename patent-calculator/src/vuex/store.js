@@ -4,6 +4,7 @@ import axios from 'axios';
 
 const UPDATE_CLASSES = 'UPDATE_CLASSES'
 const UPDATE_PRODUCTS = 'UPDATE_PRODUCTS'
+const UPDATE_FEE = 'UPDATE_FEE'
 const ADD_PRODUCT = 'ADD_PRODUCT'
 const DELETE_PRODUCT = 'DELETE_PRODUCT'
 const EDIT_PRODUCT = 'EDIT_PRODUCT'
@@ -15,16 +16,20 @@ export const store = new Vuex.Store({
         classes: [],
         products: [],
         selected: {},
-        basicFee: {
-            basicAgentFeeSearch: 50000,
-            basicAgentFeeApp: 200000,
-            basicAgentFeeReg: 150000,
-            additionalFee: 2000,
-            basicOfficialFeeApp: 62000,
-            basicOfficialFeeReg: 211000,
-            basicOfficialFeeTax: 9120      
-        },
-        fee: {}
+        basicFee: {},
+        fee: {},
+        feeSettingList: {
+            '기본값': {
+              agentSearch: 50000,
+              agentApp: 200000,
+              agentReg: 150000,
+              additional: 2000,
+              officialApp: 62000,
+              officialAppAnnounced: 56000,
+              officialReg: 211000,
+              officialTax: 9120      
+            }
+          }
     },
     getters: {
         trademarks(state) {
@@ -32,6 +37,9 @@ export const store = new Vuex.Store({
         },
         basicFee(state) {
             return state.basicFee
+        },
+        feeSettingList(state) {
+            return state.feeSettingList
         },
         products(state) {
             return state.products
@@ -64,22 +72,23 @@ export const store = new Vuex.Store({
         },
         calculateFee(state, getters) {
             let fee = { 
-                agentFeeSearch: 0, agentFeeApp: 0, agentFeeReg: 0, 
-                officialFeeApp: 0, officialFeeReg: 0
+                agentSearch: 0, agentApp: 0, agentReg: 0, 
+                officialApp: 0, officialReg: 0
             }
-            fee.agentFeeSearch = getters.selectedClassesCount * state.basicFee.basicAgentFeeSearch
-            fee.agentFeeApp = getters.selectedClassesCount * state.basicFee.basicAgentFeeApp
-            fee.agentFeeReg = getters.selectedClassesCount * state.basicFee.basicAgentFeeReg
+            fee.agentSearch = getters.selectedClassesCount * state.basicFee.agentSearch
+            fee.agentApp = getters.selectedClassesCount * state.basicFee.agentApp
+            fee.agentReg = getters.selectedClassesCount * state.basicFee.agentReg
  
+            // 모든 상품 명칭이 고시명칭인 경우 officialAppAnnounced를 사용
             let goodsOver20 = 0;
             for (const _class in getters.selected) {
               if (getters.selected.hasOwnProperty(_class)) {
-                fee.officialFeeApp += state.basicFee.basicOfficialFeeApp;
-                fee.officialFeeReg += state.basicFee.basicOfficialFeeReg;
+                fee.officialApp += state.basicFee.officialApp;
+                fee.officialReg += state.basicFee.officialReg;
                 goodsOver20 = Object.keys(_class).length - 20;
                 if (goodsOver20 > 0) {
-                  fee.officialFeeApp += goodsOver20 * state.basicFee.basicAdditionalFee
-                  fee.officialFeeReg += goodsOver20 * state.basicFee.basicAdditionalFee
+                  fee.officialApp += goodsOver20 * state.basicFee.additional
+                  fee.officialReg += goodsOver20 * state.basicFee.additional
                 }
               }
             }
@@ -92,6 +101,9 @@ export const store = new Vuex.Store({
         },
         [UPDATE_PRODUCTS](state, products) {
             state.products = products
+        },
+        [UPDATE_FEE](state) {
+            state.basicFee = this.state.feeSettingList['기본값']
         },
         [ADD_PRODUCT](state, product) {
             if (!(product['NICE분류'] in state.selected)) {
@@ -125,6 +137,9 @@ export const store = new Vuex.Store({
             axios.get(dataUrl)
                 .then(result => result.data)
                 .then(products => commit(UPDATE_PRODUCTS, products))
+        },
+        fetchFeeSettings({ commit }) {
+            commit(UPDATE_FEE)
         },
         addProduct({ commit }, product) {
             commit(ADD_PRODUCT, product)
