@@ -13,27 +13,11 @@
             {{ classes[classNo] }}
           </v-list-tile-content>
           <v-list-tile-avatar>
-          <v-dialog v-model="dialog" width="600">
-            <v-avatar slot="activator" color="primary" size=22>
-              <span class="white--text body-1 font-weight-medium">
-                {{ Object.keys(_class).length }}
-              </span>
-            </v-avatar>
-            <v-card>
-                <v-card-title>
-                <span class="headline">{{ classes[classNo] }}</span>
-                </v-card-title>
-                <v-card-text>
-                <v-container grid-list-md>
-                  <p>{{getNames(_class)}}</p>
-                </v-container>
-                </v-card-text>
-                <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="primary" flat @click.native="dialog = false">닫기</v-btn>
-                </v-card-actions>
-            </v-card>
-          </v-dialog>    
+          <v-btn fab small slot="activator" color="primary" size=22 @click.native="copyToClipboard(_class, classNo)">
+            <span class="white--text body-1 font-weight-medium">
+              {{ Object.keys(_class).length }}
+            </span>
+          </v-btn>
           </v-list-tile-avatar>
       </v-list-tile>
     </v-list>
@@ -74,6 +58,17 @@ export default {
         text += _class[keys[i]]['지정상품(국문)'];
       }
       return text
+    },
+    copyToClipboard(_class, classNo) {
+      var copyText = this.getNames(_class)
+      var temp = document.createElement("textarea");
+      document.body.appendChild(temp);
+      temp.value = copyText;
+      temp.select();
+      document.execCommand('copy');
+      document.body.removeChild(temp);
+      const message = this.classes[classNo] + "의 지정상품이 클립보드에 복사되었습니다.";
+      this.$noticeEventBus.$emit("raiseNotice", message);
     }
   }
 };
