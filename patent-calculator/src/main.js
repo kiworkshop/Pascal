@@ -6,6 +6,8 @@ import { store } from './vuex/store'
 
 Vue.config.productionTip = false;
 Vue.prototype.$noticeEventBus = new Vue();
+Vue.prototype.$submissionAlarmBus = new Vue();
+Vue.prototype.$productTransmissionBus = new Vue();
 
 new Vue({
   store,
