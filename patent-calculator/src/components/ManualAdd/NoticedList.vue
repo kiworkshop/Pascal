@@ -3,7 +3,6 @@
     <v-toolbar color="grey lighten-4">
       <v-toolbar-title>고시명칭 상품 목록</v-toolbar-title>
       <v-spacer></v-spacer>
-      <!-- <p class="caption text-xs-left" ><br><br></p> -->
     </v-toolbar>
     <v-data-table
     :headers="headers"

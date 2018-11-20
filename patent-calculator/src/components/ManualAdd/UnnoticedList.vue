@@ -105,7 +105,7 @@ export default {
       this.products.splice(index, 1);
     },
     applyClass() {
-      let productClass = this.$store.getters.classes.indexOf(this.search._class);
+      let productClass = this.$store.getters.classes.indexOf(this.appliedClass);
       let i = 0;
       for (i = 0; i < this.selected.length; i++) {
         let appliedIndex =  this.products.findIndex(x => x['id'] == this.selected[i]['id']);
