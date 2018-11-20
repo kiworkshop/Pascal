@@ -3,7 +3,6 @@
     <v-toolbar app>
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <v-spacer></v-spacer>
-      <manual-add></manual-add>
       <v-btn flat v-for="(item, i) in menu" :key="i" @click="view=item.component">
         <v-badge color="blue-grey lighten-3">
           <span v-if="item.badge" slot="badge" class="caption font-weight-medium">{{selectedCount}}</span>
@@ -42,13 +41,19 @@ export default {
     Quotation,
     Snackbar,
     ManualAdd,
-    Setting
+    Setting,
   },
   data() {
     return {
       title: "상표 견적 도우미",
       fixed: false,
       menu: [
+        {
+          icon: "add",
+          title: "상품추가",
+          component: "ManualAdd",
+          badge: false
+        },
         {
           icon: "search",
           title: "검색",

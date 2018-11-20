@@ -33,7 +33,7 @@
                 <v-btn color="primary" flat @click.native="dialog = false">닫기</v-btn>
                 </v-card-actions>
             </v-card>
-          </v-dialog>    
+          </v-dialog>
           </v-list-tile-avatar>
       </v-list-tile>
     </v-list>
@@ -41,12 +41,8 @@
 </template>
 
 <script>
-import ManualAdd from "./ManualAdd";
 export default {
   name: "BriefcaseSummary",
-  components:{
-    ManualAdd
-  },
   data(){
     return {
       dialog: false,
