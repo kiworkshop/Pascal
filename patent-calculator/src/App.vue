@@ -13,7 +13,7 @@
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
-    <v-content>
+    <v-content class="white">
       <transition name="component-fade" mode="out-in">
         <component v-bind:is="view"></component>
       </transition>
@@ -42,7 +42,7 @@ export default {
     Quotation,
     Snackbar,
     ManualAdd,
-    Setting,
+    Setting
   },
   data() {
     return {
@@ -97,7 +97,7 @@ export default {
 </script>
 <style>
 * {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 #app-toolbar > .v-toolbar__content {
