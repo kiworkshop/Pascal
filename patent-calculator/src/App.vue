@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-toolbar app dark color="#2b2b2b" flat>
+    <v-toolbar app dark color="#2b2b2b" flat id="app-toolbar">
       <v-toolbar-title v-text="title" class="headline font-weight-bold"></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
@@ -100,7 +100,7 @@ export default {
   font-family: 'Noto Sans KR', sans-serif;
 }
 
-.v-toolbar__content {
+#app-toolbar > .v-toolbar__content {
   padding-left: 10rem;
   padding-right: 10rem;
 }
