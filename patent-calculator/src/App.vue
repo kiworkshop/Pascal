@@ -1,18 +1,19 @@
 <template>
   <v-app>
-    <v-toolbar app>
-      <v-toolbar-title v-text="title"></v-toolbar-title>
+    <v-toolbar app dark color="#2b2b2b" flat>
+      <v-toolbar-title v-text="title" class="headline font-weight-bold"></v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn flat v-for="(item, i) in menu" :key="i" @click="view=item.component">
-        <v-badge color="blue-grey lighten-3">
-          <span v-if="item.badge" slot="badge" class="caption font-weight-medium">{{selectedCount}}</span>
-          <v-icon>{{item.icon}}</v-icon>
-          {{item.title}}
-      </v-badge>
-      </v-btn>
+      <v-toolbar-items>
+        <v-btn flat v-for="(item, i) in menu" :key="i" @click="view=item.component">
+          <v-badge color="#808080">
+            <span v-if="item.badge" slot="badge" class="caption font-weight-medium">{{selectedCount}}</span>
+            <!-- <v-icon>{{item.icon}}</v-icon> -->
+            <span class="subheading">{{item.title}}</span>
+          </v-badge>
+        </v-btn>
+      </v-toolbar-items>
     </v-toolbar>
     <v-content>
-      <!-- 만약 투명도 변화를 주고 싶다면 css에 opacity transition 속성 추가 -->
       <transition name="component-fade" mode="out-in">
         <component v-bind:is="view"></component>
       </transition>
@@ -97,5 +98,10 @@ export default {
 <style>
 * {
   font-family: 'Noto Sans KR', sans-serif;
+}
+
+.v-toolbar__content {
+  padding-left: 10rem;
+  padding-right: 10rem;
 }
 </style>
