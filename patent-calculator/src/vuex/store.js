@@ -70,6 +70,16 @@ export const store = new Vuex.Store({
             }
             return count      
         },
+        allAnnounced(state) {
+            for (var _class in state.selected) {
+                for (var id in state.selected[_class]) {
+                    if (!state.selected[_class][id]['고시명칭']) {
+                        return false
+                    }
+                }
+            } 
+            return true
+        },
         calculateFee(state, getters) {
             let fee = { 
                 agentSearch: 0, agentApp: 0, agentReg: 0, 
@@ -80,10 +90,15 @@ export const store = new Vuex.Store({
             fee.agentReg = getters.selectedClassesCount * state.basicFee.agentReg
  
             // 모든 상품 명칭이 고시명칭인 경우 officialAppAnnounced를 사용
+            var basicOfficialApp = state.basicFee.officialApp
+            if (getters.allAnnounced){
+                basicOfficialApp = state.basicFee.officialAppAnnounced
+            }
+
             let goodsOver20 = 0;
             for (const _class in getters.selected) {
               if (getters.selected.hasOwnProperty(_class)) {
-                fee.officialApp += state.basicFee.officialApp;
+                fee.officialApp += basicOfficialApp;
                 fee.officialReg += state.basicFee.officialReg;
                 goodsOver20 = Object.keys(_class).length - 20;
                 if (goodsOver20 > 0) {
