@@ -1,11 +1,11 @@
 <template>
   <v-app>
-    <v-toolbar app dark color="#2b2b2b" flat clipped-right id="app-toolbar">
+    <v-toolbar app dark color="primary" flat clipped-right id="app-toolbar">
       <v-toolbar-title v-text="title" class="headline font-weight-bold"></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
         <v-btn flat v-for="(item, i) in menu" :key="i" @click="view=item.component">
-          <v-badge color="#808080">
+          <v-badge color="grey darken-2">
             <span v-if="item.badge" slot="badge" class="caption font-weight-medium">{{selectedCount}}</span>
             <!-- <v-icon>{{item.icon}}</v-icon> -->
             <span class="subheading">{{item.title}}</span>
