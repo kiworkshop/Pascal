@@ -14,10 +14,10 @@
                 <td class="text-xs-center"><input type="text" v-model="props.item['지정상품(국문)']"></td>
                 <td class="text-xs-center">
                   <!--수정하기-->
-                  <v-btn flat icon slot="activator" color="primary" dark @click.native="moveProductToUnnoticed(props.item.id)">
+                  <v-btn flat icon slot="activator" color="primary" dark @click.native="moveProduct(props.item)">
                     <v-icon small>compare_arrows</v-icon>
                   </v-btn>
-                  <v-btn flat icon slot="activator" color="red" dark @click.native="deleteFromList(props.item.id)">
+                  <v-btn flat icon slot="activator" color="red" dark @click.native="deleteFromTable(props.item)">
                     <v-icon small>delete</v-icon>
                   </v-btn>
                 </td>
@@ -31,6 +31,7 @@
             <v-layout column>
               <v-flex>
                 <v-data-table
+                  v-model="selected"
                   :headers="unnoticedProductsHeaders"
                   :items="products.unnoticed"
                   :rows-per-page-items="rowsPerPageItems"
@@ -51,10 +52,10 @@
                       <td class="text-xs-center"><input type="text" v-model="props.item['지정상품(국문)']"></td>
                       <td class="text-xs-center">
                         <!--추가하기-->
-                        <v-btn flat icon slot="activator" color="primary" dark @click.native="moveProduct(props.item.id)">
+                        <v-btn flat icon slot="activator" color="primary" dark @click.native="moveProduct(props.item)">
                           <v-icon small>compare_arrows</v-icon>
                         </v-btn>
-                        <v-btn flat icon slot="activator" color="red" dark @click.native="deleteFromList(props.item.id)">
+                        <v-btn flat icon slot="activator" color="red" dark @click.native="deleteFromTable(props.item)">
                           <v-icon small>delete</v-icon>
                         </v-btn>
                       </td>
@@ -67,7 +68,7 @@
                   <v-spacer></v-spacer>
                     <v-flex>
                       <v-select
-                      v-model="payload._class"
+                      v-model="selectedClass"
                       :items="classes"
                       label="분류"
                       ></v-select> <!--적용할 분류 검색 기능-->
@@ -91,13 +92,11 @@ export default {
   name: "ClassifiedResult",
   data() {
     return {
-      classes: [1, 2, 3],
+      classes: [1, 2, 3],  // 45류 대신 임시로 사용할 test용 분류
+      selected: [],
+      // TODO: selectedClass의 기본값을 설정해주어야합니다.
+      selectedClass: -1,
       rowsPerPageItems: [10, 25, 100],
-      // TODO: _class의 기본값을 설정해주어야합니다.
-      payload: {
-        _class: -1,
-        searchingProducts: ""
-      },
       noticedProductsHeaders: [
         {
           text: "분류",
@@ -149,6 +148,39 @@ export default {
     }
   },
   methods: {
+    applyClass() {
+      let selectedClass = this.selectedClass;
+      let i = 0;
+      for (i = 0; i < this.selected.length; i++) {
+        let selectedIndex =  this.products.unnoticed.findIndex(x => x['id'] == this.selected[i]['id']);
+          if (selectedClass != -1) {
+            this.products.unnoticed[selectedIndex]['NICE분류'] = selectedClass;
+          }
+      }
+      this.selected = [];
+    },
+    moveProduct(product) {
+      if(product['고시명칭']) {  //고시상품인경우 비고시상품으로 이동
+        product['고시명칭'] = false;
+        let selectedIndex = this.products.noticed.findIndex(temp => temp['id'] == product['id']);
+        this.products.unnoticed.push(this.products.noticed.splice(selectedIndex, 1)[0]);
+      }
+      else {  //비고시상품인경우 고시상품으로 이동
+        product['고시명칭'] = true;
+        let selectedIndex = this.products.unnoticed.findIndex(temp => temp['id'] == product['id']);
+        this.products.noticed.push(this.products.unnoticed.splice(selectedIndex, 1)[0]);
+      }
+    },
+    deleteFromTable(product) {
+      if(product['고시명칭']) {
+        let selectedIndex = this.products.noticed.findIndex(temp => temp['id'] == product['id']);
+        this.products.noticed.splice(selectedIndex, 1);
+      }
+      else {
+        let selectedIndex = this.products.unnoticed.findIndex(temp => temp['id'] == product['id']);
+        this.products.unnoticed.splice(selectedIndex, 1)[0];
+      }
+    },
     submitProductsToBriefcase () {
       for (const product of this.products.noticed) {
         this.$store.dispatch("addProduct", Object.assign({}, product));
