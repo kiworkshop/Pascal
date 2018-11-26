@@ -1,8 +1,6 @@
 <template>
   <v-container fluid grid-list-md>
     <v-slide-y-transition mode="out-in">
-      <v-layout row wrap>
-        <v-flex xs8>
           <v-card>
             <v-toolbar color="grey lighten-4">
               <v-toolbar-title>상품 관리</v-toolbar-title>
@@ -93,27 +91,13 @@
               </v-alert>
             </v-data-table>
           </v-card>
-        </v-flex>
-        <v-flex xs4>
-          <v-layout column>
-            <v-flex><briefcase-summary></briefcase-summary></v-flex>
-            <v-flex><quotation-summary></quotation-summary></v-flex>
-          </v-layout>
-        </v-flex>
-      </v-layout>
     </v-slide-y-transition>
   </v-container>
 </template>
 
 <script>
-import BriefcaseSummary from "./BriefcaseSummary";
-import QuotationSummary from "./QuotationSummary";
 export default {
   name: "Briefcase",
-  components: {
-    BriefcaseSummary,
-    QuotationSummary
-  },
   data() {
     return {
       dialog: false,
