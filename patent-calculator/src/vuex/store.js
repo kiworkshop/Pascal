@@ -114,8 +114,16 @@ export const store = new Vuex.Store({
             }
             state.selected = Object.assign({}, state.selected)
         },
-        [EDIT_PRODUCT](state, productToEdit) {
-            state.selected[productToEdit['NICE분류']][productToEdit['id']] = Object.assign({}, productToEdit)
+        [EDIT_PRODUCT](state, product) {
+            let classObject = state.selected[product.toEdit['NICE분류']]
+            delete classObject[product.toEdit['id']]
+            if (Object.keys(classObject).length === 0 && classObject.constructor === Object) {
+                delete state.selected[product.toEdit['NICE분류']]
+            }
+            if (!(product.edited['NICE분류'] in state.selected)) {
+                state.selected[product.edited['NICE분류']] = {}
+            }
+            state.selected[product.edited['NICE분류']][product.edited['id']] = Object.assign({}, product.edited)
             state.selected = Object.assign({}, state.selected)
         }
     },
@@ -126,8 +134,8 @@ export const store = new Vuex.Store({
         deleteProduct({ commit }, product) {
             commit(DELETE_PRODUCT, product)
         },
-        editProduct({ commit }, productToEdit) {
-            commit(EDIT_PRODUCT, productToEdit)
+        editProduct({ commit }, product) {
+            commit(EDIT_PRODUCT, product)
         }
     }
 })

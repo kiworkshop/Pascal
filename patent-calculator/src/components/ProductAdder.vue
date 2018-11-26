@@ -21,7 +21,7 @@
                         <v-layout row>
                           <v-flex xs4>
                             <v-select
-                              v-model="payload._class"
+                              v-model="payload.classString"
                               :items="classes"
                               label="분류"
                             ></v-select>
@@ -99,6 +99,7 @@ export default {
       payloads: [
         {
           id: 1,
+          classString: "",
           _class: -1,
           searchingProducts: ""
         }
@@ -114,6 +115,9 @@ export default {
   },
   methods: {
     classifyProducts() {
+      for (let i=0; i<this.payloads.length ; i++) {
+        this.payloads[i]._class = this.classes.indexOf(this.payloads[i].classString)
+      }
       const requests = [];
       for (let i=0; i<this.payloads.length ; i++) {
         requests.push(this.$searchManager.search(this.payloads[i]).then(response => {

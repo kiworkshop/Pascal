@@ -56,20 +56,22 @@
                       <v-card-text>
                         <v-container grid-list-md>
                           <v-layout wrap>
+                            <v-select
+                              v-model="productClass"
+                              :items="classes"
+                              label="분류"
+                            ></v-select>
                             <v-flex xs12>
-                              {{ classes[editingProduct['NICE분류']] }}
+                              <v-text-field v-model="product.edited['지정상품(국문)']" label="명칭" required></v-text-field>
                             </v-flex>
                             <v-flex xs12>
-                              <v-text-field v-model="editingProduct['지정상품(국문)']" label="명칭" required></v-text-field>
+                              <v-text-field v-model="product.edited['지정상품(영문)']" label="영문 명칭"></v-text-field>
                             </v-flex>
                             <v-flex xs12>
-                              <v-text-field v-model="editingProduct['지정상품(영문)']" label="영문 명칭"></v-text-field>
+                              <v-text-field v-model="product.edited['유사군코드']" label="유사군코드"></v-text-field>
                             </v-flex>
                             <v-flex xs12>
-                              <v-text-field v-model="editingProduct['유사군코드']" label="유사군코드"></v-text-field>
-                            </v-flex>
-                            <v-flex xs12>
-                              <v-checkbox :label="`고시명칭`" v-model="editingProduct['고시명칭']"></v-checkbox>
+                              <v-checkbox :label="`고시명칭`" v-model="product.edited['고시명칭']"></v-checkbox>
                             </v-flex>
                           </v-layout>
                         </v-container>
@@ -101,6 +103,7 @@ export default {
   data() {
     return {
       dialog: false,
+      productClass: "",
       rowsPerPageItems: [
         10,
         25,
@@ -147,7 +150,10 @@ export default {
           value: "수정하기"
         }
       ],
-      editingProduct: {}
+      product: {
+        toEdit: {},
+        edited: {}
+      }
     };
   },
   methods: {
@@ -157,12 +163,15 @@ export default {
       this.$store.dispatch("deleteProduct", item);
     },
     copyProductToEdit(item) {
-      this.editingProduct = Object.assign({}, item)
+      this.product.toEdit = Object.assign({}, item);
+      this.product.edited = Object.assign({}, item);
+      this.productClass = this.classes[this.product.toEdit['NICE분류']];
     },
     commitEditing() {
-      this.$store.dispatch("editProduct", this.editingProduct);
+      this.product.edited['NICE분류'] = this.classes.indexOf(this.productClass);
+      this.$store.dispatch("editProduct", this.product);
       this.dialog = false;
-      const message = "[ " + this.editingProduct["NICE분류"] + "류 ] " + this.editingProduct["지정상품(국문)"] + "으로 수정되었습니다.";
+      const message = "[ " + this.product.edited["NICE분류"] + "류 ] " + this.product.edited["지정상품(국문)"] + "(으)로 수정되었습니다.";
       this.$noticeEventBus.$emit("raiseNotice", message);
     }
   },
