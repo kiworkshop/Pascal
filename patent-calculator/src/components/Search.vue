@@ -118,7 +118,7 @@ export default {
   },
   computed: {
     classes() {
-      return this.$store.getters.classes;
+      return Object.values(this.$store.getters.classes);
     }
   }
 };
