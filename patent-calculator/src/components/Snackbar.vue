@@ -6,7 +6,7 @@
     :timeout="3000"
   >
     {{ message }}
-    <v-btn color="primary" flat @click="show=false"> 알겠어요! </v-btn>
+    <v-btn flat @click="show=false"> 알겠어요! </v-btn>
   </v-snackbar>
 </template>
 

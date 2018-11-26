@@ -1,11 +1,11 @@
 <template>
   <v-app>
-    <v-toolbar app dark color="#2b2b2b" flat id="app-toolbar">
+    <v-toolbar app dark color="primary" flat clipped-right id="app-toolbar">
       <v-toolbar-title v-text="title" class="headline font-weight-bold"></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
         <v-btn flat v-for="(item, i) in menu" :key="i" @click="view=item.component">
-          <v-badge color="#808080">
+          <v-badge color="grey darken-2">
             <span v-if="item.badge" slot="badge" class="caption font-weight-medium">{{selectedCount}}</span>
             <!-- <v-icon>{{item.icon}}</v-icon> -->
             <span class="subheading">{{item.title}}</span>
@@ -13,17 +13,41 @@
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
+    <v-navigation-drawer
+      app
+      right
+      clipped
+      :mini-variant.sync="mini"
+      width=350
+    >
+      <v-list>
+        <v-list-tile v-if="mini">
+          <v-list-tile-action>
+            <v-btn flat icon>
+              <v-icon @click="mini = !mini">arrow_back</v-icon>
+            </v-btn>
+          </v-list-tile-action>
+        </v-list-tile>
+        <v-list-tile v-else @click="mini = !mini">
+          <v-list-tile-action>
+            <v-icon>arrow_forward</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>요약 닫기</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-layout column v-if="!mini">
+          <v-flex><briefcase-summary></briefcase-summary></v-flex>
+          <v-flex><quotation-summary></quotation-summary></v-flex>
+        </v-layout>
+      </v-list>
+    </v-navigation-drawer>
     <v-content class="white">
       <transition name="component-fade" mode="out-in">
         <component v-bind:is="view"></component>
       </transition>
       <snackbar></snackbar>
     </v-content>
-    <v-footer :fixed="fixed">
-      <v-layout column align-center>
-        <span>&copy; 2018 광일공방</span>
-      </v-layout>
-    </v-footer>
   </v-app>
 </template>
 
@@ -33,6 +57,8 @@ import Briefcase from "./components/Briefcase";
 import Quotation from "./components/Quotation";
 import Snackbar from "./components/Snackbar";
 import ProductAdder from "./components/ProductAdder"
+import BriefcaseSummary from "./components/BriefcaseSummary";
+import QuotationSummary from "./components/QuotationSummary";
 import Setting from "./components/Setting";
 export default {
   name: "App",
@@ -42,7 +68,9 @@ export default {
     Quotation,
     Snackbar,
     ProductAdder,
-    Setting
+    Setting,
+    BriefcaseSummary,
+    QuotationSummary
   },
   data() {
     return {
@@ -80,7 +108,8 @@ export default {
           badge: false
         }
       ],
-      view: "Search"
+      view: "Search",
+      mini: true
     };
   },
   computed: {
