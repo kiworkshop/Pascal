@@ -6,23 +6,45 @@
         <v-stepper class="elevation-0" v-model="curStep">
           <v-stepper-header class="elevation-0">
             <v-stepper-step :complete="curStep>1" step="1">상품 입력</v-stepper-step>
-
             <v-divider></v-divider>
-
             <v-stepper-step :complete="curStep>2" step="2">상품 분류</v-stepper-step>
-
             <v-divider></v-divider>
-
             <v-stepper-step step="3">상품 추가 완료</v-stepper-step>
           </v-stepper-header>
           <v-stepper-items class="elevation-0">
             <v-stepper-content step="1">
               <v-layout column wrap>
-                <v-flex v-for="addFormId in addFormIds" class="mb-5">
-                  <add-form v-bind:addformId="addFormId"></add-form>
+                <v-flex v-for="payload in payloads" :key="payload.id" class="mb-5">
+                  <v-container>
+                    <v-layout column wrap>
+                      <v-flex>
+                        <v-layout row>
+                          <v-flex xs4>
+                            <v-select
+                              v-model="payload._class"
+                              :items="classes"
+                              label="분류"
+                            ></v-select>
+                          </v-flex>
+                          <v-spacer></v-spacer>
+                          <v-flex xs7>
+                            <v-textarea
+                              v-model="payload.searchingProducts"
+                              append-icon="search"
+                              placeholder="명칭 (붕산비료, 생물 비료, 도매업)"
+                              auto-grow
+                              hint="특허청 고시상품명칭 11판(2018)에서 상품 명칭을 검색합니다."
+                              persistent-hint
+                              rows="1"
+                            ></v-textarea>
+                          </v-flex>
+                        </v-layout>
+                      </v-flex>
+                    </v-layout>
+                  </v-container>
                 </v-flex>
                 <v-flex xs1 offset-xs5 >
-                  <v-btn color="primary" @click="addComponent()">
+                  <v-btn color="primary" @click="addForm()">
                     +
                   </v-btn>
                 </v-flex>
@@ -33,7 +55,6 @@
                 </v-flex>
               </v-layout>
             </v-stepper-content>
-
             <v-stepper-content step="2">
               <v-layout column wrap>
                 <v-flex class="mb-5">
@@ -55,7 +76,6 @@
               </v-flex>
               </v-layout>
             </v-stepper-content>
-
             <v-stepper-content step="3">
               <v-flex class='mt-5'><h2 align=center>선택하신 상품들이 추가되었습니다.</h2></v-flex>
             </v-stepper-content>
@@ -67,44 +87,53 @@
 </template>
 
 <script>
-import AddForm from "./ProductAdder/AddForm"
-import ClassifiedResult from "./ProductAdder/ClassifiedResult"
+import ClassifiedResult from "./ClassifiedResult"
 
 export default {
   name: "ProductAdder",
   components: {
-    AddForm,
     ClassifiedResult
   },
   data() {
     return {
+      payloads: [
+        {
+          id: 1,
+          _class: -1,
+          searchingProducts: ""
+        }
+      ],
+      classes: [1,2,3], // test를 위한 임시 class입니다
       curStep: 0,
-      addFormIds: [1],
-      completedCount: 0,
-      idCount: 1,
-      mutex: 1
+      numOfForms: 1
     }
   },
   methods: {
     classifyProducts() {
-      if (this.idCount != this.completedCount) {
-        this.completedCount++;
-        this.$submissionAlarmBus.$emit('classifyProducts' + this.completedCount);
+      const requests = [];
+      for (let i=0; i<this.payloads.length ; i++) {
+        requests.push(this.$searchManager.search(this.payloads[i]).then(response => {
+          return response; 
+        }));
       }
-      else {
-        this.curStep++;
-      }
+      let productAdderPointer = this
+      Promise.all(requests).then((responses) => {
+        let result = {noticed:[], unnoticed:[]};
+        for (let i=0; i<responses.length; i++){
+          result.noticed = result.noticed.concat(responses[i].noticed);
+          result.unnoticed = result.unnoticed.concat(responses[i].unnoticed);
+        }        
+        productAdderPointer.$productTransmissionBus.$emit('transmitClassified', result);
+      })
+      this.curStep++;
     },
     addProducts() {
       this.$submissionAlarmBus.$emit('submitProductsToBriefcase');
       this.curStep++;
     },
-    addComponent() {
-      this.addFormIds.push(++this.idCount);
+    addForm() {
+      this.payloads.push({id:++this.numOfForms, _class:-1, searchingProducts:""});
     }
-  },
-  mounted() {
-    this.$submissionAlarmBus.$on('classifyComplete', this.classifyProducts);
   },
   destroyed() {
     this.$submissionAlarmBus.$off();

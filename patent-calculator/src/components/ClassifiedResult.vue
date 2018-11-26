@@ -1,7 +1,7 @@
 <template>
   <v-container>
         <v-layout row wrap>
-          <v-flex xs5 class='mr-5'>
+          <v-flex xs5 class='mr-4'>
             <v-data-table
               :headers="noticedProductsHeaders"
               :items="products.noticed"
@@ -27,7 +27,7 @@
 
           <v-divider vertical></v-divider>
 
-          <v-flex xs6 class="ml-5">
+          <v-flex xs6 class="ml-4">
             <v-layout column>
               <v-flex>
                 <v-data-table
@@ -163,8 +163,8 @@ export default {
   mounted() {
     this.$submissionAlarmBus.$on('submitProductsToBriefcase', this.submitProductsToBriefcase);
     this.$productTransmissionBus.$on('transmitClassified', (transmittedProducts) => {
-      this.products.noticed = this.products.noticed.concat(transmittedProducts.noticed);
-      this.products.unnoticed = this.products.unnoticed.concat(transmittedProducts.unnoticed);
+      this.products.noticed = transmittedProducts.noticed;
+      this.products.unnoticed = transmittedProducts.unnoticed;
     });
   }
 }
