@@ -30,7 +30,7 @@
         </v-list-tile>
         <v-list-tile v-else @click="mini = !mini"> 
           <v-list-tile-action>
-            <v-icon @click="mini = !mini">arrow_forward</v-icon>
+            <v-icon>arrow_forward</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>요약 닫기</v-list-tile-title>
