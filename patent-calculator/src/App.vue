@@ -32,7 +32,7 @@ import Search from "./components/Search";
 import Briefcase from "./components/Briefcase";
 import Quotation from "./components/Quotation";
 import Snackbar from "./components/Snackbar";
-import ManualAdd from "./components/ManualAdd";
+import ProductAdder from "./components/ProductAdder"
 import Setting from "./components/Setting";
 export default {
   name: "App",
@@ -41,7 +41,7 @@ export default {
     Briefcase,
     Quotation,
     Snackbar,
-    ManualAdd,
+    ProductAdder,
     Setting
   },
   data() {
@@ -52,7 +52,7 @@ export default {
         {
           icon: "add",
           title: "상품추가",
-          component: "ManualAdd",
+          component: "ProductAdder",
           badge: false
         },
         {
