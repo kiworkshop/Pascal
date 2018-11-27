@@ -51,9 +51,6 @@
           <v-list-tile-action>
             <v-icon>arrow_forward</v-icon>
           </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>요약 닫기</v-list-tile-title>
-          </v-list-tile-content>
         </v-list-tile>
         <v-layout column v-if="!mini">
           <v-flex><briefcase-summary></briefcase-summary></v-flex>

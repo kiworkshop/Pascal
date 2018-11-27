@@ -7,7 +7,6 @@ export default class SearchManager {
 
   search(payload, exactness = true) {
     let searchingProducts = this.trimSearchingProducts(payload.searchingProducts);
-    console.log(searchingProducts);
     return this.makeRequests(payload._class, searchingProducts, exactness);
   }
 
@@ -24,14 +23,14 @@ export default class SearchManager {
   makeURL(searchingProducts) {
     let productsString = "";
     for (let product of searchingProducts) {
-      if (Boolean(product.match(/[\s]/))) {
+      if (product.match(/[\s]/)) {
         const splited = product.split(/[\s]/);
         for (const word of splited) {
           productsString += "|" + word;
         }
       }
       else {
-      productsString += "|" + product;
+        productsString += "|" + product;
       }
     }
     const baseURL = 'https://oow1cmv2z7.execute-api.ap-northeast-2.amazonaws.com/Pascal';
