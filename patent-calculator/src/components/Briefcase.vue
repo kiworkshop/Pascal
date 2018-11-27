@@ -15,7 +15,7 @@
                 :items="classes"
                 label="분류"
                 buttom
-              ></v-select> <!--분류별 검색 기능 추가-->
+              ></v-select>
               </v-flex>
               <v-spacer></v-spacer>
               <v-flex>
@@ -181,11 +181,17 @@ export default {
     },
     selected() {
       let classes = this.$store.getters.selected;
-      let goods = [];
-      for (const classId in classes) {
-        goods = goods.concat(Object.values(classes[classId]))
+      let classId = this.classes.indexOf(this.search._class);
+      if (classId <= 0) {
+        let goods = []
+        for (const classId in classes) {
+          goods = goods.concat(Object.values(classes[classId]))
+        }
+        return goods;
       }
-      return goods;
+      else {
+        return Object.values(classes[classId]);
+      }
     }
   }
 };
