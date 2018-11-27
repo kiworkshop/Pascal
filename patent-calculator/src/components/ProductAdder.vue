@@ -52,7 +52,7 @@
                   </v-btn>
                 </v-flex>
                 <v-layout align-center justify-end row fill-height>
-                  <v-flex xs1 class="mt-2">
+                  <v-flex xs1 class="mt-3">
                     <v-btn block color="primary" @click="classifyProducts()">
                       <v-icon>
                         arrow_forward
