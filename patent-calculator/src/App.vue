@@ -6,7 +6,6 @@
       <v-toolbar-items>
         <v-btn flat v-for="(item, i) in menu" :key="i" @click="view=item.component">
           <v-badge color="grey darken-2">
-            <span v-if="item.badge" slot="badge" class="caption font-weight-medium">{{selectedCount}}</span>
             <!-- <v-icon>{{item.icon}}</v-icon> -->
             <span class="subheading">{{item.title}}</span>
           </v-badge>
@@ -24,7 +23,27 @@
         <v-list-tile v-if="mini">
           <v-list-tile-action>
             <v-btn flat icon>
-              <v-icon @click="mini = !mini">arrow_back</v-icon>
+              <v-icon>arrow_back</v-icon>
+            </v-btn>
+          </v-list-tile-action>
+        </v-list-tile>
+        <v-list-tile v-if="mini">
+          <v-list-tile-action>
+            <v-btn flat icon>
+              <v-badge
+                v-model="selectedCount"
+                small
+              >
+                <v-icon>work</v-icon>
+                <span slot="badge">{{selectedCount}}</span>
+              </v-badge>
+            </v-btn>
+          </v-list-tile-action>
+        </v-list-tile>
+        <v-list-tile v-if="mini">
+          <v-list-tile-action>
+            <v-btn flat icon>
+              <v-icon>insert_chart_outlined</v-icon>
             </v-btn>
           </v-list-tile-action>
         </v-list-tile>
