@@ -47,7 +47,7 @@
             </v-btn>
           </v-list-tile-action>
         </v-list-tile>
-        <v-list-tile v-else @click="mini = !mini"> 
+        <v-list-tile v-else @click="mini = !mini">
           <v-list-tile-action>
             <v-icon>arrow_forward</v-icon>
           </v-list-tile-action>
@@ -75,7 +75,7 @@ import Search from "./components/Search";
 import Briefcase from "./components/Briefcase";
 import Quotation from "./components/Quotation";
 import Snackbar from "./components/Snackbar";
-import ManualAdd from "./components/ManualAdd";
+import ProductAdder from "./components/ProductAdder"
 import BriefcaseSummary from "./components/BriefcaseSummary";
 import QuotationSummary from "./components/QuotationSummary";
 import Setting from "./components/Setting";
@@ -86,7 +86,7 @@ export default {
     Briefcase,
     Quotation,
     Snackbar,
-    ManualAdd,
+    ProductAdder,
     Setting,
     BriefcaseSummary,
     QuotationSummary
@@ -99,7 +99,7 @@ export default {
         {
           icon: "add",
           title: "상품추가",
-          component: "ManualAdd",
+          component: "ProductAdder",
           badge: false
         },
         {
@@ -135,11 +135,6 @@ export default {
     selectedCount() {
       return this.$store.getters.selectedCount;
     }
-  },
-  created() {
-    this.$store.dispatch("fetchClasses");
-    this.$store.dispatch("fetchProducts");
-    this.$store.dispatch("fetchFeeSettings");
   }
 };
 </script>

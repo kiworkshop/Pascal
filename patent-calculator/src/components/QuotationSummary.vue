@@ -34,7 +34,7 @@
           <v-list-tile-title class="font-weight-bold">합계</v-list-tile-title>
         </v-list-tile-content>
         <v-list-tile-action>
-          <v-flex class="text-xs-right font-weight-bold">{{totalFee.toLocaleString()}} 원</v-flex>
+          <v-flex class="text-xs-right font-weight-bold">{{전체비용.toLocaleString()}} 원</v-flex>
         </v-list-tile-action>
       </v-list-tile>
     </v-list>
@@ -51,83 +51,81 @@ export default {
           내역: [
             {
               명목: "대리인 수수료",
-              가격: this.agentFeeSearch
+              가격: this.검색단계대리인수수료
             },
             {
               명목: "부가세",
-              가격: this.agentFeeSearch * 0.1
+              가격: this.검색단계대리인수수료 * 0.1
             }
           ],
-          소계: this.searchFee
+          소계: this.검색단계비용
         },
         출원단계: {
           내역: [
             {
               명목: "대리인 수수료",
-              가격: this.agentFeeApp
+              가격: this.출원단계대리인수수료
             },
             {
               명목: "부가세",
-              가격: this.agentFeeApp * 0.1
+              가격: this.출원단계대리인수수료 * 0.1
             },
             {
               명목: "특허청 관납료",
-              가격: this.officialFeeApp
+              가격: this.출원단계관납료
             }
           ],
-          소계: this.appFee
+          소계: this.출원단계비용
         },
         등록단계: {
           내역: [
             {
               명목: "대리인 수수료",
-              가격: this.agentFeeReg
+              가격: this.등록단계대리인수수료
             },
             {
               명목: "부가세",
-              가격: this.agentFeeReg * 0.1
+              가격: this.등록단계대리인수수료 * 0.1
             },
             {
               명목: "특허청 관납료",
-              가격: this.officialFeeReg + this.basicOfficialFeeTax
+              가격: this.등록단계관납료 + this.등록세
             }
           ],
-          소계: this.regFee
+          소계: this.등록단계비용
         }
       };
     },
 
-    agentFeeSearch() {
-      return this.$store.getters.calculateFee.agentSearch;
+    검색단계대리인수수료() {
+      return this.$store.getters.calculateFee.검색단계.대리인수수료;
     },
-    agentFeeApp() {
-      return this.$store.getters.calculateFee.agentApp;
+    출원단계대리인수수료() {
+      return this.$store.getters.calculateFee.출원단계.대리인수수료;
     },
-    agentFeeReg() {
-      return this.$store.getters.calculateFee.agentReg;
+    등록단계대리인수수료() {
+      return this.$store.getters.calculateFee.등록단계.대리인수수료;
     },
-    officialFeeApp() {
-      return this.$store.getters.calculateFee.officialApp;
+    출원단계관납료() {
+      return this.$store.getters.calculateFee.출원단계.관납료;
     },
-    officialFeeReg() {
-      return this.$store.getters.calculateFee.officialReg;
+    등록단계관납료() {
+      return this.$store.getters.calculateFee.등록단계.관납료;
     },
-    basicOfficialFeeTax() {
-      return this.$store.state.basicFee.officialTax;
+    등록세() {
+      return this.$store.state.기본료.등록단계.등록세;
     },
-    searchFee() {
-      return this.agentFeeSearch * 1.1;
+    검색단계비용() {
+      return this.검색단계대리인수수료 * 1.1;
     },
-    appFee() {
-      return this.agentFeeApp * 1.1 + this.officialFeeApp;
+    출원단계비용() {
+      return this.출원단계대리인수수료 * 1.1 + this.출원단계관납료;
     },
-    regFee() {
-      return (
-        this.agentFeeReg * 1.1 + this.officialFeeReg + this.basicOfficialFeeTax
-      );
+    등록단계비용() {
+      return this.등록단계대리인수수료 * 1.1 + this.등록단계관납료 + this.등록세;
     },
-    totalFee() {
-      return this.searchFee + this.appFee + this.regFee;
+    전체비용() {
+      return this.검색단계비용 + this.출원단계비용 + this.등록단계비용;
     }
   }
 };

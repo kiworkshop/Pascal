@@ -19,22 +19,22 @@
                     <v-flex text-xs-center>검색단계 대리인 수수료</v-flex>
                     <v-layout row wrap>
                       <v-flex text-xs-center>기본료</v-flex>
-                      <v-flex text-xs-center>{{numOfTrademarks}}상표 {{numOfClasses}}개류</v-flex>
-                      <v-flex text-xs-right>{{agentFeeSearch.toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-center>1상표 {{numOfClasses}}개류</v-flex>
+                      <v-flex text-xs-right>{{검색단계대리인수수료.toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-layout row wrap>
                       <v-flex text-xs-center>부가세</v-flex>
                       <v-flex text-xs-center>10%</v-flex>
-                      <v-flex text-xs-right>{{(agentFeeSearch * 0.1).toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-right>{{(검색단계대리인수수료 * 0.1).toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-layout row wrap>
                       <v-flex text-xs-center>소계</v-flex>
-                      <v-flex text-xs-right>{{(agentFeeSearch * 1.1).toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-right>{{(검색단계대리인수수료 * 1.1).toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-divider light></v-divider>
                     <v-layout row wrap>
                       <v-flex text-xs-center>검색단계 합계</v-flex>
-                      <v-flex text-xs-right>{{searchFee.toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-right>{{검색단계비용.toLocaleString()}} 원</v-flex>
                     </v-layout>
                   </v-layout>
                 </v-container>
@@ -48,29 +48,29 @@
                     <v-flex text-xs-center>출원단계 대리인 수수료</v-flex>
                     <v-layout row wrap>
                       <v-flex text-xs-center>기본료</v-flex>
-                      <v-flex text-xs-center>{{numOfTrademarks}}상표 {{numOfClasses}}개류</v-flex>
-                      <v-flex text-xs-right>{{agentFeeApp.toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-center>1상표 {{numOfClasses}}개류</v-flex>
+                      <v-flex text-xs-right>{{출원단계대리인수수료.toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-layout row wrap>
                       <v-flex text-xs-center>부가세</v-flex>
                       <v-flex text-xs-center>10%</v-flex>
-                      <v-flex text-xs-right>{{(agentFeeApp * 0.1).toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-right>{{(출원단계대리인수수료 * 0.1).toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-layout row wrap>
                       <v-flex text-xs-center>소계</v-flex>
-                      <v-flex text-xs-right>{{(agentFeeApp * 1.1).toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-right>{{(출원단계대리인수수료 * 1.1).toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-divider light></v-divider>
                     <v-flex text-xs-center>출원단계 특허청 관납료</v-flex>
                     <v-layout row wrap>
                       <v-flex text-xs-center>출원료</v-flex>
-                      <v-flex text-xs-center>{{numOfTrademarks}}상표 {{numOfClasses}}개류</v-flex>
-                      <v-flex text-xs-right>{{officialFeeApp.toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-center>1상표 {{numOfClasses}}개류</v-flex>
+                      <v-flex text-xs-right>{{출원단계관납료.toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-divider light></v-divider>
                     <v-layout row wrap>
                       <v-flex text-xs-center>출원단계 합계</v-flex>
-                      <v-flex text-xs-right>{{appFee.toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-right>{{출원단계비용.toLocaleString()}} 원</v-flex>
                     </v-layout>
                   </v-layout>
                 </v-container>
@@ -84,38 +84,38 @@
                     <v-flex text-xs-center>등록단계 대리인 수수료</v-flex>
                     <v-layout row wrap>
                       <v-flex text-xs-center>등록수수료</v-flex>
-                      <v-flex text-xs-center>{{numOfTrademarks}}상표 {{numOfClasses}}개류</v-flex>
-                      <v-flex text-xs-right>{{agentFeeReg.toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-center>1상표 {{numOfClasses}}개류</v-flex>
+                      <v-flex text-xs-right>{{등록단계대리인수수료.toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-layout row wrap>
                       <v-flex text-xs-center>부가세</v-flex>
                       <v-flex text-xs-center>10%</v-flex>
-                      <v-flex text-xs-right>{{(agentFeeReg* 0.1).toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-right>{{(등록단계대리인수수료 * 0.1).toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-layout row wrap>
                       <v-flex text-xs-center>소계</v-flex>
-                      <v-flex text-xs-right>{{(agentFeeReg * 1.1).toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-right>{{(등록단계대리인수수료 * 1.1).toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-divider light></v-divider>
                     <v-flex text-xs-center>등록단계 특허청 관납료</v-flex>
                     <v-layout row wrap>
                       <v-flex text-xs-center>등록수수료</v-flex>
-                      <v-flex text-xs-center>{{numOfTrademarks}}상표 {{numOfClasses}}개류</v-flex>
-                      <v-flex text-xs-right>{{officialFeeReg.toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-center>1상표 {{numOfClasses}}개류</v-flex>
+                      <v-flex text-xs-right>{{등록단계관납료.toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-layout row wrap>
                       <v-flex text-xs-center>등록세</v-flex>
                       <v-flex text-xs-center>1건</v-flex>
-                      <v-flex text-xs-right>{{basicOfficialFeeTax.toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-right>{{등록세.toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-layout row wrap>
                       <v-flex text-xs-center>소계</v-flex>
-                      <v-flex text-xs-right>{{(officialFeeReg + basicOfficialFeeTax).toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-right>{{(등록단계관납료 + 등록세).toLocaleString()}} 원</v-flex>
                     </v-layout>
                     <v-divider light></v-divider>
                     <v-layout row wrap>
                       <v-flex text-xs-center>등록단계 합계</v-flex>
-                      <v-flex text-xs-right>{{regFee.toLocaleString()}} 원</v-flex>
+                      <v-flex text-xs-right>{{등록단계비용.toLocaleString()}} 원</v-flex>
                     </v-layout>
                   </v-layout>
                 </v-container>
@@ -126,7 +126,7 @@
                 <v-toolbar color="elevation-0">
                   <v-toolbar-title>출원에서 등록까지</v-toolbar-title>
                 </v-toolbar>
-                <v-flex text-xs-center>{{totalFee.toLocaleString()}} 원</v-flex>
+                <v-flex text-xs-center>{{전체비용.toLocaleString()}} 원</v-flex>
               </v-container>
             </v-flex>
           </v-card>
@@ -137,48 +137,41 @@
 </template>
 
 <script>
-import QuotationSummary from "./QuotationSummary"
 export default {
   name: "Quotation",
-  components:{
-    QuotationSummary
-  },
   computed: {
-    numOfTrademarks() {
-      return this.$store.getters.trademarks;
-    },
     numOfClasses() {
       return this.$store.getters.selectedClassesCount;
     },
-    agentFeeSearch() {
-      return this.$store.getters.calculateFee.agentSearch;
+    검색단계대리인수수료() {
+      return this.$store.getters.calculateFee.검색단계.대리인수수료;
     },
-    agentFeeApp() {
-      return this.$store.getters.calculateFee.agentApp;
+    출원단계대리인수수료() {
+      return this.$store.getters.calculateFee.출원단계.대리인수수료;
     },
-    agentFeeReg() {
-      return this.$store.getters.calculateFee.agentReg;
+    등록단계대리인수수료() {
+      return this.$store.getters.calculateFee.등록단계.대리인수수료;
     },
-    officialFeeApp() {
-      return this.$store.getters.calculateFee.officialApp;
+    출원단계관납료() {
+      return this.$store.getters.calculateFee.출원단계.관납료;
     },
-    officialFeeReg() {
-      return this.$store.getters.calculateFee.officialReg;
+    등록단계관납료() {
+      return this.$store.getters.calculateFee.등록단계.관납료;
     },
-    basicOfficialFeeTax() {
-      return this.$store.state.basicFee.officialTax;
+    등록세() {
+      return this.$store.state.기본료.등록단계.등록세;
     },
-    searchFee() {
-      return this.agentFeeSearch * 1.1;
+    검색단계비용() {
+      return this.검색단계대리인수수료 * 1.1;
     },
-    appFee() {
-      return this.agentFeeApp * 1.1 + this.officialFeeApp;
+    출원단계비용() {
+      return this.출원단계대리인수수료 * 1.1 + this.출원단계관납료;
     },
-    regFee() {
-      return this.agentFeeReg * 1.1 + this.officialFeeReg + this.basicOfficialFeeTax;
+    등록단계비용() {
+      return this.등록단계대리인수수료 * 1.1 + this.등록단계관납료 + this.등록세;
     },
-    totalFee() {
-      return this.searchFee + this.appFee + this.regFee;
+    전체비용() {
+      return this.검색단계비용 + this.출원단계비용 + this.등록단계비용;
     }
   }
 };

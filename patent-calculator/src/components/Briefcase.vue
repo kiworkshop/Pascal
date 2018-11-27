@@ -41,53 +41,55 @@
               <v-icon v-if="props.item['고시명칭']" small color="secondary">O</v-icon>
             </td>
             <td class="text-xs-center">
-              <v-dialog v-model="dialog" width="500">
-                <v-btn flat icon slot="activator" color="grey darken-2" dark @click.native="copyProductToEdit(props.item)">
-                  <v-icon small>edit</v-icon>
-                </v-btn>            
-                <v-card>
-                  <v-card-title>
-                    <span class="headline">수정하기</span>
-                  </v-card-title>
-                  <v-card-text>
-                    <v-container grid-list-md>
-                      <v-layout wrap>
-                        <v-flex xs12>
-                          {{ classes[editingProduct['NICE분류']] }}
-                        </v-flex>
-                        <v-flex xs12>
-                          <v-text-field v-model="editingProduct['지정상품(국문)']" label="명칭" required></v-text-field>
-                        </v-flex>
-                        <v-flex xs12>
-                          <v-text-field v-model="editingProduct['지정상품(영문)']" label="영문 명칭"></v-text-field>
-                        </v-flex>
-                        <v-flex xs12>
-                          <v-text-field v-model="editingProduct['유사군코드']" label="유사군코드"></v-text-field>
-                        </v-flex>
-                        <v-flex xs12>
-                          <v-checkbox :label="`고시명칭`" v-model="editingProduct['고시명칭']"></v-checkbox>
-                        </v-flex>
-                      </v-layout>
-                    </v-container>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="primary" flat @click.native="commitEditing()">수정</v-btn>
-                    <v-btn color="primary" flat @click.native="dialog = false">취소</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>                
+              <v-btn flat icon slot="activator" color="grey darken-2" dark @click.native="editProduct(props.item)">
+                <v-icon small>edit</v-icon>
+              </v-btn>            
               <v-btn flat icon slot="activator" color="grey darken-2" dark @click.native="deleteProduct(props.item)">
                 <v-icon small>delete</v-icon>
               </v-btn>            
             </td>
-          </template>
-          <v-alert slot="no-results" :value="true" color="error" icon="warning">
-            "{{ search.name }}"을(를) 찾을 수 없습니다.
-          </v-alert>
-        </v-data-table>
-    </v-layout>
-  </v-slide-y-transition>
+        </template>
+        <v-alert slot="no-results" :value="true" color="error" icon="warning">
+          "{{ search.name }}"을(를) 찾을 수 없습니다.
+        </v-alert>
+      </v-data-table>
+      <v-dialog v-model="dialog" width="500">
+        <v-card>
+          <v-card-title>
+            <span class="headline">수정하기</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-select
+                  v-model="productClass"
+                  :items="classes"
+                  label="분류"
+                ></v-select>
+                <v-flex xs12>
+                  <v-text-field v-model="product.edited['지정상품(국문)']" label="명칭" required></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field v-model="product.edited['지정상품(영문)']" label="영문 명칭"></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field v-model="product.edited['유사군코드']" label="유사군코드"></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-checkbox :label="`고시명칭`" v-model="product.edited['고시명칭']"></v-checkbox>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" flat @click.native="commitEditing()">수정</v-btn>
+            <v-btn color="primary" flat @click.native="dialog = false">취소</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>                
+</v-layout>
+</v-slide-y-transition>
 </v-container>
 </template>
 
@@ -97,13 +99,10 @@ export default {
   data() {
     return {
       dialog: false,
-      rowsPerPageItems: [
-        10,
-        25,
-        100
-      ],
+      productClass: "",
+      rowsPerPageItems: [10, 25, 100],
       search: {
-        _class: "",
+        _class: "전체",
         name: ""
       },
       headers: [
@@ -143,10 +142,31 @@ export default {
           value: "수정하기"
         }
       ],
-      editingProduct: {}
+      product: {
+        toEdit: {},
+        edited: {}
+      }
     };
   },
   methods: {
+    editProduct(item) {
+      this.dialog = true;
+      this.product.toEdit = Object.assign({}, item);
+      this.product.edited = Object.assign({}, item);
+      this.productClass = this.classes[this.product.toEdit["NICE분류"]];
+    },
+    commitEditing() {
+      this.product.edited["NICE분류"] = this.classes.indexOf(this.productClass);
+      this.$store.dispatch("editProduct", this.product);
+      this.dialog = false;
+      const message =
+        "[ " +
+        this.product.edited["NICE분류"] +
+        "류 ] " +
+        this.product.edited["지정상품(국문)"] +
+        "(으)로 수정되었습니다.";
+      this.$noticeEventBus.$emit("raiseNotice", message);
+    },
     deleteProduct(item) {
       const message =
         "[ " +
@@ -156,33 +176,23 @@ export default {
         "이(가) 지정상품에서 삭제되었습니다.";
       this.$noticeEventBus.$emit("raiseNotice", message);
       this.$store.dispatch("deleteProduct", item);
-    },
-    copyProductToEdit(item) {
-      this.editingProduct = Object.assign({}, item);
-    },
-    commitEditing() {
-      this.$store.dispatch("editProduct", this.editingProduct);
-      this.dialog = false;
-      const message =
-        "[ " +
-        this.editingProduct["NICE분류"] +
-        "류 ] " +
-        this.editingProduct["지정상품(국문)"] +
-        "으로 수정되었습니다.";
-      this.$noticeEventBus.$emit("raiseNotice", message);
     }
   },
   computed: {
     classes() {
-      return this.$store.getters.classes;
+      return Object.values(this.$store.getters.classes);
     },
     selected() {
-      let classes = this.$store.getters.selected;
-      let goods = [];
-      for (const classId in classes) {
-        goods = goods.concat(Object.values(classes[classId]));
+      const selected = this.$store.getters.selected;
+      const classId = this.classes.indexOf(this.search._class);
+      if (this.search._class === "전체") {
+        return Object.values(selected).reduce((acc, val) => {
+          return acc.concat(Object.values(val));
+        }, []);
+      } else if (selected.hasOwnProperty(classId)) {
+        return Object.values(selected[classId]);
       }
-      return goods;
+      return [];
     }
   }
 };
