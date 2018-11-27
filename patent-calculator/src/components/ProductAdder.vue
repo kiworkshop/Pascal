@@ -19,7 +19,7 @@
                     <v-layout column wrap>
                       <v-flex>
                         <v-layout row>
-                          <v-flex xs4>
+                          <v-flex xs4 class="mr-5">
                             <v-select
                               v-model="payload.classString"
                               :items="classes"
