@@ -7,13 +7,14 @@ export default class SearchManager {
 
   search(payload, exactness = true) {
     let searchingProducts = this.trimSearchingProducts(payload.searchingProducts);
+    console.log(searchingProducts);
     return this.makeRequests(payload._class, searchingProducts, exactness);
   }
 
   trimSearchingProducts(searchingProducts) {
     return Object.keys(searchingProducts.split(/[,]+[\s]*/)
       .reduce((accumulator, value) => {
-        if (!accumulator.hasOwnProperty(value)) {
+        if (!accumulator.hasOwnProperty(value) && Boolean(value)) {   // 상품 이름이 공란인 경우는 추가 대상에서 제외
           accumulator[value] = null;
         }
         return accumulator;
@@ -23,7 +24,15 @@ export default class SearchManager {
   makeURL(searchingProducts) {
     let productsString = "";
     for (let product of searchingProducts) {
+      if (Boolean(product.match(/[\s]/))) {
+        const splited = product.split(/[\s]/);
+        for (const word of splited) {
+          productsString += "|" + word;
+        }
+      }
+      else {
       productsString += "|" + product;
+      }
     }
     const baseURL = 'https://oow1cmv2z7.execute-api.ap-northeast-2.amazonaws.com/Pascal';
     const encodedURL = baseURL + '?format=json&pretty=true&q=' + encodeURI(productsString);
@@ -84,8 +93,9 @@ export default class SearchManager {
   buildSearchResult(response) {
     return response.reduce((accumulator, array) => {
       for (const value of array) {
-        accumulator[value["fields"]["name_kor"]] = value["fields"];
-        accumulator[value["fields"]["name_kor"]]["id"] = parseInt(value["id"]);
+        const trimmed = (value["fields"]["name_kor"]).replace(/\s/g, "")
+        accumulator[trimmed] = value["fields"];
+        accumulator[trimmed]["id"] = parseInt(value["id"]);
       }
       return accumulator;
     }, {});
@@ -93,13 +103,14 @@ export default class SearchManager {
 
   classifyNoticedOrUnnoticed(_class, searchingProducts, checklist) {
     return searchingProducts.reduce((accumulator, searchingProduct) => {
-      if (checklist && checklist.hasOwnProperty(searchingProduct)) {
+      const trimmedSearhingProduct = searchingProduct.replace(/\s/g, "")
+      if (checklist && checklist.hasOwnProperty(trimmedSearhingProduct)) {
         accumulator['noticed'].push({
-          'id': checklist[searchingProduct]["id"],
-          'NICE분류': parseInt(checklist[searchingProduct]["nice"]),
-          '지정상품(국문)': checklist[searchingProduct]["name_kor"],
-          '지정상품(영문)': checklist[searchingProduct]["name_eng"],
-          '유사군코드': checklist[searchingProduct]["code"],
+          'id': checklist[trimmedSearhingProduct]["id"],
+          'NICE분류': parseInt(checklist[trimmedSearhingProduct]["nice"]),
+          '지정상품(국문)': checklist[trimmedSearhingProduct]["name_kor"],
+          '지정상품(영문)': checklist[trimmedSearhingProduct]["name_eng"],
+          '유사군코드': checklist[trimmedSearhingProduct]["code"],
           '고시명칭': true
         });
       } else {
