@@ -38,8 +38,8 @@ export default {
       return this.$store.getters.selected;
     },
     classes() {
-      return this.$store.getters.classes;
-    }
+      return Object.values(this.$store.getters.classes);
+    },
   }
 };
 </script>

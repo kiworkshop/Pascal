@@ -19,9 +19,9 @@
                     <v-layout column wrap>
                       <v-flex>
                         <v-layout row>
-                          <v-flex xs4 class='mr-5'>
+                          <v-flex xs4>
                             <v-select
-                              v-model="payload._class"
+                              v-model="payload.classString"
                               :items="classes"
                               label="분류"
                             ></v-select>
@@ -104,24 +104,30 @@ export default {
       payloads: [
         {
           id: 1,
+          classString: "",
           _class: -1,
           searchingProducts: ""
         }
       ],
-      classes: [1,2,3], // test를 위한 임시 class입니다
       curStep: 0,
       numOfForms: 1
     }
   },
+  computed: {
+    classes() {
+      return Object.values(this.$store.getters.classes);
+    }
+  },
   methods: {
     classifyProducts() {
+      for (let i=0; i<this.payloads.length ; i++) {
+        this.payloads[i]._class = this.classes.indexOf(this.payloads[i].classString)
+      }
       const requests = [];
       for (let i=0; i<this.payloads.length ; i++) {
-        if (this.payloads[i]["searchingProducts"] != "") {
-          requests.push(this.$searchManager.search(this.payloads[i]).then(response => {
-            return response;
-          }));
-        }
+        requests.push(this.$searchManager.search(this.payloads[i]).then(response => {
+          return response;
+        }));
       }
       let productAdderPointer = this
       Promise.all(requests).then((responses) => {

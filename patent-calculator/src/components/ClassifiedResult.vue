@@ -92,10 +92,9 @@ export default {
   name: "ClassifiedResult",
   data() {
     return {
-      classes: [1, 2, 3],  // 45류 대신 임시로 사용할 test용 분류
       selected: [],
       // TODO: selectedClass의 기본값을 설정해주어야합니다.
-      selectedClass: -1,
+      selectedClass: "미지정",
       rowsPerPageItems: [10, 25, 100],
       noticedProductsHeaders: [
         {
@@ -147,9 +146,17 @@ export default {
       }
     }
   },
+  computed: {
+    classes() {
+      return Object.values(this.$store.getters.classes);
+    }
+  },
   methods: {
     applyClass() {
-      let selectedClass = this.selectedClass;
+      let selectedClass = -1
+      if (this.selectedClass != "미지정") {
+        selectedClass = this.classes.indexOf(this.selectedClass);
+      }
       let i = 0;
       for (i = 0; i < this.selected.length; i++) {
         let selectedIndex =  this.products.unnoticed.findIndex(x => x['id'] == this.selected[i]['id']);
