@@ -103,9 +103,13 @@ export default {
           searchingProducts: ""
         }
       ],
-      classes: [1,2,3], // test를 위한 임시 class입니다
       curStep: 0,
       numOfForms: 1
+    }
+  },
+  computed: {
+    classes() {
+      return Object.values(this.$store.getters.classes);
     }
   },
   methods: {
@@ -122,7 +126,7 @@ export default {
         for (let i=0; i<responses.length; i++){
           result.noticed = result.noticed.concat(responses[i].noticed);
           result.unnoticed = result.unnoticed.concat(responses[i].unnoticed);
-        }        
+        }
         productAdderPointer.$productTransmissionBus.$emit('transmitClassified', result);
       })
       this.curStep++;
