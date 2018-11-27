@@ -12,14 +12,14 @@
             <v-stepper-step step="3">상품 추가 완료</v-stepper-step>
           </v-stepper-header>
           <v-stepper-items class="elevation-0">
-            <v-stepper-content step="1">
+            <v-stepper-content step="1" class='pr-0 pl-0'>
               <v-layout column wrap>
                 <v-flex v-for="payload in payloads" :key="payload.id" class="mb-5">
                   <v-container>
                     <v-layout column wrap>
                       <v-flex>
                         <v-layout row>
-                          <v-flex xs4>
+                          <v-flex xs4 class='mr-5'>
                             <v-select
                               v-model="payload._class"
                               :items="classes"
@@ -27,7 +27,7 @@
                             ></v-select>
                           </v-flex>
                           <v-spacer></v-spacer>
-                          <v-flex xs7>
+                          <v-flex xs7 class='mr-4'>
                             <v-textarea
                               v-model="payload.searchingProducts"
                               append-icon="search"
@@ -38,12 +38,17 @@
                               rows="1"
                             ></v-textarea>
                           </v-flex>
+                          <v-flex class='mt-4'>
+                            <v-btn icon color="primary" slot="activator" @click="deleteForm(payload.id)">
+                              <v-icon>delete</v-icon>
+                            </v-btn>
+                          </v-flex>
                         </v-layout>
                       </v-flex>
                     </v-layout>
                   </v-container>
                 </v-flex>
-                <v-flex xs1 offset-xs5 >
+                <v-flex xs1 offset-xs5>
                   <v-btn color="primary" @click="addForm()">
                     +
                   </v-btn>
@@ -55,7 +60,7 @@
                 </v-flex>
               </v-layout>
             </v-stepper-content>
-            <v-stepper-content step="2">
+            <v-stepper-content step="2" class='pr-0 pl-0'>
               <v-layout column wrap>
                 <v-flex class="mb-5">
                   <classified-result></classified-result>
@@ -112,9 +117,11 @@ export default {
     classifyProducts() {
       const requests = [];
       for (let i=0; i<this.payloads.length ; i++) {
-        requests.push(this.$searchManager.search(this.payloads[i]).then(response => {
-          return response; 
-        }));
+        if (this.payloads[i]["searchingProducts"] != "") {
+          requests.push(this.$searchManager.search(this.payloads[i]).then(response => {
+            return response;
+          }));
+        }
       }
       let productAdderPointer = this
       Promise.all(requests).then((responses) => {
@@ -122,10 +129,10 @@ export default {
         for (let i=0; i<responses.length; i++){
           result.noticed = result.noticed.concat(responses[i].noticed);
           result.unnoticed = result.unnoticed.concat(responses[i].unnoticed);
-        }        
+        }
         productAdderPointer.$productTransmissionBus.$emit('transmitClassified', result);
+        this.curStep++;
       })
-      this.curStep++;
     },
     addProducts() {
       this.$submissionAlarmBus.$emit('submitProductsToBriefcase');
@@ -133,6 +140,10 @@ export default {
     },
     addForm() {
       this.payloads.push({id:++this.numOfForms, _class:-1, searchingProducts:""});
+    },
+    deleteForm(payloadId) {
+      const deletedIndex = this.payloads.findIndex(payload => payload['id'] == payloadId);
+      this.payloads.splice(deletedIndex, 1);
     }
   },
   destroyed() {
