@@ -159,7 +159,7 @@ export default {
       return this.$store.getters.calculateFee.등록단계.관납료;
     },
     등록세() {
-      return this.$store.state.기본료.등록단계.등록세;
+      return this.$store.getters.기본료.등록단계.등록세;
     },
     검색단계비용() {
       return this.검색단계대리인수수료 * 1.1;
