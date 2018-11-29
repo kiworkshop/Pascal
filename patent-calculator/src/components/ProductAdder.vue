@@ -2,8 +2,10 @@
   <v-container>
     <v-slide-y-transition mode="out-in">
       <v-layout column wrap>
+
         <h1 class="headline font-weight-bold mb-2">상품추가</h1>
-        <v-stepper class="elevation-0" v-model="curStep">
+
+        <v-stepper class="elevation-0 pa-0" v-model="curStep">
           <v-stepper-header class="elevation-0">
             <v-stepper-step :complete="curStep>1" step="1">상품 입력</v-stepper-step>
             <v-divider></v-divider>
@@ -15,82 +17,93 @@
             <v-stepper-content step="1" class="pt-0">
               <v-layout column wrap>
                 <v-flex v-for="payload in payloads" :key="payload.id" class="my-2">
-                    <v-layout column wrap>
-                      <v-flex>
-                        <v-layout row>
-                          <v-flex xs4 class="ml-2">
-                            <v-select
-                              v-model="payload.classString"
-                              :items="classes"
-                              label="분류"
-                            ></v-select>
-                          </v-flex>
-                          <v-flex xs8 class="ml-5">
-                            <v-textarea
-                              v-model="payload.searchingProducts"
-                              append-icon="search"
-                              placeholder="명칭 (붕산비료, 생물 비료, 도매업)"
-                              auto-grow
-                              persistent-hint
-                              rows="1"
-                            ></v-textarea>
-                          </v-flex>
-                          <v-flex>
-                            <v-layout align-center justify-center row fill-height>
-                              <v-btn icon color="secondary" flat slot="activator" @click="deleteForm(payload.id)">
-                                <v-icon>delete</v-icon>
-                              </v-btn>
-                            </v-layout>
-                          </v-flex>
-                        </v-layout>
-                      </v-flex>
-                    </v-layout>
+                  <v-layout column wrap>
+                    <v-flex>
+                      <v-layout row>
+                        <v-flex xs4 class="ml-2">
+                          <v-select
+                          v-model="payload.classString"
+                          :items="classes"
+                          label="분류"
+                          ></v-select>
+                        </v-flex>
+                        <v-flex xs8 class="ml-5">
+                          <v-textarea
+                          v-model="payload.searchingProducts"
+                          append-icon="search"
+                          placeholder="명칭 (붕산비료, 생물 비료, 도매업)"
+                          auto-grow
+                          persistent-hint
+                          rows="1"
+                          ></v-textarea>
+                        </v-flex>
+                        <v-flex>
+                          <v-layout align-center justify-center row fill-height>
+                            <v-btn icon color="secondary" flat slot="activator" @click="deleteForm(payload.id)">
+                              <v-icon>delete</v-icon>
+                            </v-btn>
+                          </v-layout>
+                        </v-flex>
+                      </v-layout>
+                    </v-flex>
+                  </v-layout>
                 </v-flex>
                 <v-flex>
                   <v-btn block outline color="secondary" class="add-button mt-4" @click="addForm()">
                     <v-icon>add</v-icon>
                   </v-btn>
                 </v-flex>
-                <v-layout align-center justify-end row fill-height>
-                  <v-flex xs1 class="mt-3">
-                    <v-btn block color="primary" @click="classifyProducts()">
-                      <v-icon>
-                        arrow_forward
-                      </v-icon>
-                    </v-btn>
-                  </v-flex>
-                </v-layout>
               </v-layout>
-            </v-stepper-content>
-            <v-stepper-content step="2" class='pr-0 pl-0'>
-              <v-layout column wrap>
-                <v-flex>
-                  <classified-result></classified-result>
+              <v-layout align-end justify-end row fill-height>
+                <v-btn
+                icon
+                color="primary"
+                class="mx-0 mt-3"
+                @click="classifyProducts()">
+                <v-icon>
+                  arrow_forward
+                </v-icon>
+              </v-btn>
+            </v-layout>
+          </v-stepper-content>
+          <v-stepper-content step="2">
+            <v-layout column wrap>
+              <v-flex>
+                <classified-result></classified-result>
               </v-flex>
               <v-flex>
-                <v-layout row>
-                  <v-flex xs1 offset-xs1>
-                    <v-btn color="primary" @click="curStep = 1">
-                      이전 단계
-                    </v-btn>
-                  </v-flex>
-                  <v-flex xs1 offset-xs8>
-                    <v-btn color="primary" @click="addProducts()">
-                      상품 추가
-                    </v-btn>
-                  </v-flex>
-                </v-layout>
-              </v-flex>
-              </v-layout>
-            </v-stepper-content>
-            <v-stepper-content step="3">
-              <v-flex><h2 align=center>선택하신 상품들이 추가되었습니다.</h2></v-flex>
-            </v-stepper-content>
-          </v-stepper-items>
-        </v-stepper>
-      </v-layout>
-    </v-slide-y-transition>
-  </v-container>
+                <v-layout align-center justify-space-between row fill-height class="mx-1">
+                  <v-btn
+                  icon
+                  color="primary"
+                  class="mx-0 mt-3"
+                  @click="curStep = 1">
+                  <v-icon>
+                    arrow_back
+                  </v-icon>
+                </v-btn>
+                <v-btn
+                icon
+                color="primary"
+                class="mx-0 mt-3"
+                @click="addProducts()">
+                <v-icon>
+                  arrow_forward
+                </v-icon>
+              </v-btn>
+            </v-layout>
+          </v-flex>
+        </v-layout>
+      </v-stepper-content>
+      <v-stepper-content step="3">
+        <v-flex><h2 align=center>선택하신 상품들이 추가되었습니다.</h2></v-flex>
+      </v-stepper-content>
+    </v-stepper-items>
+  </v-stepper>
+
+</v-layout>
+</v-slide-y-transition>
+</v-container>
 </template>
 
 <script>
@@ -164,7 +177,6 @@ export default {
 <style scoped>
 .add-button {
   height: 3.5rem;
-  /* border-radius: 10px; */
   border: dashed 1.3px;
 }
 
