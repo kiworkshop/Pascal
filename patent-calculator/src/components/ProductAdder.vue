@@ -56,6 +56,7 @@
               </v-layout>
               <v-layout align-end justify-end row fill-height>
                 <v-btn
+                :loading="loadingStep2"
                 icon
                 color="primary"
                 class="mx-0 mt-3"
@@ -125,7 +126,8 @@ export default {
         }
       ],
       curStep: 0,
-      numOfForms: 1
+      numOfForms: 1,
+      loadingStep2: false
     }
   },
   computed: {
@@ -135,6 +137,7 @@ export default {
   },
   methods: {
     classifyProducts() {
+      this.loadingStep2 = true;
       for (let i=0; i<this.payloads.length ; i++) {
         this.payloads[i]._class = this.classes.indexOf(this.payloads[i].classString)
       }
@@ -153,6 +156,7 @@ export default {
         }
         productAdderPointer.$productTransmissionBus.$emit('transmitClassified', result);
         this.curStep++;
+        this.loadingStep2 = false;
       })
     },
     addProducts() {
