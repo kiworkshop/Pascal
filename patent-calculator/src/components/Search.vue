@@ -22,6 +22,8 @@
                 hint="특허청 고시상품명칭 11판(2018)에서 상품 명칭을 검색합니다."
                 persistent-hint
                 @keyup.enter="search()"
+                :loading="searching"
+                :readonly="searching"
               ></v-text-field>
             </v-flex>
           </v-layout>
@@ -42,7 +44,7 @@
               <!--추가하기-->
               <v-btn flat icon slot="activator" color="primary" dark @click.native="addProduct(props.item)">
                 <v-icon small>add</v-icon>
-              </v-btn>            
+              </v-btn>
             </td>
           </template>
         </v-data-table>
@@ -63,6 +65,7 @@ export default {
         _class: -1,
         searchingProducts: ""
       },
+      searching: false,
       headers: [
         {
           text: "분류",
@@ -111,8 +114,10 @@ export default {
       this.$noticeEventBus.$emit("raiseNotice", message);
     },
     search() {
+      this.searching = true;
       this.$searchManager.search(this.payload, false).then(result => {
         this.products = result.noticed;
+        this.searching = false;
       });
     }
   },
