@@ -43,11 +43,11 @@ export default {
   name: "BriefcaseSummary",
   methods: {
     copyToClipboard(classNo, products) {
-      products = Object.values(products).reduce((acc, val) => {
+      const stringfied = Object.values(products).reduce((acc, val) => {
         acc = acc.concat(val['지정상품(국문)'])
         return acc;
       }, []).join(", ");
-      navigator.clipboard.writeText(products);
+      navigator.clipboard.writeText(stringfied);
       const message = this.classes[classNo] + "의 지정상품이 클립보드에 복사되었습니다.";
       this.$noticeEventBus.$emit("raiseNotice", message);
     }
