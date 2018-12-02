@@ -181,7 +181,7 @@ export default {
 <style scoped>
 .add-button {
   height: 3.5rem;
-  border: dashed 1.3px;
+  border: solid 1.3px #dbdbdb;
 }
 
 .classify-button {
