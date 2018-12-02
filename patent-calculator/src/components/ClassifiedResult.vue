@@ -184,13 +184,13 @@ export default {
   methods: {
     applyClass() {
       if (this.selected.length > 0) {
-        let selectedClass = -1
+        let selectedClass = -1  //"미지정" class의 id값
         if (this.selectedClass != "미지정") {
           selectedClass = this.classes.indexOf(this.selectedClass);
         }
         for (const selected of this.selected) {
-          let selectedIndex =  this.products.unnoticed.findIndex(product => product['id'] == selected['id']);
-            if (selectedClass != -1) {
+            if ((selectedClass != -1) && (selected['고시명칭'] == false)) {
+              let selectedIndex =  this.products.unnoticed.findIndex(product => product['id'] == selected['id']);
               this.products.unnoticed[selectedIndex]['NICE분류'] = selectedClass;
             }
         }
