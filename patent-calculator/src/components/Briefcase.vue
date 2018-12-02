@@ -2,25 +2,21 @@
   <v-container>
     <v-slide-y-transition mode="out-in">
       <v-layout column wrap>
-       <h1 class="headline font-weight-bold mb-2">상품 관리</h1>
-          <v-layout row>
-            <v-flex xs4>
-              <v-select
-                v-model="search._class"
-                :items="classes"
-                label="분류"
-              ></v-select>
-            </v-flex>
-            <v-spacer></v-spacer>
-            <v-flex xs7>
-              <v-text-field
-                v-model="search.name"
-                append-icon="search"
-                label="명칭"
-                single-line
-                hint="선택된 지정상품에서 검색합니다."
-                persistent-hint
-              ></v-text-field>
+        <h1 class="headline font-weight-bold mb-2">상품 관리</h1>
+        <v-layout row>
+          <v-flex xs4>
+            <v-select v-model="search._class" :items="classes" label="분류"></v-select>
+          </v-flex>
+          <v-spacer></v-spacer>
+          <v-flex xs7>
+            <v-text-field
+              v-model="search.name"
+              append-icon="search"
+              label="명칭"
+              single-line
+              hint="선택된 지정상품에서 검색합니다."
+              persistent-hint
+            ></v-text-field>
           </v-flex>
         </v-layout>
         <v-data-table
@@ -33,64 +29,78 @@
         >
           <template slot="items" slot-scope="props">
             <td class="text-xs-center">{{ props.item['NICE분류'] }}</td>
-            <td> {{ props.item['지정상품(국문)'] }}</td>
-            <td> {{ props.item['지정상품(영문)'] }}</td>
+            <td>{{ props.item['지정상품(국문)'] }}</td>
+            <td>{{ props.item['지정상품(영문)'] }}</td>
             <td class="text-xs-center">{{ props.item['유사군코드'] }}</td>
             <td class="text-xs-center">
               <v-icon v-if="!props.item['고시명칭']" small color="secondary">X</v-icon>
               <v-icon v-if="props.item['고시명칭']" small color="secondary">O</v-icon>
             </td>
             <td class="text-xs-center">
-              <v-btn flat icon slot="activator" color="grey darken-2" dark @click.native="editProduct(props.item)">
+              <v-btn
+                flat
+                icon
+                slot="activator"
+                color="grey darken-2"
+                dark
+                @click.native="editProduct(props.item)"
+              >
                 <v-icon small>edit</v-icon>
-              </v-btn>            
-              <v-btn flat icon slot="activator" color="grey darken-2" dark @click.native="deleteProduct(props.item)">
+              </v-btn>
+              <v-btn
+                flat
+                icon
+                slot="activator"
+                color="grey darken-2"
+                dark
+                @click.native="deleteProduct(props.item)"
+              >
                 <v-icon small>delete</v-icon>
-              </v-btn>            
+              </v-btn>
             </td>
-        </template>
-        <v-alert slot="no-results" :value="true" color="error" icon="warning">
-          "{{ search.name }}"을(를) 찾을 수 없습니다.
-        </v-alert>
-      </v-data-table>
-      <v-dialog v-model="dialog" width="500">
-        <v-card>
-          <v-card-title>
-            <span class="headline">수정하기</span>
-          </v-card-title>
-          <v-card-text>
-            <v-container grid-list-md>
-              <v-layout wrap>
-                <v-select
-                  v-model="productClass"
-                  :items="classes"
-                  label="분류"
-                ></v-select>
-                <v-flex xs12>
-                  <v-text-field v-model="product.edited['지정상품(국문)']" label="명칭" required></v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                  <v-text-field v-model="product.edited['지정상품(영문)']" label="영문 명칭"></v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                  <v-text-field v-model="product.edited['유사군코드']" label="유사군코드"></v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                  <v-checkbox :label="`고시명칭`" v-model="product.edited['고시명칭']"></v-checkbox>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" flat @click.native="commitEditing()">수정</v-btn>
-            <v-btn color="primary" flat @click.native="dialog = false">취소</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>                
-</v-layout>
-</v-slide-y-transition>
-</v-container>
+          </template>
+          <v-alert
+            slot="no-results"
+            :value="true"
+            color="error"
+            icon="warning"
+          >"{{ search.name }}"을(를) 찾을 수 없습니다.</v-alert>
+        </v-data-table>
+        <v-dialog v-model="dialog" width="500">
+          <v-card>
+            <v-card-title>
+              <span class="headline">수정하기</span>
+            </v-card-title>
+            <v-card-text>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <v-select v-model="productClass" :items="classes" label="분류"></v-select>
+                  <v-flex xs12>
+                    <v-text-field v-model="product.edited['지정상품(국문)']" label="명칭" required></v-text-field>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-text-field v-model="product.edited['지정상품(영문)']" label="영문 명칭"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-text-field v-model="product.edited['유사군코드']" label="유사군코드"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-checkbox :label="`고시명칭`" v-model="product.edited['고시명칭']"></v-checkbox>
+                    <v-alert :value="true" type="warning" outline>수정 시 고시/비고시 여부를 반드시 정확하게 표기하십시오.</v-alert>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" flat @click.native="commitEditing()">수정</v-btn>
+              <v-btn color="primary" flat @click.native="dialog = false">취소</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-layout>
+    </v-slide-y-transition>
+  </v-container>
 </template>
 
 <script>
@@ -164,7 +174,7 @@ export default {
         this.product.edited["NICE분류"] +
         "류 ] " +
         this.product.edited["지정상품(국문)"] +
-        "(으)로 수정되었습니다.";
+        " 수정되었습니다.";
       this.$noticeEventBus.$emit("raiseNotice", message);
     },
     deleteProduct(item) {
