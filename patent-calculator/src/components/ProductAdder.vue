@@ -56,7 +56,7 @@
               </v-layout>
               <v-layout align-end justify-end row fill-height>
                 <v-btn
-                :loading="loadingStep2"
+                :loading="searchLoading"
                 icon
                 color="primary"
                 class="mx-0 mt-3"
@@ -126,8 +126,8 @@ export default {
         }
       ],
       curStep: 0,
-      numOfForms: 1,
-      loadingStep2: false
+      formCount: 1,
+      searchLoading: false
     }
   },
   computed: {
@@ -137,7 +137,7 @@ export default {
   },
   methods: {
     classifyProducts() {
-      this.loadingStep2 = true;
+      this.searchLoading = true;
       for (let i=0; i<this.payloads.length ; i++) {
         this.payloads[i]._class = this.classes.indexOf(this.payloads[i].classString)
       }
@@ -156,7 +156,7 @@ export default {
         }
         productAdderPointer.$productTransmissionBus.$emit('transmitClassified', result);
         this.curStep++;
-        this.loadingStep2 = false;
+        this.searchLoading = false;
       })
     },
     addProducts() {
@@ -164,7 +164,7 @@ export default {
       this.curStep++;
     },
     addForm() {
-      this.payloads.push({id:++this.numOfForms, _class:-1, searchingProducts:""});
+      this.payloads.push({id:++this.formCount, _class:-1, searchingProducts:""});
     },
     deleteForm(payloadId) {
       const deletedIndex = this.payloads.findIndex(payload => payload['id'] == payloadId);
