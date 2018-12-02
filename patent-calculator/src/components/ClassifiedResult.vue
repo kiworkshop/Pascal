@@ -183,18 +183,30 @@ export default {
   },
   methods: {
     applyClass() {
-      let selectedClass = -1
-      if (this.selectedClass != "미지정") {
-        selectedClass = this.classes.indexOf(this.selectedClass);
+      if (this.selected.length > 0) {
+        let selectedClass = -1
+        if (this.selectedClass != "미지정") {
+          selectedClass = this.classes.indexOf(this.selectedClass);
+        }
+        for (const selected of this.selected) {
+          let selectedIndex =  this.products.unnoticed.findIndex(product => product['id'] == selected['id']);
+            if (selectedClass != -1) {
+              this.products.unnoticed[selectedIndex]['NICE분류'] = selectedClass;
+            }
+        }
+        const message =
+          "선택하신 상품이 " +
+          "[ " +
+          selectedClass +
+          "류 ] " +
+          "로 분류되었습니다.";
+        this.$noticeEventBus.$emit("raiseNotice", message);
+        this.selected = [];
       }
-      let i = 0;
-      for (i = 0; i < this.selected.length; i++) {
-        let selectedIndex =  this.products.unnoticed.findIndex(x => x['id'] == this.selected[i]['id']);
-          if (selectedClass != -1) {
-            this.products.unnoticed[selectedIndex]['NICE분류'] = selectedClass;
-          }
+      else {
+        const message = "선택된 상품이 없습니다."
+        this.$noticeEventBus.$emit("raiseNotice", message);
       }
-      this.selected = [];
     },
     moveProduct(toTheOther) {
       let movedCount = 0;  //몇 개 상품이 이동하였는지를 snackbar에 전달해주기 위한 변수
