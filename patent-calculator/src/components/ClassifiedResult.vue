@@ -1,89 +1,108 @@
 <template>
-  <v-container>
-        <v-layout row wrap>
-          <v-flex xs5 class='mr-4'>
+  <v-container class="pa-0">
+
+    <v-tabs
+      slot="extension"
+      v-model="activeTab"
+      class='pb-3'
+      slider-color="primary"
+    >
+    <v-tab class="headline" v-for="tab of tabs" :key="tab.index"> {{tab.name}} </v-tab>
+    </v-tabs>
+
+    <v-tabs-items v-model="activeTab">
+      <!-- 고시상품 테이블 -->
+      <v-tab-item :key="0">
+        <v-layout column>
+          <v-flex>
+            <v-layout align-center justify-end row fill-height>
+              <v-btn class='mt-3' slot="activator" color="primary" dark @click.native="moveProduct('toUnnoticed')">
+                비고시 상품으로
+              </v-btn>
+            </v-layout>
+          </v-flex>
+          <v-data-table
+            v-model="selected"
+            :headers="noticedProductsHeaders"
+            :items="products.noticed"
+            :rows-per-page-items="rowsPerPageItems"
+            no-data-text="검색 결과가 없습니다."
+            class="mt-3"
+          >
+          <template slot="items" slot-scope="props">
+          <tr :active="props.selected">
+            <td>
+              <v-checkbox
+              :input-value="props.selected"
+              primary
+              hide-details
+              @click="props.selected = !props.selected"
+              ></v-checkbox>
+            </td>
+              <td class="text-xs-center">{{ props.item['NICE분류'] }}</td>
+              <td class="text-xs-center">{{ props.item['지정상품(국문)'] }}</td>
+              <td class="text-xs-center">
+                <v-btn flat icon slot="activator" color="secondary" dark @click.native="deleteFromTable(props.item)">
+                  <v-icon small>delete</v-icon>
+                </v-btn>
+              </td>
+            </tr>
+            </template>
+          </v-data-table>
+        </v-layout>
+      </v-tab-item>
+      <!-- 비고시상품 테이블 -->
+      <v-tab-item :key="1">
+        <v-layout column>
+          <v-flex>
+            <v-layout align-center justify-end row fill-height>
+              <v-flex xs5 class="mr-3">
+                <v-select
+                v-model="selectedClass"
+                :items="classes"
+                label="분류"
+                ></v-select>
+              </v-flex>
+              <v-btn color="primary" @click="applyClass()">분류 적용</v-btn>
+              <v-btn slot="activator" color="primary" dark @click.native="moveProduct('toNoticed')">
+                고시 상품으로
+              </v-btn>
+            </v-layout>
+          </v-flex>
+          <v-flex>
             <v-data-table
-              :headers="noticedProductsHeaders"
-              :items="products.noticed"
+              v-model="selected"
+              :headers="unnoticedProductsHeaders"
+              :items="products.unnoticed"
               :rows-per-page-items="rowsPerPageItems"
               no-data-text="검색 결과가 없습니다."
               class="mt-3"
             >
               <template slot="items" slot-scope="props">
-                <td class="text-xs-center">{{ props.item['NICE분류'] }}</td>
-                <td class="text-xs-center"><input type="text" v-model="props.item['지정상품(국문)']"></td>
-                <td class="text-xs-center">
-                  <!--수정하기-->
-                  <v-btn flat icon slot="activator" color="primary" dark @click.native="moveProduct(props.item)">
-                    <v-icon small>compare_arrows</v-icon>
-                  </v-btn>
-                  <v-btn flat icon slot="activator" color="red" dark @click.native="deleteFromTable(props.item)">
-                    <v-icon small>delete</v-icon>
-                  </v-btn>
-                </td>
+                <tr :active="props.selected">
+                  <td>
+                    <v-checkbox
+                    :input-value="props.selected"
+                    primary
+                    hide-details
+                    @click="props.selected = !props.selected"
+                    ></v-checkbox>
+                  </td>
+                  <td class="text-xs-center">{{ props.item['NICE분류'] }}</td>
+                  <td class="text-xs-center"><input class="text-xs-center" type="text" v-model="props.item['지정상품(국문)']"></td>
+                  <td class="text-xs-center">
+                    <v-btn flat icon slot="activator" color="secondary" dark @click.native="deleteFromTable(props.item)">
+                      <v-icon small>delete</v-icon>
+                    </v-btn>
+                  </td>
+                </tr>
               </template>
             </v-data-table>
           </v-flex>
-
-          <v-divider vertical></v-divider>
-
-          <v-flex xs6 class="ml-4">
-            <v-layout column>
-              <v-flex>
-                <v-data-table
-                  v-model="selected"
-                  :headers="unnoticedProductsHeaders"
-                  :items="products.unnoticed"
-                  :rows-per-page-items="rowsPerPageItems"
-                  no-data-text="검색 결과가 없습니다."
-                  class="mt-3"
-                >
-                  <template slot="items" slot-scope="props">
-                    <tr :active="props.selected">
-                      <td>
-                        <v-checkbox
-                        :input-value="props.selected"
-                        primary
-                        hide-details
-                        @click="props.selected = !props.selected"
-                        ></v-checkbox>
-                      </td>
-                      <td class="text-xs-center">{{ props.item['NICE분류'] }}</td>
-                      <td class="text-xs-center"><input type="text" v-model="props.item['지정상품(국문)']"></td>
-                      <td class="text-xs-center">
-                        <!--추가하기-->
-                        <v-btn flat icon slot="activator" color="primary" dark @click.native="moveProduct(props.item)">
-                          <v-icon small>compare_arrows</v-icon>
-                        </v-btn>
-                        <v-btn flat icon slot="activator" color="red" dark @click.native="deleteFromTable(props.item)">
-                          <v-icon small>delete</v-icon>
-                        </v-btn>
-                      </td>
-                    </tr>
-                  </template>
-                </v-data-table>
-              </v-flex>
-              <v-flex>
-                <v-layout row>
-                  <v-spacer></v-spacer>
-                    <v-flex>
-                      <v-select
-                      v-model="selectedClass"
-                      :items="classes"
-                      label="분류"
-                      ></v-select> <!--적용할 분류 검색 기능-->
-                    </v-flex>
-                    <v-spacer></v-spacer>
-                    <v-flex class="pt-2">
-                      <v-btn color="white" @click="applyClass()">선택한 항목에 분류 적용</v-btn>
-                    </v-flex>
-                    <v-spacer></v-spacer>
-                </v-layout>
-              </v-flex>
-
-            </v-layout>
-          </v-flex>
         </v-layout>
+      </v-tab-item>
+    </v-tabs-items>
+
   </v-container>
 </template>
 
@@ -92,11 +111,22 @@ export default {
   name: "ClassifiedResult",
   data() {
     return {
+      tabIsLoaded: false,
+      activeTab: 1,
+      tabs: [
+        {index: 0, name: '고시상품'},
+        {index: 1, name: '비고시상품'}
+      ],
       selected: [],
-      // TODO: selectedClass의 기본값을 설정해주어야합니다.
       selectedClass: "미지정",
       rowsPerPageItems: [10, 25, 100],
       noticedProductsHeaders: [
+        {
+          text: "선택",
+          align: "left",
+          sortable: false,
+          value: "선택"
+        },
         {
           text: "분류",
           align: "center",
@@ -109,10 +139,10 @@ export default {
           value: "지정상품(국문)"
         },
         {
-          text: "수정하기",
+          text: "삭제하기",
           align: "center",
           sortable: false,
-          value: "수정하기"
+          value: "삭제하기"
         }
       ],
       unnoticedProductsHeaders: [
@@ -134,10 +164,10 @@ export default {
           value: "지정상품(국문)"
         },
         {
-          text: "수정하기",
+          text: "삭제하기",
           align: "center",
           sortable: false,
-          value: "수정하기"
+          value: "삭제하기"
         }
       ],
       products: {
@@ -166,17 +196,26 @@ export default {
       }
       this.selected = [];
     },
-    moveProduct(product) {
-      if(product['고시명칭']) {  //고시상품인경우 비고시상품으로 이동
-        product['고시명칭'] = false;
-        let selectedIndex = this.products.noticed.findIndex(temp => temp['id'] == product['id']);
-        this.products.unnoticed.push(this.products.noticed.splice(selectedIndex, 1)[0]);
+    moveProduct(toTheOther) {
+      if (toTheOther == "toUnnoticed") { //고시 -> 비고시 이동인 경우
+        for (const product of this.selected) {  // selected에 고시/비고시 섞여있을 수 있음
+          if (product['고시명칭']) {
+            product['고시명칭'] = false;
+            let selectedIndex = this.products.noticed.findIndex(temp => temp['id'] == product['id']);
+            this.products.unnoticed.push(this.products.noticed.splice(selectedIndex, 1)[0]);
+          }
+        }
       }
-      else {  //비고시상품인경우 고시상품으로 이동
-        product['고시명칭'] = true;
-        let selectedIndex = this.products.unnoticed.findIndex(temp => temp['id'] == product['id']);
-        this.products.noticed.push(this.products.unnoticed.splice(selectedIndex, 1)[0]);
+      else { //비고시 -> 고시 이동인 경우
+        for (const product of this.selected) {
+          if (!product['고시명칭']) {
+            product['고시명칭'] = true;
+            let selectedIndex = this.products.unnoticed.findIndex(temp => temp['id'] == product['id']);
+            this.products.noticed.push(this.products.unnoticed.splice(selectedIndex, 1)[0]);
+          }
+        }
       }
+      this.selected = [];
     },
     deleteFromTable(product) {
       if(product['고시명칭']) {
@@ -204,6 +243,10 @@ export default {
     this.$productTransmissionBus.$on('transmitClassified', (transmittedProducts) => {
       this.products.noticed = transmittedProducts.noticed;
       this.products.unnoticed = transmittedProducts.unnoticed;
+      if (!this.tabIsLoaded) {   // tab이 stepper의 step 2에서 mount 되는 경우, 처음에 slidebar가 보이지 않는 버그를 해결
+        this.activeTab--;
+        this.tabIsLoaded = true;
+      }
     });
   }
 }
