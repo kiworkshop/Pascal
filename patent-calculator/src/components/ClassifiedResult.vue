@@ -40,7 +40,7 @@
               ></v-checkbox>
             </td>
               <td class="text-xs-center">{{ props.item['NICE분류'] }}</td>
-              <td class="text-xs-center"><input class="text-xs-center" type="text" v-model="props.item['지정상품(국문)']"></td>
+              <td class="text-xs-center">{{ props.item['지정상품(국문)'] }}</td>
               <td class="text-xs-center">
                 <v-btn flat icon slot="activator" color="secondary" dark @click.native="deleteFromTable(props.item)">
                   <v-icon small>delete</v-icon>
