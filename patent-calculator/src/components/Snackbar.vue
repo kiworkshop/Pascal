@@ -3,7 +3,7 @@
     v-model="show"
     :bottom="true"
     :right="true"
-    :timeout="3000"
+    :timeout="4000"
   >
     {{ message }}
     <v-btn flat @click="show=false"> 알겠어요! </v-btn>
