@@ -161,7 +161,7 @@ export default {
     },
     addProducts() {
       this.$submissionAlarmBus.$emit('submitProductsToBriefcase');
-      this.curStep++;
+      // this.curStep++;
     },
     addForm() {
       this.payloads.push({id:++this.formCount, _class:-1, searchingProducts:""});
@@ -170,6 +170,11 @@ export default {
       const deletedIndex = this.payloads.findIndex(payload => payload['id'] == payloadId);
       this.payloads.splice(deletedIndex, 1);
     }
+  },
+  mounted() {
+    this.$submissionAlarmBus.$on('submissionComplete', () => {
+      this.curStep = 3;
+    });
   },
   destroyed() {
     this.$submissionAlarmBus.$off();

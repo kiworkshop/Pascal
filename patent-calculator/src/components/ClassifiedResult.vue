@@ -88,7 +88,8 @@
                     @click="props.selected = !props.selected"
                     ></v-checkbox>
                   </td>
-                  <td class="text-xs-center">{{ props.item['NICE분류'] }}</td>
+                  <td v-if="props.item['NICE분류'] == -1"></td>
+                  <td v-else class="text-xs-center">{{ props.item['NICE분류'] }}</td>
                   <td class="text-xs-center"><input class="text-xs-center" type="text" v-model="props.item['지정상품(국문)']"></td>
                   <td class="text-xs-center">
                     <v-btn flat icon slot="activator" color="secondary" dark @click.native="deleteFromTable(props.item)">
@@ -102,6 +103,28 @@
         </v-layout>
       </v-tab-item>
     </v-tabs-items>
+
+    <v-dialog v-model="dialogView" width="400">
+      <v-card>
+        <v-card-text>
+          <v-layout column>
+            <v-flex class="mt-3">
+              <h4>분류하신 상품들을 정말로 추가하시겠습니까?</h4>
+            </v-flex>
+            <v-flex class='mt-3'>
+              <v-layout align-center justify-end row>
+                <v-btn color="primary" @click.native="submitProductsToBriefcase(products)">
+                  추가 확정
+                </v-btn>
+                <v-btn color="primary" @click.native="dialogView = false">
+                  취소
+                </v-btn>
+              </v-layout>
+            </v-flex>
+          </v-layout>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
 
   </v-container>
 </template>
@@ -173,12 +196,15 @@ export default {
       products: {
         noticed: [],
         unnoticed: []
-      }
+      },
+      dialogView: false,
     }
   },
   computed: {
     classes() {
-      return Object.values(this.$store.getters.classes);
+      let classes = Object.values(this.$store.getters.classes);
+      classes.splice(0, 1);  //index 0에 있는 "전체"는 빼고, 나머지 분류들만 리턴해주도록 합니다.
+      return classes;
     }
   },
   methods: {
@@ -257,21 +283,23 @@ export default {
         "이(가) 목록에서 삭제되었습니다.";
       this.$noticeEventBus.$emit("raiseNotice", message);
     },
-    submitProductsToBriefcase () {
-      for (const product of this.products.noticed) {
+    submitProductsToBriefcase (products) {
+      for (const product of products.noticed) {
         this.$store.dispatch("addProduct", Object.assign({}, product));
       }
-      for (const product of this.products.unnoticed) {
-        this.$store.dispatch("addProduct", product);
+      for (const product of products.unnoticed) {
+        this.$store.dispatch("addProduct", Object.assign({}, product));
       }
-      this.products = {};
       const message = '상품 관리 탭에서 추가된 상품들을 확인해주세요.';
       this.$noticeEventBus.$emit("raiseNotice", message);
-      this.$submissionAlarmBus.$emit('Ready', true);
+      this.$submissionAlarmBus.$emit('submissionComplete');
+      this.dialogView = false;
     },
   },
   mounted() {
-    this.$submissionAlarmBus.$on('submitProductsToBriefcase', this.submitProductsToBriefcase);
+    this.$submissionAlarmBus.$on('submitProductsToBriefcase', () => {
+      this.dialogView = true;
+    });
     this.$productTransmissionBus.$on('transmitClassified', (transmittedProducts) => {
       this.products.noticed = transmittedProducts.noticed;
       this.products.unnoticed = transmittedProducts.unnoticed;
