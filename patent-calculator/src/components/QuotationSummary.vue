@@ -7,10 +7,7 @@
         </v-list-tile-content>
       </v-list-tile>
       <v-divider></v-divider>
-      <v-list-group
-        v-for="(description, title) in fee"
-        :key="title"
-      >
+      <v-list-group v-for="(description, title) in fee" :key="title">
         <v-list-tile slot="activator">
           <v-list-tile-content>
             <v-list-tile-title>{{title}}</v-list-tile-title>
@@ -113,7 +110,7 @@ export default {
       return this.$store.getters.calculateFee.등록단계.관납료;
     },
     등록세() {
-      return this.$store.getters.기본료.등록단계.등록세;
+      return this.$store.getters.현재요금.등록단계.등록세;
     },
     검색단계비용() {
       return this.검색단계대리인수수료 * 1.1;
@@ -122,7 +119,9 @@ export default {
       return this.출원단계대리인수수료 * 1.1 + this.출원단계관납료;
     },
     등록단계비용() {
-      return this.등록단계대리인수수료 * 1.1 + this.등록단계관납료 + this.등록세;
+      return (
+        this.등록단계대리인수수료 * 1.1 + this.등록단계관납료 + this.등록세
+      );
     },
     전체비용() {
       return this.검색단계비용 + this.출원단계비용 + this.등록단계비용;

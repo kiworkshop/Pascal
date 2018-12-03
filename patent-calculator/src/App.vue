@@ -12,13 +12,7 @@
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
-    <v-navigation-drawer
-      app
-      right
-      clipped
-      :mini-variant.sync="mini"
-      width=350
-    >
+    <v-navigation-drawer app right clipped :mini-variant.sync="mini" width="350">
       <v-list>
         <v-list-tile v-if="mini">
           <v-list-tile-action>
@@ -30,10 +24,7 @@
         <v-list-tile v-if="mini">
           <v-list-tile-action>
             <v-btn flat icon>
-              <v-badge
-                v-model="selectedCount"
-                small
-              >
+              <v-badge v-model="selectedCount" small>
                 <v-icon>work</v-icon>
                 <span slot="badge">{{selectedCount}}</span>
               </v-badge>
@@ -53,8 +44,12 @@
           </v-list-tile-action>
         </v-list-tile>
         <v-layout column v-if="!mini">
-          <v-flex><briefcase-summary></briefcase-summary></v-flex>
-          <v-flex><quotation-summary></quotation-summary></v-flex>
+          <v-flex>
+            <briefcase-summary></briefcase-summary>
+          </v-flex>
+          <v-flex>
+            <quotation-summary></quotation-summary>
+          </v-flex>
         </v-layout>
       </v-list>
     </v-navigation-drawer>
@@ -72,7 +67,7 @@ import Search from "./components/Search";
 import Briefcase from "./components/Briefcase";
 import Quotation from "./components/Quotation";
 import Snackbar from "./components/Snackbar";
-import ProductAdder from "./components/ProductAdder"
+import ProductAdder from "./components/ProductAdder";
 import BriefcaseSummary from "./components/BriefcaseSummary";
 import QuotationSummary from "./components/QuotationSummary";
 import Setting from "./components/Setting";
