@@ -79,7 +79,7 @@
               class="mt-3"
             >
               <template slot="items" slot-scope="props">
-                <tr :active="props.selected">
+                <tr :active="props.selected" :style="[props.item['NICE분류'] === -1 ? backgroundColor : '']">
                   <td>
                     <v-checkbox
                     :input-value="props.selected"
@@ -88,7 +88,7 @@
                     @click="props.selected = !props.selected"
                     ></v-checkbox>
                   </td>
-                  <td v-if="props.item['NICE분류'] == -1"></td>
+                  <td v-if="props.item['NICE분류'] === -1"></td>
                   <td v-else class="text-xs-center">{{ props.item['NICE분류'] }}</td>
                   <td class="text-xs-center"><input class="text-xs-center" type="text" v-model="props.item['지정상품(국문)']"></td>
                   <td class="text-xs-center">
@@ -142,6 +142,7 @@ export default {
       ],
       selected: [],
       selectedClass: "미지정",
+      backgroundColor: {},
       rowsPerPageItems: [10, 25, 100],
       noticedProductsHeaders: [
         {
@@ -213,21 +214,25 @@ export default {
         let selectedClass = -1  //"미지정" class의 id값
         if (this.selectedClass != "미지정") {
           selectedClass = this.classes.indexOf(this.selectedClass);
+          for (const selected of this.selected) {
+              if ((selectedClass != -1) && (selected['고시명칭'] == false)) {
+                let selectedIndex =  this.products.unnoticed.findIndex(product => product['id'] == selected['id']);
+                this.products.unnoticed[selectedIndex]['NICE분류'] = selectedClass;
+              }
+          }
+          const message =
+            "선택하신 상품이 " +
+            "[ " +
+            selectedClass +
+            "류 ] " +
+            "로 분류되었습니다.";
+          this.$noticeEventBus.$emit("raiseNotice", message);
+          this.selected = [];
         }
-        for (const selected of this.selected) {
-            if ((selectedClass != -1) && (selected['고시명칭'] == false)) {
-              let selectedIndex =  this.products.unnoticed.findIndex(product => product['id'] == selected['id']);
-              this.products.unnoticed[selectedIndex]['NICE분류'] = selectedClass;
-            }
+        else {
+          const message = "지정할 분류를 골라주세요."
+          this.$noticeEventBus.$emit("raiseNotice", message);
         }
-        const message =
-          "선택하신 상품이 " +
-          "[ " +
-          selectedClass +
-          "류 ] " +
-          "로 분류되었습니다.";
-        this.$noticeEventBus.$emit("raiseNotice", message);
-        this.selected = [];
       }
       else {
         const message = "선택된 상품이 없습니다."
@@ -295,10 +300,29 @@ export default {
       this.$submissionAlarmBus.$emit('submissionComplete');
       this.dialogView = false;
     },
+    checkUnclassified (products) {
+      let unclassified = false;
+      for (const product of products) {
+        if (product["NICE분류"] == -1) {
+          unclassified = true;
+        }
+      }
+      return unclassified;
+    },
+    highlightUnclassified () {
+      this.backgroundColor = {background: '#fff0f0'}
+    }
   },
   mounted() {
     this.$submissionAlarmBus.$on('submitProductsToBriefcase', () => {
-      this.dialogView = true;
+      if (this.checkUnclassified(this.products.unnoticed)) {
+        const message = "아직 미분류 상태인 상품들이 있습니다!"
+        this.$noticeEventBus.$emit("raiseNotice", message);
+        this.highlightUnclassified();
+      }
+      else {
+        this.dialogView = true;
+      }
     });
     this.$productTransmissionBus.$on('transmitClassified', (transmittedProducts) => {
       this.products.noticed = transmittedProducts.noticed;
