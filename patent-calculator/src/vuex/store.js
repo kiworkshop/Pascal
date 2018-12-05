@@ -6,6 +6,8 @@ import 기본요금 from "../../public/data/basicFee.json";
 const INITIALIZE_FEE = "INITIALIZE_FEE";
 const SYNC_FEE_TO_SESSION = "SYNC_FEE_TO_SESSION";
 const UPDATE_FEE = "UPDATE_FEE";
+const CHANGE_CLIENT = "CHANGE_CLIENT";
+const COPY_FEE = "COPY_FEE";
 const ADD_PRODUCT = "ADD_PRODUCT";
 const DELETE_PRODUCT = "DELETE_PRODUCT";
 const EDIT_PRODUCT = "EDIT_PRODUCT";
@@ -17,7 +19,8 @@ export const store = new Vuex.Store({
     classes: productClass,
     products: [],
     selected: {},
-    요금표: {}
+    요금표: {},
+    현재거래처: ""
   },
   getters: {
     products(state) {
@@ -122,7 +125,18 @@ export const store = new Vuex.Store({
       state.현재거래처 = store._vm.$session.get("현재 거래처");
     },
     [UPDATE_FEE](state, newFee) {
-      state.요금표[state.현재거래처] = newFee;
+      delete state.요금표[state.현재거래처];
+      state.요금표[newFee.거래처] = newFee.요금;
+      state.요금표 = Object.assign({}, state.요금표);
+      state.현재거래처 = newFee.거래처;
+    },
+    [CHANGE_CLIENT](state, client) {
+      state.현재거래처 = client;
+    },
+    [COPY_FEE](state) {
+      const newSettingName = state.현재거래처 + "의 사본";
+      state.요금표[newSettingName] = state.요금표[state.현재거래처];
+      state.요금표 = Object.assign({}, state.요금표);
     },
     [SYNC_FEE_TO_SESSION](state) {
       store._vm.$session.set("요금표", state.요금표);
@@ -171,13 +185,20 @@ export const store = new Vuex.Store({
     initializeFee({ commit }) {
       commit(INITIALIZE_FEE);
     },
-    updateFee({ commit }, newFee) {
-      new Promise((resolve) => {
+    updateFee({ commit, getters }, newFee) {
+      return new Promise((resolve) => {
         commit(UPDATE_FEE, newFee);
         resolve()
       }).then(() => {
         commit(SYNC_FEE_TO_SESSION);
+        return getters.거래처목록;
       })
+    },
+    changeClient({ commit }, client) {
+      commit(CHANGE_CLIENT, client);
+    },
+    copyFee({ commit}) {
+      commit(COPY_FEE);
     },
     addProduct({ commit }, product) {
       commit(ADD_PRODUCT, product);

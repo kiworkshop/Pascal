@@ -5,45 +5,39 @@
         <h1 class="headline font-weight-bold mb-2">설정</h1>
 
         <v-tabs slot="extension" v-model="activeTab" class="pb-3" slider-color="primary">
-          <v-tab class="headline" v-for="tab of tabs" :key="tab">{{tab}}</v-tab>
+          <v-tab class="headline" v-for="tab of tabs" :key="tab" @click.native="changeClient()">{{tab}}</v-tab>
           <v-btn @click="addNewSetting()">
             <v-icon>add</v-icon>
           </v-btn>
         </v-tabs>
-        <v-tabs-items v-model="activeTab" v-for="tab of tabs" :key="tab">
-          <v-tab-item :key="tab">
-            <v-layout row>
-              <v-layout column>
-                <v-flex v-for="stage in currentSetting" :key="stage.stageName">
-                  <v-flex>{{stage.stageName}}</v-flex>
-                  <v-flex>
-                    <v-data-table :items="stage.fee" class="elevation-1" hide-actions hide-headers>
-                      <template slot="items" slot-scope="props">
-                        <td class="text-xs-right">{{ props.item.항목 }}</td>
-                        <td class="text-xs-right">
-                          <input type="text" v-model="props.item.비용" @keyup="applyChanges()">
-                        </td>
-                      </template>
-                    </v-data-table>
-                  </v-flex>
-                </v-flex>
-              </v-layout>
-              <v-layout column>
-                <v-spacer></v-spacer>
-                <v-flex>
-                  <!-- <v-select :items="Object.keys(설정목록)" @input="applySavedSetting" label="불러오기"></v-select> -->
-                </v-flex>
-                <v-flex class="pt-2">
-                  <v-btn color="white">현재 설정 저장</v-btn>
-                </v-flex>
-                <v-flex class="pt-2">
-                  <v-btn color="white">설정 목록 관리</v-btn>
-                </v-flex>
-                <v-spacer></v-spacer>
-              </v-layout>
-            </v-layout>
-          </v-tab-item>
-        </v-tabs-items>       
+        <v-layout row>
+          <v-flex class="pt-2">
+            <v-btn v-if="!editMode" @click.native="editMode = !editMode" color="white">수정</v-btn>
+            <v-btn v-else @click.native="applyChanges(); editMode = !editMode;" color="white">저장</v-btn>
+          </v-flex>
+          <v-flex class="pt-2">
+            <v-btn color="white">삭제</v-btn>
+          </v-flex>
+        </v-layout>
+        <v-layout column>
+          <v-flex>거래처</v-flex>
+          <v-flex>
+            명칭: <input :disabled="!editMode" type="text" v-model="client">
+          </v-flex>
+          <v-flex v-for="stage in currentSetting" :key="stage.stageName">
+            <v-flex>{{stage.stageName}}</v-flex>
+            <v-flex>
+              <v-data-table :items="stage.fee" class="elevation-1" hide-actions hide-headers>
+                <template slot="items" slot-scope="props">
+                  <td class="text-xs-right">{{ props.item.항목 }}</td>
+                  <td class="text-xs-right">
+                    <input :disabled="!editMode" type="text" v-model="props.item.비용">
+                  </td>
+                </template>
+              </v-data-table>
+            </v-flex>
+          </v-flex>
+        </v-layout>
       </v-layout>
     </v-slide-y-transition>
   </v-container>
@@ -56,7 +50,9 @@ export default {
     return {
       currentSetting: [],
       activeTab: null,
-      tabs: null
+      tabs: null,
+      editMode: false,
+      client: null
     };
   },
   created() {
@@ -64,25 +60,32 @@ export default {
       this.message = message;
       this.show = true;
     });
-    this.activeTab = this.$store.getters.현재거래처;
+    this.activeTab = this.$store.getters.거래처목록.indexOf(this.$store.getters.현재거래처);
     this.tabs = this.$store.getters.거래처목록;
-    this.applySetting(this.$store.getters.현재요금);
+    this.getSetting(this.$store.getters.현재요금);
+    this.client = this.$store.getters.현재거래처;
   },
   methods: {
     applyChanges() {
-      let result = {};
+      let result = {
+        "거래처" : this.client,
+        "요금" : {}
+      };
       for (var i = 0; i < this.currentSetting.length; i++) {
         let stage = this.currentSetting[i];
-        result[stage.stageName] = {};
+        result.요금[stage.stageName] = {};
         for (var j = 0; j < stage.fee.length; j++) {
-          result[stage.stageName][stage.fee[j].항목] = parseInt(
+          result.요금[stage.stageName][stage.fee[j].항목] = parseInt(
             stage.fee[j].비용
           );
         }
       }
-      this.$store.dispatch("updateFee", result);
+      this.$store.dispatch("updateFee", result).then(() => {
+        this.tabs = this.$store.getters.거래처목록;
+        this.client = this.tabs[this.activeTab];
+      });
     },
-    applySetting(요금) {
+    getSetting(요금) {
       let result = [];
       for (var stageName in 요금) {
         let temp = {};
@@ -98,8 +101,15 @@ export default {
       }
       this.currentSetting = result;
     },
-    applySavedSetting(event) {
-      this.applySetting(this.설정목록[event]);
+    addNewSetting() {
+      this.$store.dispatch("copyFee");
+      this.tabs = this.$store.getters.거래처목록;
+    },
+    changeClient() {
+      this.editMode = false;
+      this.$store.dispatch("changeClient", this.tabs[this.activeTab]);
+      this.client = this.tabs[this.activeTab];      
+      this.getSetting(this.$store.getters.현재요금);
     }
   },
   computed: {
