@@ -64,7 +64,7 @@ export default {
       this.message = message;
       this.show = true;
     });
-    this.activeTab = this.$store.getters.거래처;
+    this.activeTab = this.$store.getters.현재거래처;
     this.tabs = this.$store.getters.거래처목록;
     this.applySetting(this.$store.getters.현재요금);
   },
@@ -80,7 +80,7 @@ export default {
           );
         }
       }
-      this.$store.dispatch("setFee", result);
+      this.$store.dispatch("updateFee", result);
     },
     applySetting(요금) {
       let result = [];
@@ -100,8 +100,6 @@ export default {
     },
     applySavedSetting(event) {
       this.applySetting(this.설정목록[event]);
-    },
-    addNewSetting() {
     }
   },
   computed: {

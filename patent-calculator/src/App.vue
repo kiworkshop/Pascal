@@ -127,6 +127,9 @@ export default {
     selectedCount() {
       return this.$store.getters.selectedCount;
     }
+  },
+  created() {
+    this.$store.dispatch("initializeFee");
   }
 };
 </script>

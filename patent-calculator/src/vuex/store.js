@@ -3,7 +3,9 @@ import Vuex from "vuex";
 import productClass from "../../public/data/class.json";
 import 기본요금 from "../../public/data/basicFee.json";
 
-const SET_FEE = "SET_FEE";
+const INITIALIZE_FEE = "INITIALIZE_FEE";
+const SYNC_FEE_TO_SESSION = "SYNC_FEE_TO_SESSION";
+const UPDATE_FEE = "UPDATE_FEE";
 const ADD_PRODUCT = "ADD_PRODUCT";
 const DELETE_PRODUCT = "DELETE_PRODUCT";
 const EDIT_PRODUCT = "EDIT_PRODUCT";
@@ -15,8 +17,7 @@ export const store = new Vuex.Store({
     classes: productClass,
     products: [],
     selected: {},
-    거래처: "",
-    현재요금: {}
+    요금표: {}
   },
   getters: {
     products(state) {
@@ -101,31 +102,31 @@ export const store = new Vuex.Store({
       }
       return 비용;
     },
-    현재요금(state) {
-      if (Object.keys(state.현재요금).length === 0) {
-        if (store._vm.$session.get("비용") === undefined) {
-          store._vm.$session.set("비용", {
-            기본: 기본요금,
-            "마지막 거래처": "기본"
-          });
-        }
-        state.거래처 = store._vm.$session.get("비용")["마지막 거래처"];
-        state.현재요금 = store._vm.$session.get("비용")[state.거래처];
-      }
-      return state.현재요금;
+    현재요금(state, getters) {
+      return state.요금표[getters.현재거래처]
     },
-    거래처(state) {
-      return state.거래처;
+    현재거래처(state) {
+      return state.현재거래처
     },
-    거래처목록() {
-      let 비용 = store._vm.$session.get("비용");
-      delete 비용["마지막 거래처"];
-      return Object.keys(비용);
+    거래처목록(state) {
+      return Object.keys(state.요금표);
     }
   },
   mutations: {
-    [SET_FEE](state, feeSetting) {
-      state.현재요금 = feeSetting;
+    [INITIALIZE_FEE](state) {
+      if (store._vm.$session.get("요금표") === undefined || store._vm.$session.get("현재 거래처") === undefined) {
+        store._vm.$session.set("요금표", { "기본": 기본요금 });
+        store._vm.$session.set("현재 거래처", "기본")
+      }
+      state.요금표 = store._vm.$session.get("요금표");
+      state.현재거래처 = store._vm.$session.get("현재 거래처");
+    },
+    [UPDATE_FEE](state, newFee) {
+      state.요금표[state.현재거래처] = newFee;
+    },
+    [SYNC_FEE_TO_SESSION](state) {
+      store._vm.$session.set("요금표", state.요금표);
+      store._vm.$session.set("현재 거래처", state.현재거래처);
     },
     [ADD_PRODUCT](state, product) {
       if (!(product["NICE분류"] in state.selected)) {
@@ -167,8 +168,16 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
-    setFee({ commit }, feeSetting) {
-      commit(SET_FEE, feeSetting);
+    initializeFee({ commit }) {
+      commit(INITIALIZE_FEE);
+    },
+    updateFee({ commit }, newFee) {
+      new Promise((resolve) => {
+        commit(UPDATE_FEE, newFee);
+        resolve()
+      }).then(() => {
+        commit(SYNC_FEE_TO_SESSION);
+      })
     },
     addProduct({ commit }, product) {
       commit(ADD_PRODUCT, product);
