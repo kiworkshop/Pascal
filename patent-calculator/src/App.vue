@@ -94,15 +94,15 @@ export default {
       fixed: false,
       menu: [
         {
-          icon: "add",
-          title: "상품추가",
-          component: "ProductAdder",
-          badge: false
-        },
-        {
           icon: "search",
           title: "검색",
           component: "Search",
+          badge: false
+        },
+        {
+          icon: "add",
+          title: "상품추가",
+          component: "ProductAdder",
           badge: false
         },
         {
