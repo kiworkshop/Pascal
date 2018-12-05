@@ -13,9 +13,9 @@
         :key="classNo"
         @click="copyToClipboard(classNo, products)"
       >
-        <v-list-tile-content>{{ classes[classNo] }}</v-list-tile-content>
+        <v-list-tile-content class="text-no-wrap text-truncate">{{ classes[classNo] }}</v-list-tile-content>
         <v-list-tile-avatar>
-          <v-avatar slot="activator" color="primary" size="22">
+          <v-avatar slot="activator" color="secondary" size="22">
             <span class="white--text body-1 font-weight-medium">{{ Object.keys(products).length }}</span>
           </v-avatar>
         </v-list-tile-avatar>
