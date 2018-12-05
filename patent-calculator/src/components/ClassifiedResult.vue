@@ -83,7 +83,7 @@
               class="mt-3"
             >
               <template slot="items" slot-scope="props">
-                <tr :active="props.selected">
+                <tr :active="props.selected" :style="[props.item['NICE분류'] === -1 ? backgroundColor : '']">
                   <td>
                     <v-checkbox
                       :input-value="props.selected"
@@ -92,7 +92,9 @@
                       @click="props.selected = !props.selected"
                     ></v-checkbox>
                   </td>
-                  <td class="text-xs-center">{{ props.item['NICE분류'] }}</td>
+                  <td v-if="props.item['NICE분류'] === -1"></td>
+                  <td v-else class="text-xs-center">{{ props.item['NICE분류'] }}</td>
+                  <td class="text-xs-center"><input class="text-xs-center" type="text" v-model="props.item['지정상품(국문)']"></td>
                   <td class="text-xs-center">
                     <input class="text-xs-center" type="text" v-model="props.item['지정상품(국문)']">
                   </td>
@@ -115,6 +117,29 @@
         </v-layout>
       </v-tab-item>
     </v-tabs-items>
+
+    <v-dialog v-model="dialogView" width="400">
+      <v-card>
+        <v-card-text>
+          <v-layout column>
+            <v-flex class="mt-3">
+              <h4>분류하신 상품들을 정말로 추가하시겠습니까?</h4>
+            </v-flex>
+            <v-flex class='mt-3'>
+              <v-layout align-center justify-end row>
+                <v-btn color="primary" @click.native="submitProductsToBriefcase(products)">
+                  추가 확정
+                </v-btn>
+                <v-btn color="primary" @click.native="dialogView = false">
+                  취소
+                </v-btn>
+              </v-layout>
+            </v-flex>
+          </v-layout>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
   </v-container>
 </template>
 
@@ -128,6 +153,7 @@ export default {
       tabs: [{ index: 0, name: "고시상품" }, { index: 1, name: "비고시상품" }],
       selected: [],
       selectedClass: "미지정",
+      backgroundColor: {},
       rowsPerPageItems: [10, 25, 100],
       noticedProductsHeaders: [
         {
@@ -182,12 +208,15 @@ export default {
       products: {
         noticed: [],
         unnoticed: []
-      }
-    };
+      },
+      dialogView: false,
+    }
   },
   computed: {
     classes() {
-      return Object.values(this.$store.getters.classes);
+      let classes = Object.values(this.$store.getters.classes);
+      classes.splice(0, 1);  //index 0에 있는 "전체"는 빼고, 나머지 분류들만 리턴해주도록 합니다.
+      return classes;
     }
   },
   methods: {
@@ -196,25 +225,28 @@ export default {
         let selectedClass = -1; //"미지정" class의 id값
         if (this.selectedClass != "미지정") {
           selectedClass = this.classes.indexOf(this.selectedClass);
-        }
-        for (const selected of this.selected) {
-          if (selectedClass != -1 && selected["고시명칭"] == false) {
-            let selectedIndex = this.products.unnoticed.findIndex(
-              product => product["id"] == selected["id"]
-            );
-            this.products.unnoticed[selectedIndex]["NICE분류"] = selectedClass;
+          for (const selected of this.selected) {
+              if ((selectedClass != -1) && (selected['고시명칭'] == false)) {
+                let selectedIndex =  this.products.unnoticed.findIndex(product => product['id'] == selected['id']);
+                this.products.unnoticed[selectedIndex]['NICE분류'] = selectedClass;
+              }
           }
+          const message =
+            "선택하신 상품이 " +
+            "[ " +
+            selectedClass +
+            "류 ] " +
+            "로 분류되었습니다.";
+          this.$noticeEventBus.$emit("raiseNotice", message);
+          this.selected = [];
         }
-        const message =
-          "선택하신 상품이 " +
-          "[ " +
-          selectedClass +
-          "류 ] " +
-          "로 분류되었습니다.";
-        this.$noticeEventBus.$emit("raiseNotice", message);
-        this.selected = [];
-      } else {
-        const message = "선택된 상품이 없습니다.";
+        else {
+          const message = "지정할 분류를 골라주세요."
+          this.$noticeEventBus.$emit("raiseNotice", message);
+        }
+      }
+      else {
+        const message = "선택된 상품이 없습니다."
         this.$noticeEventBus.$emit("raiseNotice", message);
       }
     },
@@ -278,36 +310,50 @@ export default {
         "이(가) 목록에서 삭제되었습니다.";
       this.$noticeEventBus.$emit("raiseNotice", message);
     },
-    submitProductsToBriefcase() {
-      for (const product of this.products.noticed) {
+    submitProductsToBriefcase (products) {
+      for (const product of products.noticed) {
         this.$store.dispatch("addProduct", Object.assign({}, product));
       }
-      for (const product of this.products.unnoticed) {
-        this.$store.dispatch("addProduct", product);
+      for (const product of products.unnoticed) {
+        this.$store.dispatch("addProduct", Object.assign({}, product));
       }
-      this.products = {};
-      const message = "상품 관리 탭에서 추가된 상품들을 확인해주세요.";
+      const message = '상품 관리 탭에서 추가된 상품들을 확인해주세요.';
       this.$noticeEventBus.$emit("raiseNotice", message);
-      this.$submissionAlarmBus.$emit("Ready", true);
+      this.$submissionAlarmBus.$emit('submissionComplete');
+      this.dialogView = false;
+    },
+    checkUnclassified (products) {
+      let unclassified = false;
+      for (const product of products) {
+        if (product["NICE분류"] == -1) {
+          unclassified = true;
+        }
+      }
+      return unclassified;
+    },
+    highlightUnclassified () {
+      this.backgroundColor = {background: '#fff0f0'}
     }
   },
   mounted() {
-    this.$submissionAlarmBus.$on(
-      "submitProductsToBriefcase",
-      this.submitProductsToBriefcase
-    );
-    this.$productTransmissionBus.$on(
-      "transmitClassified",
-      transmittedProducts => {
-        this.products.noticed = transmittedProducts.noticed;
-        this.products.unnoticed = transmittedProducts.unnoticed;
-        if (!this.tabIsLoaded) {
-          // tab이 stepper의 step 2에서 mount 되는 경우, 처음에 slidebar가 보이지 않는 버그를 해결
-          this.activeTab--;
-          this.tabIsLoaded = true;
-        }
+    this.$submissionAlarmBus.$on('submitProductsToBriefcase', () => {
+      if (this.checkUnclassified(this.products.unnoticed)) {
+        const message = "아직 미분류 상태인 상품들이 있습니다!"
+        this.$noticeEventBus.$emit("raiseNotice", message);
+        this.highlightUnclassified();
       }
-    );
+      else {
+        this.dialogView = true;
+      }
+    });
+    this.$productTransmissionBus.$on('transmitClassified', (transmittedProducts) => {
+      this.products.noticed = transmittedProducts.noticed;
+      this.products.unnoticed = transmittedProducts.unnoticed;
+      if (!this.tabIsLoaded) {   // tab이 stepper의 step 2에서 mount 되는 경우, 처음에 slidebar가 보이지 않는 버그를 해결
+        this.activeTab--;
+        this.tabIsLoaded = true;
+      }
+    });
   }
 };
 </script>

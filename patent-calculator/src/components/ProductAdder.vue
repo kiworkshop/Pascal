@@ -155,8 +155,7 @@ export default {
       });
     },
     addProducts() {
-      this.$submissionAlarmBus.$emit("submitProductsToBriefcase");
-      this.curStep++;
+      this.$submissionAlarmBus.$emit('submitProductsToBriefcase');
     },
     addForm() {
       this.payloads.push({
@@ -171,6 +170,11 @@ export default {
       );
       this.payloads.splice(deletedIndex, 1);
     }
+  },
+  mounted() {
+    this.$submissionAlarmBus.$on('submissionComplete', () => {
+      this.curStep = 3;
+    });
   },
   destroyed() {
     this.$submissionAlarmBus.$off();
