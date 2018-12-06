@@ -161,7 +161,6 @@ export default {
     },
     addProducts() {
       this.$submissionAlarmBus.$emit('submitProductsToBriefcase');
-      // this.curStep++;
     },
     addForm() {
       this.payloads.push({id:++this.formCount, _class:-1, searchingProducts:""});
