@@ -64,24 +64,24 @@
 
 <script>
 import Search from "./components/Search";
+import ProductAdder from "./components/ProductAdder";
 import Briefcase from "./components/Briefcase";
 import Quotation from "./components/Quotation";
+import Settings from "./components/Settings";
 import Snackbar from "./components/Snackbar";
-import ProductAdder from "./components/ProductAdder";
 import BriefcaseSummary from "./components/BriefcaseSummary";
 import QuotationSummary from "./components/QuotationSummary";
-import Setting from "./components/Setting";
 export default {
   name: "App",
   components: {
     Search,
+    ProductAdder,
     Briefcase,
     Quotation,
-    Snackbar,
-    ProductAdder,
-    Setting,
+    Settings,
     BriefcaseSummary,
-    QuotationSummary
+    QuotationSummary,
+    Snackbar
   },
   data() {
     return {
@@ -89,15 +89,15 @@ export default {
       fixed: false,
       menu: [
         {
-          icon: "add",
-          title: "상품추가",
-          component: "ProductAdder",
-          badge: false
-        },
-        {
           icon: "search",
           title: "검색",
           component: "Search",
+          badge: false
+        },
+        {
+          icon: "add",
+          title: "상품추가",
+          component: "ProductAdder",
           badge: false
         },
         {

@@ -36,7 +36,7 @@
               <v-icon v-if="!props.item['고시명칭']" small color="secondary">X</v-icon>
               <v-icon v-if="props.item['고시명칭']" small color="secondary">O</v-icon>
             </td>
-            <td class="text-xs-center">
+            <td class="text-xs-center edit">
               <v-btn
                 flat
                 icon
@@ -209,4 +209,7 @@ export default {
 </script>
 
 <style scoped>
+.edit {
+  min-width: 160px;
+}
 </style>
