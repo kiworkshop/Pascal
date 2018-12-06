@@ -115,7 +115,7 @@ export default {
         {
           icon: "settings",
           title: "설정",
-          component: "Setting",
+          component: "Settings",
           badge: false
         }
       ],

@@ -13,7 +13,7 @@ Vue.prototype.$submissionAlarmBus = new Vue();
 Vue.prototype.$productTransmissionBus = new Vue();
 Vue.prototype.$searchManager = new SearchManager();
 Vue.prototype.$http = axios;
-Vue.use(VueSession, { persist: false });
+Vue.use(VueSession, { persist: true });
 
 new Vue({
   store,
