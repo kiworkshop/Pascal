@@ -225,15 +225,9 @@ export default {
       if (this.selected.unnoticed.length > 0) {
         let selectedClass = -1; //"미지정" class의 id값
         if (this.selectedClass != "미지정") {
-<<<<<<< HEAD
-          selectedClass = this.classes.indexOf(this.selectedClass);
-          for (const selected of this.selected.unnoticed) {
-            if (selectedClass != -1) {
-=======
           selectedClass = this.classes.indexOf(this.selectedClass) + 1;
           for (const selected of this.selected) {
             if (selectedClass != -1 && selected["고시명칭"] == false) {
->>>>>>> 5538599b2b39ff12727c6d4f1dd853d0d2983662
               let selectedIndex = this.products.unnoticed.findIndex(
                 product => product["id"] == selected["id"]
               );
