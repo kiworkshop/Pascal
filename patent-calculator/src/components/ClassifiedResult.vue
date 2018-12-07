@@ -257,36 +257,51 @@ export default {
       let movedCount = 0; //몇 개 상품이 이동하였는지를 snackbar에 전달해주기 위한 변수
       if (toTheOther == "toUnnoticed") {
         //고시 -> 비고시 이동인 경우
-        for (const product of this.selected.noticed) {
-          product["고시명칭"] = false;
-          let selectedIndex = this.products.noticed.findIndex(
-            temp => temp["id"] == product["id"]
-          );
-          this.products.unnoticed.push(
-            this.products.noticed.splice(selectedIndex, 1)[0]
-          );
-          movedCount++;
+        if (this.selected.noticed.length == 0) {
+          const message = "선택된 고시상품이 없습니다.";
+          this.$noticeEventBus.$emit("raiseNotice", message);
+        } else {
+          for (const product of this.selected.noticed) {
+            product["고시명칭"] = false;
+            let selectedIndex = this.products.noticed.findIndex(
+              temp => temp["id"] == product["id"]
+            );
+            this.products.unnoticed.push(
+              this.products.noticed.splice(selectedIndex, 1)[0]
+            );
+            movedCount++;
+          }
+          const message =
+            movedCount + "개의 고시상품이 비고시상품으로 변경되었습니다.";
+          this.$noticeEventBus.$emit("raiseNotice", message);
+          this.selected.noticed = [];
         }
-        const message =
-          movedCount + "개의 고시상품이 비고시상품으로 변경되었습니다.";
-        this.$noticeEventBus.$emit("raiseNotice", message);
-        this.selected.noticed = [];
       } else {
         //비고시 -> 고시 이동인 경우
-        for (const product of this.selected.unnoticed) {
-          product["고시명칭"] = true;
-          let selectedIndex = this.products.unnoticed.findIndex(
-            temp => temp["id"] == product["id"]
-          );
-          this.products.noticed.push(
-            this.products.unnoticed.splice(selectedIndex, 1)[0]
-          );
-          movedCount++;
+        if (this.selected.unnoticed.length == 0) {
+          const message = "선택된 비고시상품이 없습니다.";
+          this.$noticeEventBus.$emit("raiseNotice", message);
+        } else {
+          if (this.checkUnclassified(this.selected.unnoticed)) {
+            const message = "미분류 상태인 상품은 이동할 수 없습니다.";
+            this.$noticeEventBus.$emit("raiseNotice", message);
+          } else{
+            for (const product of this.selected.unnoticed) {
+              product["고시명칭"] = true;
+              let selectedIndex = this.products.unnoticed.findIndex(
+                temp => temp["id"] == product["id"]
+              );
+              this.products.noticed.push(
+                this.products.unnoticed.splice(selectedIndex, 1)[0]
+              );
+              movedCount++;
+            }
+            const message =
+            movedCount + "개의 비고시상품이 고시상품으로 변경되었습니다.";
+            this.$noticeEventBus.$emit("raiseNotice", message);
+            this.selected.unnoticed = [];
+          }
         }
-        const message =
-          movedCount + "개의 비고시상품이 고시상품으로 변경되었습니다.";
-        this.$noticeEventBus.$emit("raiseNotice", message);
-        this.selected.unnoticed = [];
       }
     },
     deleteFromTable(product) {
