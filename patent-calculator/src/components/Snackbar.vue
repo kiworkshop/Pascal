@@ -1,29 +1,24 @@
  <template>
-  <v-snackbar
-    v-model="show"
-    :bottom="true"
-    :right="true"
-    :timeout="4000"
-  >
+  <v-snackbar v-model="show" :bottom="true" :right="true" :timeout="4000">
     {{ message }}
-    <v-btn flat @click="show=false"> 알겠어요! </v-btn>
+    <v-btn flat @click="show=false">알겠어요!</v-btn>
   </v-snackbar>
 </template>
 
 <script>
 export default {
   name: "Snackbar",
-  data () {
+  data() {
     return {
       show: false,
-      message: ''
-    }
+      message: ""
+    };
   },
   created() {
-    this.$noticeEventBus.$on('raiseNotice', (message) => {
-      this.message = message
-      this.show = true
-      })
+    this.$noticeEventBus.$on("raiseNotice", message => {
+      this.message = message;
+      this.show = true;
+    });
   }
-}
+};
 </script>

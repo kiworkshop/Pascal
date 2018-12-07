@@ -12,13 +12,7 @@
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
-    <v-navigation-drawer
-      app
-      right
-      clipped
-      :mini-variant.sync="mini"
-      width=350
-    >
+    <v-navigation-drawer app right clipped :mini-variant.sync="mini" width="350">
       <v-list>
         <v-list-tile v-if="mini">
           <v-list-tile-action>
@@ -30,10 +24,7 @@
         <v-list-tile v-if="mini">
           <v-list-tile-action>
             <v-btn flat icon>
-              <v-badge
-                v-model="selectedCount"
-                small
-              >
+              <v-badge v-model="selectedCount" small>
                 <v-icon>work</v-icon>
                 <span slot="badge">{{selectedCount}}</span>
               </v-badge>
@@ -53,8 +44,12 @@
           </v-list-tile-action>
         </v-list-tile>
         <v-layout column v-if="!mini">
-          <v-flex><briefcase-summary></briefcase-summary></v-flex>
-          <v-flex><quotation-summary></quotation-summary></v-flex>
+          <v-flex>
+            <briefcase-summary></briefcase-summary>
+          </v-flex>
+          <v-flex>
+            <quotation-summary></quotation-summary>
+          </v-flex>
         </v-layout>
       </v-list>
     </v-navigation-drawer>
@@ -69,24 +64,24 @@
 
 <script>
 import Search from "./components/Search";
+import ProductAdder from "./components/ProductAdder";
 import Briefcase from "./components/Briefcase";
 import Quotation from "./components/Quotation";
+import Settings from "./components/Settings";
 import Snackbar from "./components/Snackbar";
-import ProductAdder from "./components/ProductAdder"
 import BriefcaseSummary from "./components/BriefcaseSummary";
 import QuotationSummary from "./components/QuotationSummary";
-import Setting from "./components/Setting";
 export default {
   name: "App",
   components: {
     Search,
+    ProductAdder,
     Briefcase,
     Quotation,
-    Snackbar,
-    ProductAdder,
-    Setting,
+    Settings,
     BriefcaseSummary,
-    QuotationSummary
+    QuotationSummary,
+    Snackbar
   },
   data() {
     return {
@@ -120,7 +115,7 @@ export default {
         {
           icon: "settings",
           title: "설정",
-          component: "Setting",
+          component: "Settings",
           badge: false
         }
       ],
@@ -132,6 +127,9 @@ export default {
     selectedCount() {
       return this.$store.getters.selectedCount;
     }
+  },
+  created() {
+    this.$store.dispatch("initializeFee");
   }
 };
 </script>
