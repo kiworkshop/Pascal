@@ -54,10 +54,12 @@
                 </v-list>
               </div>
               <v-layout align-center justify-end row>
-                <v-btn color="primary" @click="copyClient()">복사</v-btn>
+                <v-btn color="primary" v-if="editing === null" @click="copyClient()">복사</v-btn>
                 <v-btn color="primary" v-if="this.현재거래처 !== '기본' && editing === null" @click="editClient()">수정</v-btn>
+                <v-btn color="primary" v-if="this.현재거래처 !== '기본' && editing === null" @click="deleteClient()">삭제</v-btn>
+
                 <v-btn color="primary" v-if="this.현재거래처 !== '기본' && editing !== null" @click="updateClient()">저장</v-btn>
-                <v-btn color="primary" v-if="this.현재거래처 !== '기본'" @click="deleteClient()">삭제</v-btn>
+                <v-btn color="primary" v-if="this.현재거래처 !== '기본' && editing !== null" @click="resetState()">취소</v-btn>
               </v-layout>
             </v-card>
           </v-flex>
@@ -89,7 +91,6 @@ export default {
       this.$store.dispatch("changeClient", this.현재거래처);
     },
     copyClient() {
-      this.resetState();
       const newClientName = new Date().toLocaleString() + "에 만들어진 거래처";
       this.요금표[newClientName] = this.요금표[this.현재거래처];
       this.요금표 = deepcopy(this.요금표);
@@ -116,7 +117,6 @@ export default {
       this.resetState();
     },
     deleteClient() {
-      this.resetState();
       delete this.요금표[this.현재거래처];
       this.요금표 = deepcopy(this.요금표);
       this.changeClient("기본");
