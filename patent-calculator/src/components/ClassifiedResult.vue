@@ -16,7 +16,7 @@
                 color="primary"
                 dark
                 @click.native="moveProduct('toUnnoticed')"
-              >비고시 상품으로</v-btn>
+              >비고시상품으로</v-btn>
             </v-layout>
           </v-flex>
           <v-data-table
@@ -71,7 +71,7 @@
                 color="primary"
                 dark
                 @click.native="moveProduct('toNoticed')"
-              >고시 상품으로</v-btn>
+              >고시상품으로</v-btn>
             </v-layout>
           </v-flex>
           <v-flex>
@@ -226,15 +226,13 @@ export default {
         let selectedClass = -1; //"미지정" class의 id값
         if (this.selectedClass != "미지정") {
           selectedClass = this.classes.indexOf(this.selectedClass) + 1;
-          for (const selected of this.selected) {
-            if (selectedClass != -1 && selected["고시명칭"] == false) {
-              let selectedIndex = this.products.unnoticed.findIndex(
-                product => product["id"] == selected["id"]
-              );
-              this.products.unnoticed[selectedIndex][
-                "NICE분류"
-              ] = selectedClass;
-            }
+          for (const selected of this.selected.unnoticed) {
+            let selectedIndex = this.products.unnoticed.findIndex(
+              product => product["id"] == selected["id"]
+            );
+            this.products.unnoticed[selectedIndex][
+              "NICE분류"
+            ] = selectedClass;
           }
           const message =
             "선택하신 상품이 " +
@@ -249,7 +247,7 @@ export default {
           this.$noticeEventBus.$emit("raiseNotice", message);
         }
       } else {
-        const message = "선택된 비고시 상품이 없습니다.";
+        const message = "선택된 비고시상품이 없습니다.";
         this.$noticeEventBus.$emit("raiseNotice", message);
       }
     },
