@@ -303,6 +303,20 @@ export default {
       }
     },
     deleteFromTable(product) {
+      //product가 선택된 상품인 경우 selected에서 삭제
+      if (this.selected.noticed.includes(product)){
+        let selectedIndex = this.selected.noticed.findIndex(
+          temp => temp["id"] == product["id"]
+        );
+        this.selected.noticed.splice(selectedIndex, 1);
+      } else if (this.selected.unnoticed.includes(product)) {
+        let selectedIndex = this.selected.unnoticed.findIndex(
+          temp => temp["id"] == product["id"]
+        );
+        this.selected.unnoticed.splice(selectedIndex, 1);
+      }
+
+      // products에서 삭제
       if (product["고시명칭"]) {
         let selectedIndex = this.products.noticed.findIndex(
           temp => temp["id"] == product["id"]
@@ -362,8 +376,13 @@ export default {
       transmittedProducts => {
         this.products.noticed = transmittedProducts.noticed;
         this.products.unnoticed = transmittedProducts.unnoticed;
+
+        //선택된 상품 초기화
+        this.selected.noticed = [];
+        this.selected.unnoticed= [];
+
+        // tab이 stepper의 step 2에서 mount 되는 경우, 처음에 slidebar가 보이지 않는 버그를 해결
         if (!this.tabIsLoaded) {
-          // tab이 stepper의 step 2에서 mount 되는 경우, 처음에 slidebar가 보이지 않는 버그를 해결
           this.activeTab--;
           this.tabIsLoaded = true;
         }
