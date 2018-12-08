@@ -49,7 +49,12 @@ export default {
           return acc;
         }, [])
         .join(", ");
-      navigator.clipboard.writeText(stringfied);
+      let temp = document.createElement("textarea");
+      document.body.appendChild(temp);
+      temp.value = stringfied;
+      temp.select();
+      document.execCommand("copy");
+      document.body.removeChild(temp);
       const message =
         this.classes[classNo] + "의 지정상품이 클립보드에 복사되었습니다.";
       this.$noticeEventBus.$emit("raiseNotice", message);
