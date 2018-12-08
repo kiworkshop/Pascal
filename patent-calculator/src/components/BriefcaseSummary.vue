@@ -43,12 +43,20 @@ export default {
   name: "BriefcaseSummary",
   methods: {
     copyToClipboard(classNo, products) {
-      const stringfied = Object.values(products).reduce((acc, val) => {
-        acc = acc.concat(val['지정상품(국문)'])
-        return acc;
-      }, []).join(", ");
-      navigator.clipboard.writeText(stringfied);
-      const message = this.classes[classNo] + "의 지정상품이 클립보드에 복사되었습니다.";
+      const stringfied = Object.values(products)
+        .reduce((acc, val) => {
+          acc = acc.concat(val["지정상품(국문)"]);
+          return acc;
+        }, [])
+        .join(", ");
+      let temp = document.createElement("textarea");
+      document.body.appendChild(temp);
+      temp.value = stringfied;
+      temp.select();
+      document.execCommand("copy");
+      document.body.removeChild(temp);
+      const message =
+        this.classes[classNo] + "의 지정상품이 클립보드에 복사되었습니다.";
       this.$noticeEventBus.$emit("raiseNotice", message);
     }
   },

@@ -6,11 +6,8 @@
         <v-flex>
           <v-layout row>
             <v-flex xs4>
-              <v-select
-                v-model="payload._class"
-                :items="classes"
-                label="분류"
-              ></v-select> <!--분류별 검색 기능 추가-->
+              <v-select v-model="payload._class" :items="classes" label="분류"></v-select>
+              <!--분류별 검색 기능 추가-->
             </v-flex>
             <v-spacer></v-spacer>
             <v-flex xs7>
@@ -37,20 +34,27 @@
         >
           <template slot="items" slot-scope="props">
             <td class="text-xs-center">{{ props.item['NICE분류'] }}</td>
-            <td> {{ props.item['지정상품(국문)'] }}</td>
-            <td> {{ props.item['지정상품(영문)'] }}</td>
+            <td>{{ props.item['지정상품(국문)'] }}</td>
+            <td>{{ props.item['지정상품(영문)'] }}</td>
             <td class="text-xs-center">{{ props.item['유사군코드'] }}</td>
             <td class="text-xs-center">
               <!--추가하기-->
-              <v-btn flat icon slot="activator" color="primary" dark @click.native="addProduct(props.item)">
+              <v-btn
+                flat
+                icon
+                slot="activator"
+                color="primary"
+                dark
+                @click.native="addProduct(props.item)"
+              >
                 <v-icon small>add</v-icon>
               </v-btn>
             </td>
           </template>
         </v-data-table>
-    </v-layout>
-  </v-slide-y-transition>
-</v-container>
+      </v-layout>
+    </v-slide-y-transition>
+  </v-container>
 </template>
 
 <script>

@@ -10,18 +10,18 @@
                 <v-card-title class="title font-weight-bold">검색단계</v-card-title>
                 <v-divider class="title-divider"></v-divider>
                 <v-list dense>
-                  <v-subheader class="subheading">대리인 수수료</v-subheader>
-                  <v-list-tile>
+                  <v-subheader class="black--text font-weight-bold">대리인 수수료</v-subheader>
+                  <v-list-tile class="pl-3">
                     <v-list-tile-content>기본료</v-list-tile-content>
                     <v-list-tile-content class="align-center">1상표 {{numOfClasses}}개류</v-list-tile-content>
                     <v-list-tile-content class="align-end">{{검색단계대리인수수료.toLocaleString()}}원</v-list-tile-content>
                   </v-list-tile>
-                  <v-list-tile>
+                  <v-list-tile class="pl-3">
                     <v-list-tile-content>부가세</v-list-tile-content>
                     <v-list-tile-content class="align-center">10%</v-list-tile-content>
                     <v-list-tile-content class="align-end">{{(검색단계대리인수수료 * 0.1).toLocaleString()}}원</v-list-tile-content>
                   </v-list-tile>
-                  <v-list-tile>
+                  <v-list-tile class="pl-3">
                     <v-list-tile-content class="font-weight-bold">소계</v-list-tile-content>
                     <v-list-tile-content
                       class="align-end font-weight-bold"
@@ -42,31 +42,31 @@
                 <v-card-title class="title font-weight-bold">출원단계</v-card-title>
                 <v-divider class="title-divider"></v-divider>
                 <v-list dense>
-                  <v-subheader class="subheading">대리인 수수료</v-subheader>
-                  <v-list-tile>
+                  <v-subheader class="black--text font-weight-bold">대리인 수수료</v-subheader>
+                  <v-list-tile class="pl-3">
                     <v-list-tile-content>기본료</v-list-tile-content>
                     <v-list-tile-content class="align-center">1상표 {{numOfClasses}}개류</v-list-tile-content>
                     <v-list-tile-content class="align-end">{{출원단계대리인수수료.toLocaleString()}}원</v-list-tile-content>
                   </v-list-tile>
-                  <v-list-tile>
+                  <v-list-tile class="pl-3">
                     <v-list-tile-content>부가세</v-list-tile-content>
                     <v-list-tile-content class="align-center">10%</v-list-tile-content>
                     <v-list-tile-content class="align-end">{{(출원단계대리인수수료 * 0.1).toLocaleString()}}원</v-list-tile-content>
                   </v-list-tile>
-                  <v-list-tile>
+                  <v-list-tile class="pl-3">
                     <v-list-tile-content class="font-weight-bold">소계</v-list-tile-content>
                     <v-list-tile-content
                       class="align-end font-weight-bold"
                     >{{(출원단계대리인수수료 * 1.1).toLocaleString()}}원</v-list-tile-content>
                   </v-list-tile>
                   <v-divider class="content-divider"></v-divider>
-                  <v-subheader class="subheading">특허청 관납료</v-subheader>
-                  <v-list-tile>
+                  <v-subheader class="black--text font-weight-bold">특허청 관납료</v-subheader>
+                  <v-list-tile class="pl-3">
                     <v-list-tile-content>출원료</v-list-tile-content>
                     <v-list-tile-content class="align-center">1상표 {{numOfClasses}}개류</v-list-tile-content>
                     <v-list-tile-content class="align-end">{{출원단계관납료.toLocaleString()}}원</v-list-tile-content>
                   </v-list-tile>
-                  <v-list-tile>
+                  <v-list-tile class="pl-3">
                     <v-list-tile-content class="font-weight-bold">소계</v-list-tile-content>
                     <v-list-tile-content
                       class="align-end font-weight-bold"
@@ -87,36 +87,36 @@
                 <v-card-title class="title font-weight-bold">등록단계</v-card-title>
                 <v-divider class="title-divider"></v-divider>
                 <v-list dense>
-                  <v-subheader class="subheading">대리인 수수료</v-subheader>
-                  <v-list-tile>
+                  <v-subheader class="black--text font-weight-bold">대리인 수수료</v-subheader>
+                  <v-list-tile class="pl-3">
                     <v-list-tile-content>기본료</v-list-tile-content>
                     <v-list-tile-content class="align-center">1상표 {{numOfClasses}}개류</v-list-tile-content>
                     <v-list-tile-content class="align-end">{{등록단계대리인수수료.toLocaleString()}}원</v-list-tile-content>
                   </v-list-tile>
-                  <v-list-tile>
+                  <v-list-tile class="pl-3">
                     <v-list-tile-content>부가세</v-list-tile-content>
                     <v-list-tile-content class="align-center">10%</v-list-tile-content>
                     <v-list-tile-content class="align-end">{{(등록단계대리인수수료 * 0.1).toLocaleString()}}원</v-list-tile-content>
                   </v-list-tile>
-                  <v-list-tile>
+                  <v-list-tile class="pl-3">
                     <v-list-tile-content class="font-weight-bold">소계</v-list-tile-content>
                     <v-list-tile-content
                       class="align-end font-weight-bold"
                     >{{(등록단계대리인수수료 * 1.1).toLocaleString()}}원</v-list-tile-content>
                   </v-list-tile>
                   <v-divider class="content-divider"></v-divider>
-                  <v-subheader class="subheading">특허청 관납료</v-subheader>
-                  <v-list-tile>
+                  <v-subheader class="black--text font-weight-bold">특허청 관납료</v-subheader>
+                  <v-list-tile class="pl-3">
                     <v-list-tile-content>등록수수료</v-list-tile-content>
                     <v-list-tile-content class="align-center">1상표 {{numOfClasses}}개류</v-list-tile-content>
                     <v-list-tile-content class="align-end">{{등록단계관납료.toLocaleString()}}원</v-list-tile-content>
                   </v-list-tile>
-                  <v-list-tile>
+                  <v-list-tile class="pl-3">
                     <v-list-tile-content>등록세</v-list-tile-content>
                     <v-list-tile-content class="align-center">1건</v-list-tile-content>
                     <v-list-tile-content class="align-end">{{등록세.toLocaleString()}}원</v-list-tile-content>
                   </v-list-tile>
-                  <v-list-tile>
+                  <v-list-tile class="pl-3">
                     <v-list-tile-content class="font-weight-bold">소계</v-list-tile-content>
                     <v-list-tile-content
                       class="align-end font-weight-bold"
@@ -170,7 +170,7 @@ export default {
       return this.$store.getters.calculateFee.등록단계.관납료;
     },
     등록세() {
-      return this.$store.state.기본료.등록단계.등록세;
+      return this.$store.getters.현재요금.등록단계.등록세;
     },
     검색단계비용() {
       return this.검색단계대리인수수료 * 1.1;

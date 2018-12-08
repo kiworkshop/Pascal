@@ -16,11 +16,11 @@
                 color="primary"
                 dark
                 @click.native="moveProduct('toUnnoticed')"
-              >비고시 상품으로</v-btn>
+              >비고시상품으로</v-btn>
             </v-layout>
           </v-flex>
           <v-data-table
-            v-model="selected"
+            v-model="selected.noticed"
             :headers="noticedProductsHeaders"
             :items="products.noticed"
             :rows-per-page-items="rowsPerPageItems"
@@ -71,12 +71,12 @@
                 color="primary"
                 dark
                 @click.native="moveProduct('toNoticed')"
-              >고시 상품으로</v-btn>
+              >고시상품으로</v-btn>
             </v-layout>
           </v-flex>
           <v-flex>
             <v-data-table
-              v-model="selected"
+              v-model="selected.unnoticed"
               :headers="unnoticedProductsHeaders"
               :items="products.unnoticed"
               :rows-per-page-items="rowsPerPageItems"
@@ -149,7 +149,10 @@ export default {
       tabIsLoaded: false,
       activeTab: 1,
       tabs: [{ index: 0, name: "고시상품" }, { index: 1, name: "비고시상품" }],
-      selected: [],
+      selected: {
+          noticed: [],
+          unnoticed: []
+      },
       selectedClass: "미지정",
       backgroundColor: {},
       rowsPerPageItems: [10, 25, 100],
@@ -219,19 +222,17 @@ export default {
   },
   methods: {
     applyClass() {
-      if (this.selected.length > 0) {
+      if (this.selected.unnoticed.length > 0) {
         let selectedClass = -1; //"미지정" class의 id값
         if (this.selectedClass != "미지정") {
-          selectedClass = this.classes.indexOf(this.selectedClass);
-          for (const selected of this.selected) {
-            if (selectedClass != -1 && selected["고시명칭"] == false) {
-              let selectedIndex = this.products.unnoticed.findIndex(
-                product => product["id"] == selected["id"]
-              );
-              this.products.unnoticed[selectedIndex][
-                "NICE분류"
-              ] = selectedClass;
-            }
+          selectedClass = this.classes.indexOf(this.selectedClass) + 1;
+          for (const selected of this.selected.unnoticed) {
+            let selectedIndex = this.products.unnoticed.findIndex(
+              product => product["id"] == selected["id"]
+            );
+            this.products.unnoticed[selectedIndex][
+              "NICE분류"
+            ] = selectedClass;
           }
           const message =
             "선택하신 상품이 " +
@@ -240,13 +241,13 @@ export default {
             "류 ] " +
             "로 분류되었습니다.";
           this.$noticeEventBus.$emit("raiseNotice", message);
-          this.selected = [];
+          this.selected.unnoticed = [];
         } else {
           const message = "지정할 분류를 골라주세요.";
           this.$noticeEventBus.$emit("raiseNotice", message);
         }
       } else {
-        const message = "선택된 상품이 없습니다.";
+        const message = "선택된 비고시상품이 없습니다.";
         this.$noticeEventBus.$emit("raiseNotice", message);
       }
     },
@@ -254,9 +255,11 @@ export default {
       let movedCount = 0; //몇 개 상품이 이동하였는지를 snackbar에 전달해주기 위한 변수
       if (toTheOther == "toUnnoticed") {
         //고시 -> 비고시 이동인 경우
-        for (const product of this.selected) {
-          // selected에 고시/비고시 섞여있을 수 있음
-          if (product["고시명칭"]) {
+        if (this.selected.noticed.length == 0) {
+          const message = "선택된 고시상품이 없습니다.";
+          this.$noticeEventBus.$emit("raiseNotice", message);
+        } else {
+          for (const product of this.selected.noticed) {
             product["고시명칭"] = false;
             let selectedIndex = this.products.noticed.findIndex(
               temp => temp["id"] == product["id"]
@@ -266,29 +269,38 @@ export default {
             );
             movedCount++;
           }
+          const message =
+            movedCount + "개의 고시상품이 비고시상품으로 변경되었습니다.";
+          this.$noticeEventBus.$emit("raiseNotice", message);
+          this.selected.noticed = [];
         }
-        const message =
-          movedCount + "개의 고시상품이 비고시상품으로 변경되었습니다.";
-        this.$noticeEventBus.$emit("raiseNotice", message);
       } else {
         //비고시 -> 고시 이동인 경우
-        for (const product of this.selected) {
-          if (!product["고시명칭"]) {
-            product["고시명칭"] = true;
-            let selectedIndex = this.products.unnoticed.findIndex(
-              temp => temp["id"] == product["id"]
-            );
-            this.products.noticed.push(
-              this.products.unnoticed.splice(selectedIndex, 1)[0]
-            );
-            movedCount++;
+        if (this.selected.unnoticed.length == 0) {
+          const message = "선택된 비고시상품이 없습니다.";
+          this.$noticeEventBus.$emit("raiseNotice", message);
+        } else {
+          if (this.checkUnclassified(this.selected.unnoticed)) {
+            const message = "미분류 상태인 상품은 이동할 수 없습니다.";
+            this.$noticeEventBus.$emit("raiseNotice", message);
+          } else{
+            for (const product of this.selected.unnoticed) {
+              product["고시명칭"] = true;
+              let selectedIndex = this.products.unnoticed.findIndex(
+                temp => temp["id"] == product["id"]
+              );
+              this.products.noticed.push(
+                this.products.unnoticed.splice(selectedIndex, 1)[0]
+              );
+              movedCount++;
+            }
+            const message =
+            movedCount + "개의 비고시상품이 고시상품으로 변경되었습니다.";
+            this.$noticeEventBus.$emit("raiseNotice", message);
+            this.selected.unnoticed = [];
           }
         }
-        const message =
-          movedCount + "개의 비고시상품이 고시상품으로 변경되었습니다.";
-        this.$noticeEventBus.$emit("raiseNotice", message);
       }
-      this.selected = [];
     },
     deleteFromTable(product) {
       if (product["고시명칭"]) {
