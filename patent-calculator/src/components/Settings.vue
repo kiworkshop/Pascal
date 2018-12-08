@@ -4,7 +4,7 @@
       <v-layout column wrap>
         <h1 class="headline font-weight-bold mb-4">설정하기</h1>
         <v-layout row wrap justify-center>
-          <v-flex xs12 md3 class='mr-5'>
+          <v-flex xs12 md4 class='mx-3'>
             <v-card flat>
               <v-card-title>
                 <input class="title font-weight-bold" type="text" name="" value="거래처 목록" readonly>
@@ -24,7 +24,7 @@
               </v-list>
             </v-card>
           </v-flex>
-          <v-flex xs12 md4 class="ml-3">
+          <v-flex xs12 md5 class="mx-3">
             <v-card flat>
               <v-card-title>
                 <input v-if="editing === null" class="title font-weight-bold client-name" type="text" name="" v-model="현재거래처" readonly>
@@ -91,7 +91,7 @@ export default {
       this.$store.dispatch("changeClient", this.현재거래처);
     },
     copyClient() {
-      const newClientName = new Date().toLocaleString() + "에 만들어진 거래처";
+      const newClientName = new Date().toLocaleString() + " 복사본";
       this.요금표[newClientName] = this.요금표[this.현재거래처];
       this.요금표 = deepcopy(this.요금표);
       this.$store.dispatch("updateFee", this.요금표);
