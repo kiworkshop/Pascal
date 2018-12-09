@@ -1,90 +1,75 @@
 <template>
-  <v-container fluid grid-list-md>
+  <v-container>
     <v-slide-y-transition mode="out-in">
-      <v-layout row wrap>
-        <v-flex xs8>
-          <v-card>
-            <v-toolbar color="grey lighten-4">
-              <v-toolbar-title>검색하기</v-toolbar-title>
-              <v-spacer></v-spacer>
-              <p class="caption"><br><br>특허청 고시상품명칭 11판(2018)에서 상품 명칭을 검색합니다.</p>
-            </v-toolbar>
-            <v-layout>  
-              <v-spacer></v-spacer>
-              <v-flex>
-              <v-select
-                v-model="search._class"
-                :items="classes"
-                label="분류"
-              ></v-select> <!--분류별 검색 기능 추가-->
-              </v-flex>
-              <v-spacer></v-spacer>
-              <v-flex>
+      <v-layout column wrap>
+        <h1 class="headline font-weight-bold mb-2">검색하기</h1>
+        <v-flex>
+          <v-layout row>
+            <v-flex xs4>
+              <v-select v-model="payload._class" :items="classes" label="분류"></v-select>
+              <!--분류별 검색 기능 추가-->
+            </v-flex>
+            <v-spacer></v-spacer>
+            <v-flex xs7>
               <v-text-field
-                v-model="search.name"
+                v-model="payload.searchingProducts"
                 append-icon="search"
-                label="명칭"
+                label="명칭 (붕산비료, 생물 비료, 도매업)"
                 single-line
-                hide-details
+                hint="특허청 고시상품명칭 11판(2018)에서 상품 명칭을 검색합니다."
+                persistent-hint
+                @keyup.enter="search()"
+                :loading="searching"
+                :readonly="searching"
               ></v-text-field>
-              </v-flex>
-              <v-spacer></v-spacer>
-            </v-layout>
-            <v-data-table
-              :headers="headers"
-              :items="products"
-              :search="search.name"
-              :rows-per-page-items="rowsPerPageItems"
-            >
-              <template slot="items" slot-scope="props">
-                <td class="text-xs-center">{{ props.item['NICE분류'] }}</td>
-                <td> {{ props.item['지정상품(국문)'] }}</td>
-                <td> {{ props.item['지정상품(영문)'] }}</td>
-                <td class="text-xs-center">{{ props.item['유사군코드'] }}</td>
-                <td class="text-xs-center">
-                  <!--추가하기-->
-                  <v-btn flat icon slot="activator" color="primary" dark @click.native="addProduct(props.item)">
-                    <v-icon small>add</v-icon>
-                  </v-btn>            
-                </td>
-              </template>
-              <v-alert slot="no-results" :value="true" color="error" icon="warning">
-                "{{ search.name }}"을(를) 찾을 수 없습니다.
-              </v-alert>
-            </v-data-table>
-          </v-card>
-        </v-flex>
-        <v-flex xs4>
-          <v-layout column>
-            <v-flex><briefcase-summary></briefcase-summary></v-flex>
-            <v-flex><quotation-summary></quotation-summary></v-flex>
+            </v-flex>
           </v-layout>
         </v-flex>
+        <v-data-table
+          :headers="headers"
+          :items="products"
+          :rows-per-page-items="rowsPerPageItems"
+          no-data-text="검색 결과가 없습니다."
+          class="mt-3"
+        >
+          <template slot="items" slot-scope="props">
+            <td class="text-xs-center">{{ props.item['NICE분류'] }}</td>
+            <td>{{ props.item['지정상품(국문)'] }}</td>
+            <td>{{ props.item['지정상품(영문)'] }}</td>
+            <td class="text-xs-center">{{ props.item['유사군코드'] }}</td>
+            <td class="text-xs-center">
+              <!--추가하기-->
+              <v-btn
+                flat
+                icon
+                slot="activator"
+                color="primary"
+                dark
+                @click.native="addProduct(props.item)"
+              >
+                <v-icon small>add</v-icon>
+              </v-btn>
+            </td>
+          </template>
+        </v-data-table>
       </v-layout>
     </v-slide-y-transition>
   </v-container>
 </template>
 
 <script>
-import BriefcaseSummary from "./BriefcaseSummary";
-import QuotationSummary from "./QuotationSummary";
 export default {
   name: "Search",
-  components: {
-    BriefcaseSummary,
-    QuotationSummary
-  },
+  components: {},
   data() {
     return {
-      rowsPerPageItems: [
-        10,
-        25,
-        { text: "$vuetify.dataIterator.rowsPerPageAll", value: -1 }
-      ],
-      search: {
-        _class: "",
-        name: ""
+      rowsPerPageItems: [10, 25, 100],
+      // TODO: _class의 기본값을 설정해주어야합니다.
+      payload: {
+        _class: -1,
+        searchingProducts: ""
       },
+      searching: false,
       headers: [
         {
           text: "분류",
@@ -115,25 +100,34 @@ export default {
           sortable: false,
           value: "추가하기"
         }
-      ]
+      ],
+      products: []
     };
   },
   methods: {
     addProduct(item) {
-      let temp = Object.assign({}, item)
-      temp['고시명칭'] = true
+      let temp = Object.assign({}, item);
+      temp["고시명칭"] = true;
       this.$store.dispatch("addProduct", temp);
-      const message = "[ " + item["NICE분류"] + "류 ] " +
-        item["지정상품(국문)"] + "이(가) 지정상품에 추가되었습니다.";
+      const message =
+        "[ " +
+        item["NICE분류"] +
+        "류 ] " +
+        item["지정상품(국문)"] +
+        "이(가) 지정상품에 추가되었습니다.";
       this.$noticeEventBus.$emit("raiseNotice", message);
+    },
+    search() {
+      this.searching = true;
+      this.$searchManager.search(this.payload, false).then(result => {
+        this.products = result.noticed;
+        this.searching = false;
+      });
     }
   },
   computed: {
     classes() {
-      return this.$store.getters.classes;
-    },
-    products() {
-      return this.$store.getters.products;
+      return Object.values(this.$store.getters.classes);
     }
   }
 };
