@@ -2,7 +2,7 @@ import elasticsearch from "elasticsearch"
 
 export default class SearchManager {
   constructor() {
-    const HOST = 'http://13.209.3.7:9200';
+    const HOST = 'ec2-13-125-38-231.ap-northeast-2.compute.amazonaws.com:9200';
     this.esclient = new elasticsearch.Client({
       host: HOST
     })
