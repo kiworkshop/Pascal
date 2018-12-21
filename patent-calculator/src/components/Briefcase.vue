@@ -5,12 +5,12 @@
         <h1 class="headline font-weight-bold mb-2">상품 관리</h1>
         <v-layout row>
           <v-flex xs4>
-            <v-select v-model="search._class" :items="classes" label="분류"></v-select>
+            <v-select v-model="searchbar.classification" :items="classes" label="분류"></v-select>
           </v-flex>
           <v-spacer></v-spacer>
           <v-flex xs7>
             <v-text-field
-              v-model="search.name"
+              v-model="searchbar.keywords"
               append-icon="search"
               label="명칭"
               single-line
@@ -22,7 +22,7 @@
         <v-data-table
           :headers="headers"
           :items="selected"
-          :search="search.name"
+          :search="searchbar.keywords"
           :rows-per-page-items="rowsPerPageItems"
           no-data-text="선택된 지정상품이 없습니다."
           class="mt-3"
@@ -64,7 +64,7 @@
             :value="true"
             color="error"
             icon="warning"
-          >"{{ search.name }}"을(를) 찾을 수 없습니다.</v-alert>
+          >"{{ searchbar.keywords }}"을(를) 찾을 수 없습니다.</v-alert>
         </v-data-table>
         <v-dialog v-model="dialog" width="500">
           <v-card>
@@ -111,9 +111,9 @@ export default {
       dialog: false,
       productClass: "",
       rowsPerPageItems: [10, 25, 100],
-      search: {
-        _class: "전체",
-        name: ""
+      searchbar: {
+        classification: "전체",
+        keywords: ""
       },
       headers: [
         {
@@ -194,8 +194,8 @@ export default {
     },
     selected() {
       const selected = this.$store.getters.selected;
-      const classId = this.classes.indexOf(this.search._class);
-      if (this.search._class === "전체") {
+      const classId = this.classes.indexOf(this.searchbar.classification);
+      if (this.searchbar.classification === "전체") {
         return Object.values(selected).reduce((acc, val) => {
           return acc.concat(Object.values(val));
         }, []);
