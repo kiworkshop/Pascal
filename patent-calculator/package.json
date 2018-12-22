@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "elasticsearch": "^15.2.0",
     "vue": "^2.5.17",
     "vue-session": "^1.0.0",
     "vuetify": "^1.0.19",
