@@ -7,6 +7,9 @@
             <h1 class="headline font-weight-bold mb-5">{{현재거래처}} 견적서</h1>
           </v-flex>
           <v-spacer></v-spacer>
+          <v-btn :loading="saveLoading" icon @click="saveAsExcel()">
+            <v-icon>vertical_align_bottom</v-icon>
+          </v-btn>
           <v-btn icon @click="print()">
             <v-icon>print</v-icon>
           </v-btn>
@@ -159,11 +162,52 @@
 </template>
 
 <script>
+import download from "js-file-download";
+
 export default {
   name: "Quotation",
+  data() {
+    return {
+      saveLoading: false
+    };
+  },
   methods: {
     print() {
       window.print();
+    },
+    saveAsExcel() {
+      const ec2URL =
+        "http://ec2-13-125-38-231.ap-northeast-2.compute.amazonaws.com/excel";
+
+      let quotationPointer = this;
+      this.toggleLoader();
+      this.$http({
+        method: "post",
+        url: ec2URL,
+        data: {
+          분류: Object.keys(this.$store.getters.selected),
+          비용: this.$store.getters.calculateFee
+        },
+        responseType: "arraybuffer"
+      })
+        .then(function(response) {
+          download(
+            response.data,
+            "견적서.xlsx",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          );
+          quotationPointer.toggleLoader();
+        })
+        .catch(function() {
+          quotationPointer.toggleLoader();
+          quotationPointer.$noticeEventBus.$emit(
+            "raiseNotice",
+            "견적서 다운로드에 실패했습니다. 네트워크를 확인해주세요."
+          );
+        });
+    },
+    toggleLoader() {
+      this.saveLoading = !this.saveLoading;
     }
   },
   computed: {
