@@ -14,17 +14,12 @@ const EDIT_PRODUCT = "EDIT_PRODUCT";
 Vue.use(Vuex);
 export const store = new Vuex.Store({
   state: {
-    trademarks: 1,
     classes: productClass,
-    products: [],
     selected: {},
     요금표: {},
     현재거래처: ""
   },
   getters: {
-    products(state) {
-      return state.products;
-    },
     classes(state) {
       return state.classes;
     },
