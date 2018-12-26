@@ -92,3 +92,10 @@
 ##### 3) 거래처 설정을 삭제할 수 있습니다.
 
 ![ezgif-2-bb15461eb889](https://user-images.githubusercontent.com/12382114/50449783-e1261c80-096c-11e9-9a63-6f317c1bafe8.gif) 
+
+##  만든 사람들
+
+| <img src="https://avatars1.githubusercontent.com/u/38533611?s=460&v=4" width=200/> | <img src="https://avatars1.githubusercontent.com/u/36656184?s=460&v=4" width=200/> | <img src="https://avatars1.githubusercontent.com/u/12382114?s=460&v=4" width=200/> |
+| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+|        [Deoksoo, 김덕수](https://github.com/Deocksoo)        |       [SyngChoi, 최승혁](https://github.com/SyngChoi)        |     [kwangilcho, 조광일](https://github.com/kwangilcho)      |
+
