@@ -5,9 +5,9 @@
 
 ## 개발 스택
 
-| [Vue.js](https://vuejs.org/)                             |               [Vuetify](https://vuetifyjs.com)               |             [S3](https://aws.amazon.com/ko/s3/)              | [Elasticsearch](https://www.elastic.co/products/elasticsearch) |
-| -------------------------------------------------------- | :----------------------------------------------------------: | :----------------------------------------------------------: | ------------------------------------------------------------ |
-| <img src="https://vuejs.org/images/logo.png" width=100/> | <img src="https://cdn.vuetifyjs.com/images/logos/v-alt.svg" width=100/> | <img src="https://cdn.worldvectorlogo.com/logos/aws-s3.svg" width=100/> | <img src="https://d2eip9sf3oo6c2.cloudfront.net/tags/images/000/001/121/thumb/elastic-elasticsearch.png" width=100/> |
+| <img src="https://vuejs.org/images/logo.png" width=100/> | <img src="https://cdn.vuetifyjs.com/images/logos/v-alt.svg" width=100/> | <img src="https://cdn.worldvectorlogo.com/logos/aws-s3.svg" width=100/> | <img src="http://www1.amazonian.io/wp-content/uploads/2016/07/Compute_AmazonEC2.200px.png" width=100/> | <img src="http://1selfsolutions.com/wp-content/uploads/2018/07/flask-preview-400.jpg" width=100/> | <img src="https://d2eip9sf3oo6c2.cloudfront.net/tags/images/000/001/121/thumb/elastic-elasticsearch.png" width=100/> |
+| :------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+|               [Vue.js](https://vuejs.org/)               |               [Vuetify](https://vuetifyjs.com)               |             [S3](https://aws.amazon.com/ko/s3/)              |            [EC2](https://aws.amazon.com/ko/ec2/)             |               [Flask](http://flask.pocoo.org/)               | [Elasticsearch](https://www.elastic.co/products/elasticsearch) |
 
 
 
