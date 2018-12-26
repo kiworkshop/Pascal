@@ -14,7 +14,7 @@
           <v-stepper-items class="elevation-0">
             <v-stepper-content step="1" class="pt-0">
               <v-layout column wrap>
-                <v-flex v-for="searchbar in searchbars" :key="searchbar.id" class="my-2">
+                <v-flex v-for="searchbar in searchbars" :key="searchbar.id" class="my-1">
                   <v-layout column wrap>
                     <v-flex>
                       <v-layout row>
@@ -108,7 +108,7 @@ export default {
       searchbars: [
         {
           id: 1,
-          classification: "",
+          classification: "전체",
           keywords: ""
         }
       ],
@@ -191,13 +191,13 @@ export default {
     addForm() {
       this.searchbars.push({
         id: ++this.searchbarId,
-        classificationEdited: -1,
+        classification: "전체",
         keywords: ""
       });
     },
     deleteForm(searchbarId) {
       const deletedIndex = this.searchbars.findIndex(
-        searchbar => searchbar["id"] == searchbarId
+        searchbar => searchbar["id"] === searchbarId
       );
       this.searchbars.splice(deletedIndex, 1);
     }

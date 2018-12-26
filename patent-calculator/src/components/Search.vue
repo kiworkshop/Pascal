@@ -65,7 +65,7 @@ export default {
     return {
       rowsPerPageItems: [10, 25, 100],
       searchbar: {
-        classification: -1,
+        classification: "전체",
         keywords: ""
       },
       searching: false,
