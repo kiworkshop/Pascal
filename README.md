@@ -1,6 +1,4 @@
-# [Pascal](http://pascal.kiworkshop.s3-website.ap-northeast-2.amazonaws.com/)
-특허법인을 위한 상표 견적 계산기
-
+# [Pascal: 특허 견적 계산기](http://pascal.kiworkshop.s3-website.ap-northeast-2.amazonaws.com/)
 
 
 ## 개발 스택
