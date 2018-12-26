@@ -11,7 +11,7 @@
 
 
 
-## 사용 방법 예시
+## 사용 방법
 
 ### 1. 검색하기
 
@@ -46,3 +46,49 @@
 ##### 3) 상품 입력 폼에서 분류를 지정 시, 해당 상품 입력란 중 비고시 상품은 지정된 분류로 기본적으로 설정됩니다.
 
 ![ezgif-2-b08bb06a5e49](https://user-images.githubusercontent.com/12382114/50447576-7ae6cd00-095f-11e9-8cff-531ac9ff5cdb.gif)
+
+### 3. 상품 관리
+
+##### 1) 추가된 지정상품을 수정할 수 있습니다.
+
+![ezgif-2-1c95c88a13b3](https://user-images.githubusercontent.com/12382114/50448494-02830a80-0965-11e9-8ef7-7103eef0663d.gif)
+
+##### 2) 추가된 지정상품을 삭제할 수 있습니다.
+
+![ezgif-2-28e7e9adeb34](https://user-images.githubusercontent.com/12382114/50448599-7de4bc00-0965-11e9-8dab-c12834f6801a.gif)
+
+##### 3) 선택된 상품 내에서 검색할 수 있습니다.
+
+![ezgif-2-2b1b16682a15](https://user-images.githubusercontent.com/12382114/50448943-76261700-0967-11e9-9359-60035b49dc60.gif)
+
+##### 4) 우측 요약 사이드탭에서 선택된 상품 분류를 클릭시 해당 분류 내 상품 목록을 클립보드에 복사합니다.
+
+![ezgif-2-2ea36ca9da80](https://user-images.githubusercontent.com/12382114/50448811-9c978280-0966-11e9-93a4-b0bd6eb0989d.gif)
+
+
+
+### 4. 견적 출력
+
+##### 1) 견적서를 지정된 양식의 엑셀 파일로 저장합니다.
+
+![ezgif-2-1fc9f7d7d3e2](https://user-images.githubusercontent.com/12382114/50449148-ade18e80-0968-11e9-8970-a253a675ee49.gif)
+
+##### 2) 견적서를 출력합니다.
+
+![ezgif-2-78dfe82cda7a](https://user-images.githubusercontent.com/12382114/50449042-06645c00-0968-11e9-853f-6651ff8b784d.gif)
+
+
+
+### 5. 거래처 설정
+
+##### 1) 기존 거래처 설정을 복사하여 새 거래처 설정을 생성할 수 있습니다.
+
+![ezgif-2-96c399df3f7a](https://user-images.githubusercontent.com/12382114/50449485-06b22680-096b-11e9-92a8-d8291fcbdbe9.gif)
+
+##### 2) 거래처 설정을 수정하면 즉시 변경된 값이 견적에 적용됩니다.
+
+![ezgif-2-03684ac7171c](https://user-images.githubusercontent.com/12382114/50449556-7aecca00-096b-11e9-8e13-07008d9c81d4.gif)
+
+##### 3) 거래처 설정을 삭제할 수 있습니다.
+
+![ezgif-2-bb15461eb889](https://user-images.githubusercontent.com/12382114/50449783-e1261c80-096c-11e9-9a63-6f317c1bafe8.gif) 
