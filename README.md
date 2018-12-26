@@ -1,13 +1,8 @@
 # [Pascal: 특허 견적 계산기](http://pascal.kiworkshop.s3-website.ap-northeast-2.amazonaws.com/)
 
+## 개발 구조 및 스택
 
-## 개발 스택
-
-| <img src="https://vuejs.org/images/logo.png" width=100/> | <img src="https://cdn.vuetifyjs.com/images/logos/v-alt.svg" width=100/> | <img src="https://cdn.worldvectorlogo.com/logos/aws-s3.svg" width=100/> | <img src="http://www1.amazonian.io/wp-content/uploads/2016/07/Compute_AmazonEC2.200px.png" width=100/> | <img src="http://1selfsolutions.com/wp-content/uploads/2018/07/flask-preview-400.jpg" width=100/> | <img src="https://d2eip9sf3oo6c2.cloudfront.net/tags/images/000/001/121/thumb/elastic-elasticsearch.png" width=100/> |
-| :------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-|               [Vue.js](https://vuejs.org/)               |               [Vuetify](https://vuetifyjs.com)               |             [S3](https://aws.amazon.com/ko/s3/)              |            [EC2](https://aws.amazon.com/ko/ec2/)             |               [Flask](http://flask.pocoo.org/)               | [Elasticsearch](https://www.elastic.co/products/elasticsearch) |
-
-
+<img width="1128" alt="default" src="https://user-images.githubusercontent.com/12382114/50453292-ebebac00-0982-11e9-8b33-833edd5cca07.PNG">
 
 ## 사용 방법
 
@@ -96,4 +91,3 @@
 | <img src="https://avatars1.githubusercontent.com/u/38533611?s=460&v=4" width=200/> | <img src="https://avatars1.githubusercontent.com/u/36656184?s=460&v=4" width=200/> | <img src="https://avatars1.githubusercontent.com/u/12382114?s=460&v=4" width=200/> |
 | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
 |        [Deoksoo, 김덕수](https://github.com/Deocksoo)        |       [SyngChoi, 최승혁](https://github.com/SyngChoi)        |     [kwangilcho, 조광일](https://github.com/kwangilcho)      |
-
