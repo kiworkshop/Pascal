@@ -74,7 +74,7 @@
             <v-card-text>
               <v-container grid-list-md>
                 <v-layout wrap>
-                  <v-select v-model="productClass" :items="classes" label="분류"></v-select>
+                  <v-select v-model="productClass" :items="classesForEdit" label="분류"></v-select>
                   <v-flex xs12>
                     <v-text-field v-model="product.edited['지정상품(국문)']" label="명칭" required></v-text-field>
                   </v-flex>
@@ -191,6 +191,11 @@ export default {
   computed: {
     classes() {
       return Object.values(this.$store.getters.classes);
+    },
+    classesForEdit() {
+      let classes = Object.values(this.$store.getters.classes);
+      classes.splice(0, 1); //index 0에 있는 "전체"는 빼고, 나머지 분류들만 리턴해주도록 합니다.
+      return classes;
     },
     selected() {
       const selected = this.$store.getters.selected;
