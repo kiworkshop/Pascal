@@ -6,8 +6,8 @@
       <v-toolbar-items>
         <v-btn flat v-for="(item, i) in menu" :key="i" @click="view=item.component">
           <v-badge color="grey darken-2">
-            <!-- <v-icon>{{item.icon}}</v-icon> -->
-            <span class="subheading">{{item.title}}</span>
+            <v-icon class="hidden-md-and-up">{{item.icon}}</v-icon>
+            <span class="subheading hidden-sm-and-down">{{item.title}}</span>
           </v-badge>
         </v-btn>
       </v-toolbar-items>
@@ -95,8 +95,8 @@ export default {
           badge: false
         },
         {
-          icon: "add",
-          title: "상품추가",
+          icon: "note_add",
+          title: "상품 추가",
           component: "ProductAdder",
           badge: false
         },
@@ -148,7 +148,12 @@ export default {
 }
 
 #app-toolbar > .v-toolbar__content {
-  padding-left: 10rem;
-  padding-right: 10rem;
+  padding-right: 80px;
+}
+
+@media screen and (max-width: 1264px) {
+  #app-toolbar > .v-toolbar__content {
+    padding-right: 0px;
+  }
 }
 </style>

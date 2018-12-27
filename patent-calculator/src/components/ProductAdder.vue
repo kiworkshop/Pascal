@@ -1,8 +1,8 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-slide-y-transition mode="out-in">
       <v-layout column wrap>
-        <h1 class="headline font-weight-bold mb-2">상품추가</h1>
+        <h1 class="headline font-weight-bold mb-2">상품 추가</h1>
         <v-stepper class="elevation-0 pa-0" v-model="curStep">
           <v-stepper-header class="elevation-0">
             <v-stepper-step :complete="curStep>1" step="1">상품 입력</v-stepper-step>
@@ -31,7 +31,7 @@
                             rows="1"
                           ></v-textarea>
                         </v-flex>
-                        <v-flex>
+                        <v-flex class="ml-2">
                           <v-layout align-center justify-center row fill-height>
                             <v-btn
                               icon

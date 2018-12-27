@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-slide-y-transition mode="out-in">
       <v-layout column wrap>
         <h1 class="headline font-weight-bold mb-2">검색하기</h1>

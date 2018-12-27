@@ -1,6 +1,6 @@
 <template>
   <v-slide-y-transition mode="out-in">
-    <v-container id="print-area">
+    <v-container fluid id="print-area">
       <v-layout column>
         <v-layout row>
           <v-flex s6>
