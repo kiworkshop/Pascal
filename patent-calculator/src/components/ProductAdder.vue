@@ -1,8 +1,8 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-slide-y-transition mode="out-in">
       <v-layout column wrap>
-        <h1 class="headline font-weight-bold mb-2">상품추가</h1>
+        <h1 class="headline font-weight-bold mb-2">상품 추가</h1>
         <v-stepper class="elevation-0 pa-0" v-model="curStep">
           <v-stepper-header class="elevation-0">
             <v-stepper-step :complete="curStep>1" step="1">상품 입력</v-stepper-step>
@@ -14,16 +14,16 @@
           <v-stepper-items class="elevation-0">
             <v-stepper-content step="1" class="pt-0">
               <v-layout column wrap>
-                <v-flex v-for="payload in payloads" :key="payload.id" class="my-2">
+                <v-flex v-for="searchbar in searchbars" :key="searchbar.id" class="my-1">
                   <v-layout column wrap>
                     <v-flex>
                       <v-layout row>
                         <v-flex xs4 class="ml-2">
-                          <v-select v-model="payload.classString" :items="classes" label="분류"></v-select>
+                          <v-select v-model="searchbar.classification" :items="classes" label="분류"></v-select>
                         </v-flex>
                         <v-flex xs8 class="ml-5">
                           <v-textarea
-                            v-model="payload.searchingProducts"
+                            v-model="searchbar.keywords"
                             append-icon="search"
                             placeholder="명칭 (붕산비료, 생물 비료, 도매업)"
                             auto-grow
@@ -31,14 +31,14 @@
                             rows="1"
                           ></v-textarea>
                         </v-flex>
-                        <v-flex>
+                        <v-flex class="ml-2">
                           <v-layout align-center justify-center row fill-height>
                             <v-btn
                               icon
                               color="secondary"
                               flat
                               slot="activator"
-                              @click="deleteForm(payload.id)"
+                              @click="deleteForm(searchbar.id)"
                             >
                               <v-icon>delete</v-icon>
                             </v-btn>
@@ -105,16 +105,15 @@ export default {
   },
   data() {
     return {
-      payloads: [
+      searchbars: [
         {
           id: 1,
-          classString: "",
-          _class: -1,
-          searchingProducts: ""
+          classification: "전체",
+          keywords: ""
         }
       ],
       curStep: 0,
-      formCount: 1,
+      searchbarId: 1,
       searchLoading: false
     };
   },
@@ -124,27 +123,59 @@ export default {
     }
   },
   methods: {
+    isNoticed(keyword, checklist) {
+      return (
+        Object.keys(checklist).length > 0 &&
+        checklist.hasOwnProperty(this.trim(keyword))
+      );
+    },
+    trim(keyword) {
+      return keyword.replace(/\s/g, "");
+    },
     classifyProducts() {
       this.searchLoading = true;
-      for (let i = 0; i < this.payloads.length; i++) {
-        this.payloads[i]._class = this.classes.indexOf(
-          this.payloads[i].classString
-        );
-      }
       const requests = [];
-      for (let i = 0; i < this.payloads.length; i++) {
+      for (const searchbar of this.searchbars) {
+        const classification = this.classes.indexOf(searchbar.classification);
         requests.push(
-          this.$searchManager.search(this.payloads[i]).then(response => {
-            return response;
+          this.$searchManager.search(0, searchbar.keywords).then(response => {
+            const checklist = response.reduce((acc, val) => {
+              acc[this.trim(val["지정상품(국문)"])] = val;
+              return acc;
+            }, {});
+
+            const keywords = this.$searchManager.trimKeywords(
+              searchbar.keywords
+            );
+
+            const noticed = keywords
+              .filter(keyword => this.isNoticed(keyword, checklist))
+              .map(keyword => checklist[this.trim(keyword)]);
+
+            const unnoticed = keywords
+              .filter(keyword => !this.isNoticed(keyword, checklist))
+              .map(keyword => {
+                return {
+                  id: Math.random(),
+                  NICE분류: classification,
+                  "지정상품(국문)": keyword,
+                  "지정상품(영문)": "",
+                  유사군코드: "",
+                  고시명칭: false
+                };
+              });
+
+            return { noticed: [...new Set(noticed)], unnoticed: unnoticed };
           })
         );
       }
+
       let productAdderPointer = this;
       Promise.all(requests).then(responses => {
         let result = { noticed: [], unnoticed: [] };
-        for (let i = 0; i < responses.length; i++) {
-          result.noticed = result.noticed.concat(responses[i].noticed);
-          result.unnoticed = result.unnoticed.concat(responses[i].unnoticed);
+        for (const response of responses) {
+          result.noticed = result.noticed.concat(response.noticed);
+          result.unnoticed = result.unnoticed.concat(response.unnoticed);
         }
         productAdderPointer.$productTransmissionBus.$emit(
           "transmitClassified",
@@ -155,24 +186,24 @@ export default {
       });
     },
     addProducts() {
-      this.$submissionAlarmBus.$emit('submitProductsToBriefcase');
+      this.$submissionAlarmBus.$emit("submitProductsToBriefcase");
     },
     addForm() {
-      this.payloads.push({
-        id: ++this.formCount,
-        _class: -1,
-        searchingProducts: ""
+      this.searchbars.push({
+        id: ++this.searchbarId,
+        classification: "전체",
+        keywords: ""
       });
     },
-    deleteForm(payloadId) {
-      const deletedIndex = this.payloads.findIndex(
-        payload => payload["id"] == payloadId
+    deleteForm(searchbarId) {
+      const deletedIndex = this.searchbars.findIndex(
+        searchbar => searchbar["id"] === searchbarId
       );
-      this.payloads.splice(deletedIndex, 1);
+      this.searchbars.splice(deletedIndex, 1);
     }
   },
   mounted() {
-    this.$submissionAlarmBus.$on('submissionComplete', () => {
+    this.$submissionAlarmBus.$on("submissionComplete", () => {
       this.curStep = 3;
     });
   },

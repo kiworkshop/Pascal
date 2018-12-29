@@ -1,18 +1,18 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-slide-y-transition mode="out-in">
       <v-layout column wrap>
         <h1 class="headline font-weight-bold mb-2">검색하기</h1>
         <v-flex>
           <v-layout row>
             <v-flex xs4>
-              <v-select v-model="payload._class" :items="classes" label="분류"></v-select>
+              <v-select v-model="searchbar.classification" :items="classes" label="분류"></v-select>
               <!--분류별 검색 기능 추가-->
             </v-flex>
             <v-spacer></v-spacer>
             <v-flex xs7>
               <v-text-field
-                v-model="payload.searchingProducts"
+                v-model="searchbar.keywords"
                 append-icon="search"
                 label="명칭 (붕산비료, 생물 비료, 도매업)"
                 single-line
@@ -64,10 +64,9 @@ export default {
   data() {
     return {
       rowsPerPageItems: [10, 25, 100],
-      // TODO: _class의 기본값을 설정해주어야합니다.
-      payload: {
-        _class: -1,
-        searchingProducts: ""
+      searchbar: {
+        classification: "전체",
+        keywords: ""
       },
       searching: false,
       headers: [
@@ -106,23 +105,32 @@ export default {
   },
   methods: {
     addProduct(item) {
-      let temp = Object.assign({}, item);
-      temp["고시명칭"] = true;
-      this.$store.dispatch("addProduct", temp);
+      this.$store.dispatch("addProduct", item);
       const message =
-        "[ " +
-        item["NICE분류"] +
-        "류 ] " +
+        "[ " + item["NICE분류"] + "류 ] " +
         item["지정상품(국문)"] +
         "이(가) 지정상품에 추가되었습니다.";
       this.$noticeEventBus.$emit("raiseNotice", message);
     },
     search() {
       this.searching = true;
-      this.$searchManager.search(this.payload, false).then(result => {
-        this.products = result.noticed;
-        this.searching = false;
-      });
+      const classification = this.classes.indexOf(
+        this.searchbar.classification
+      );
+      const keywords = this.searchbar.keywords;
+      this.$searchManager
+        .search(classification, keywords)
+        .then(result => {
+          this.products = result;
+          this.searching = false;
+        })
+        .catch(() => {
+          this.searching = false;
+          this.$noticeEventBus.$emit(
+            "raiseNotice",
+            "검색에 실패했습니다. 네트워크를 확인해주세요."
+          );
+        });
     }
   },
   computed: {
